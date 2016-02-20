@@ -53,7 +53,6 @@ The usage of the tool is a direct clone of it's `zsh`-based inspiration.
     options         [-c/--config file] [ -q/--quiet | -d/--debug ]
     
   Warp Point Commands:
-     
     add   <point>   Adds the current directory as a new warp point
     add!  <point>   Overwrites an existing warp point
     rm    <point>   Removes a warp point
