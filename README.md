@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/kigster/warp_dir.svg?branch=master)](https://travis-ci.org/kigster/warp_dir)
 [![Code Climate](https://codeclimate.com/github/kigster/warp_dir/badges/gpa.svg)](https://codeclimate.com/github/kigster/warp_dir)
-[![Gitter](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)](https://github.com/kigster/warp_dir)
+[![Gitter](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)](https://gitter.im/kigster/warp_dir)
 
 This is a ruby implementation of the tool 'wd' (warp directory), 
 [originally written as a zsh module](https://github.com/mfaerevaag/wd) 
