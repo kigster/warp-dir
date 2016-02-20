@@ -28,7 +28,7 @@ Some future extensions could be based on some additional realizations:
 Add this line to your application's Gemfile:
 
 ```ruby
-    gem 'warp_dir'
+gem 'warp_dir'
 ```
 
 And then execute:
@@ -41,20 +41,24 @@ Or install it yourself as:
 
 ## Usage
 
-The usage of the tool is a direct clone of it's `zsh`-based inspiration.
-  
-```
+The usage of the tool is a derived superset of the `ZSH`-based inspiration.
+
+```bash
   > wd --help 
-  Usage: wd [ show | list | clean! ]                           [ options ] 
-         wd [ add  [ -f/--force ] | rm | ls | path ] <point>   [ options ]
+  Usage: wd [ show | list | clean | validate | wipe ]          [ flags ] 
+         wd [ add  [ -f/--force ] | rm | ls | path ] <point>   [ flags ]
          wd -v/--version
          wd help
+         
   Where:
-    options         [-c/--config file] [ -q/--quiet | -d/--debug ]
-    
+    Flags           -c/--config file    # default is ~/.warprc
+                    -q/--quiet          # suppress all output
+                    -n/--dry-run        # just display the commands
+                    -f/--force          # overwrite if exists
+                    -C/--no-color       # do not print color output
+                    
   Warp Point Commands:
     add   <point>   Adds the current directory as a new warp point
-    add!  <point>   Overwrites an existing warp point
     rm    <point>   Removes a warp point
     show  <point>   Show the path to the warp point
     ls    <point>   Show files from tne warp point
@@ -63,16 +67,16 @@ The usage of the tool is a direct clone of it's `zsh`-based inspiration.
   Global Commands:
     show            Print warp points to current directory
     list            Print all stored warp points
-    clean!          Remove points warping to nonexistent directories
-    help            Show this extremely helpful text
+    clean           Remove points warping to nonexistent directories
+    help            Show this extremely unhelpful text
 
-  Flags:
-    -v | --version  Print version
-    -d | --debug    Exit after execution with exit codes (for testing)
-    -c | --config   Specify config file (default ~/.warprc)
-    -q | --quiet    Suppress all output
-  
 ```
+
+#### Notable Differenc
+
+ * instead of `wd add!` use `wd add -f <point>` (or --force)
+ * instead of `wd clean!` use `wd clean`
+ * run `wd validate` to see what will be removed by `clean`.
 
 ## Future Features
 
