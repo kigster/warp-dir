@@ -86,13 +86,13 @@ This is what I envision down the road:
   wd proj                               # add warp point
   wd proj -x/-execute "command"         # pass an arbitrary command to execute, and return back to CWD  
 
-  wd -g/--group name <point1> <point2>, ..., <pointN>
+  wd -g/--group group <point1> <point2>, ..., <pointN>
                                         # create a group of several warp points
 
   # Run an arbitrary command across all, or a group of warp points, until...
-  wd -a/--all   [ -g name ] command     # all points are done 
-  wd -f/--first [ -g name ] command     # at least one returns non-blank output
-  wd -e/--every [ -g name ] command     # at least one returns blank output
+  wd -a/--all   [ -g group ] command    # all points are done 
+  wd -f/--first [ -g group ] command    # at least one returns non-blank output
+  wd -e/--every [ -g group ] command    # at least one returns blank output
   
 ```
 
