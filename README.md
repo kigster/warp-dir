@@ -41,29 +41,56 @@ Or install it yourself as:
 
 ## Usage
 
-The usage of the tool is a direct clone of it's `zsh`-based inspiration.  
-
+The usage of the tool is a direct clone of it's `zsh`-based inspiration.
+  
 ```
-  > wd --help
-  Usage: wd [command] <point>
+  > wd --help 
+  Usage: wd [ show | list | clean! ]                           [ options ] 
+         wd [ add  [ -f/--force ] | rm | ls | path ] <point>   [ options ]
+         wd -v/--version
+         wd help
+  Where:
+    options         [-c/--config file] [ -q/--quiet | -d/--debug ]
+    
+  Warp Point Commands:
+     
+    add   <point>   Adds the current directory as a new warp point
+    add!  <point>   Overwrites an existing warp point
+    rm    <point>   Removes a warp point
+    show  <point>   Show the path to the warp point
+    ls    <point>   Show files from tne warp point
+    path  <point>   Show the path to given warp point
   
-  Commands:
-  add <point>	  Adds the current working directory to your warp points
-  add! <point>	Overwrites existing warp point
-  rm <point>	  Removes the given warp point
-  show		      Print warp points to current directory
-  show <point>	Print path to given warp point
-  list	        Print all stored warp points
-  ls  <point>   Show files from given warp point
-  path <point>  Show the path to given warp point
-  clean!		    Remove points warping to nonexistent directories
+  Global Commands:
+    show            Print warp points to current directory
+    list            Print all stored warp points
+    clean!          Remove points warping to nonexistent directories
+    help            Show this extremely helpful text
+
+  Flags:
+    -v | --version  Print version
+    -d | --debug    Exit after execution with exit codes (for testing)
+    -c | --config   Specify config file (default ~/.warprc)
+    -q | --quiet    Suppress all output
   
-  -v | --version	Print version
-  -d | --debug	  Exit after execution with exit codes (for testing)
-  -c | --config	  Specify config file (default ~/.warprc)
-  -q | --quiet	  Suppress all output
+```
+
+## Future Features
+
+This is what I envision down the road:
+
+```bash
+  wd proj                               # add warp point
+  wd proj -x/-execute "command"         # pass an arbitrary command to execute, and return back to CWD  
+
+  wd -g/--group name <point1> <point2>, ..., <pointN>
+                                        # create a group of several warp points
+
+  # Run an arbitrary command across all, or a group of warp points, until...
+  wd -a/--all   [ -g name ] command     # all points are done 
+  wd -f/--first [ -g name ] command     # at least one returns non-blank output
+  wd -e/--every [ -g name ] command     # at least one returns blank output
   
-  help		Show this extremely helpful text
 ```
 
 ## Development
