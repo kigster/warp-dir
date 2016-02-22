@@ -14,11 +14,9 @@ Gem::Specification.new do |gem|
   gem.description   = %q{ZSH has a very nifty tool called 'wd' for Warp Directory (https://github.com/mfaerevaag/wd). Unfortunately it only works with ZSH.}
   gem.homepage      = "https://github.com/kigster/warp-dir"
 
-
   gem.files         = `git ls-files`.split($\)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.executables   = gem.files.grep(%r{^bin/wd$}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "ventable"
   gem.require_paths = ["lib"]
 
   gem.add_dependency('methadone', '~> 1.9.2')
