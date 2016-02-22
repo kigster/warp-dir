@@ -7,7 +7,7 @@ module Warp
   module Dir
     describe Store do
       let(:dotfile) { @dotfile ||= Tempfile.new('warp-dir') }
-      let(:config) { Config.new(dotfile: Tempfile.new.path) }
+      let(:config) { Config.new(dotfile: dotfile.path ) }
       let(:store) { Store.new(config) }
       after :each do
         dotfile.close
