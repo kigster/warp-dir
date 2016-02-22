@@ -2,7 +2,9 @@
 
 require 'optparse'
 require 'methadone'
-require 'warp_dir.rb'
+
+require "bundler/setup"
+require "warp"
 
 class App
   include Methadone::Main
@@ -35,7 +37,7 @@ class App
   # # Make an argument optional
   # arg :optional_arg, :optional
 
-  version WarpDir::VERSION
+  version Warp::Dir::VERSION
 
   use_log_level_option :toggle_debug_on_signal => 'USR1'
 
