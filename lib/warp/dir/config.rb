@@ -3,10 +3,10 @@ module Warp
     class Config
 
       DEFAULTS = {
-        dotfile: ENV['HOME'] + '/.warprc'
+        config: ENV['HOME'] + '/.warprc'
       }
 
-      attr_accessor :dotfile, :params
+      attr_accessor :config, :params
 
       def initialize(opts)
         options = DEFAULTS.merge(opts)

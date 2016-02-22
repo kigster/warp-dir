@@ -4,7 +4,7 @@ describe Warp::Dir::Config do
   let(:c1) { Warp::Dir::Config.new(blah: 'blahblah') }
 
   it 'should have a default folder' do
-    expect(c1.dotfile).to eql(ENV['HOME'] + '/.warprc')
+    expect(c1.config).to eql(ENV['HOME'] + '/.warprc')
   end
 
   it 'should automatically create accessor' do
@@ -12,7 +12,7 @@ describe Warp::Dir::Config do
   end
 
   it 'should add new parameter to the params array' do
-    expect(c1.params).to eql([:dotfile, :blah])
+    expect(c1.params).to eql([:config, :blah])
   end
 
   it 'should be able to create a attr_writer also' do
@@ -32,7 +32,7 @@ describe Warp::Dir::Config do
     end
 
     it 'should add new parameter to the params array' do
-      expect(c2.params).to eql([:dotfile, :poo])
+      expect(c2.params).to eql([:config, :poo])
     end
 
   end

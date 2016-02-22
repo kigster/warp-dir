@@ -1,3 +1,4 @@
+require_relative '../errors'
 module Warp
   module Dir
     module Serializer
@@ -6,7 +7,12 @@ module Warp
         def restore!
           File.open(config.dotfile, "r") do |f|
             f.each_line do |line|
-              name, path = line.chomp.split(/:/)
+              line = line.chomp
+              next if line.blank?
+              name, path = line.split(/:/)
+              if name.nil? || path.nil?
+                raise Warp::Dir::Errors::StoreFormatError.new("Corrupt data file, line [#{line}]", line)
+              end
               store.add name, path
             end
           end
@@ -14,11 +20,11 @@ module Warp
 
         def persist!
           File.open(config.dotfile, 'w') do |file|
-            buffer = "\n"
-            store.points.each_pair do |name, path|
-              buffer << "#{name}:#{path}\n"
+            buffer = ""
+            store.points.each do |point|
+              buffer << "#{point.name}:#{point.path}\n"
             end
-            file.write(buffer + "\n")
+            file.write(buffer)
           end
         end
       end

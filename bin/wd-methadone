@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'methadone'
+
+require "bundler/setup"
+require "warp"
+
+class App
+  include Methadone::Main
+  include Methadone::CLILogging
+
+  main do # Add args you want: |like,so|
+    # your program code here
+    # You can access CLI options via
+    # the options Hash
+  end
+
+  # supplemental methods here
+
+  # Declare command-line interface here
+
+  description "Warp Directory: quickly jump between warp points in your file system"
+
+  options = Warp::Dir::DEFAULT
+
+  #                     -c/--config file    # default is ~/.warprc
+  #                     -q/--quiet          # suppress all output
+  #                     -n/--dry-run        # just display the commands
+  #                     -f/--force          # overwrite if exists
+  #                     -C/--no-color       # do not print color output
+
+  #
+  # Accept flags via:
+  on("-c CONFIG", "--config", "Where the Warp Points configuration is stored")
+  options[flag] will contain VAL
+  #
+  # Specify switches via:
+  # on("--[no-]switch","Some switch")
+  #
+  # Or, just call OptionParser methods on opts
+  #
+  # Require an argument
+  # arg :some_arg 
+  #
+  # # Make an argument optional
+  # arg :optional_arg, :optional
+
+  version Warp::Dir::VERSION
+
+  use_log_level_option :toggle_debug_on_signal => 'USR1'
+
+  go!
+end
