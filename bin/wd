@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'warp/dir'
+require 'warp/dir/commands'
 require 'slop'
 
 # Slop v4 no longer supports commands, so we fake it:
@@ -28,8 +29,14 @@ opts.banner = %Q{
     list            Print all stored warp points
     clean           Remove points warping to nonexistent directories
     help            Show this extremely unhelpful text
+}
 
+Warp::Dir::Commands::Base.installed_commands.values.each do |installed_command|
+  opts.banner << sprintf("    %s\n", installed_command.help)
+end
+opts.banner << %q{
   Flags:}
+
 opts.string '-m', '--command',  'command to run, ie. add, ls, list, rm, etc.'
 opts.bool   '-h', '--help',     'show help'
 opts.bool   '-v', '--verbose',  'enable verbose mode'

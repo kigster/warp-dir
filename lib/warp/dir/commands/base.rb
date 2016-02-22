@@ -24,8 +24,19 @@ module Warp
         end
 
         def self.inherited subclass
-          shortname = subclass.name.gsub(/.*::/, '').downcase
-          self.installed_commands[shortname.to_sym] = subclass
+          subclass.instance_eval do
+            class << self
+              def command
+                self.name.gsub(/.*::/, '').downcase.to_sym
+              end
+
+              def help
+                sprintf("%-16s%s", command, description)
+              end
+            end
+          end
+
+          self.installed_commands[subclass.command] = subclass
         end
       end
     end
