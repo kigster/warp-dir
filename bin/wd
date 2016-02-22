@@ -43,24 +43,20 @@ end
 parser = Slop::Parser.new(opts)
 result = parser.parse(ARGV)
 
-if result.help?
-  puts result
-  exit 0
-end
-
 config = Warp::Dir::Config.new(result.to_hash)
 store = Warp::Dir::Store.new(config)
 
-case config.command
-  when 'list'
-    Warp::Dir::Point.print(store.points_map)
-  when ''
+Warp::Dir::Commands::Base.validate!
+if config.command
+  command_class = Warp::Dir::Commands::Base.installed_commands[config.command.to_sym]
+  if command_class
+    command_class.new(store).run
   else
-    puts 'Unknown command ' + config[:command]
+    puts "Command '#{config.command}' was not found."
+  end
+else
+  if result.help?
+    puts result
     exit 0
-end
-
-if config.verbose
-  require 'pp'
-  pp result.to_hash
+  end
 end
