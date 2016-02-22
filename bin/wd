@@ -3,6 +3,9 @@ require 'bundler/setup'
 require 'warp/dir'
 require 'slop'
 
+# Slop v4 no longer supports commands, so we fake it:
+# if the first argument does not start with a dash, it must be a command.
+# So fake-add `--command` flag in front of it.
 if ARGV[0] && !ARGV[0][0].eql?('-')
   ARGV.unshift('--command')
 end
@@ -51,6 +54,7 @@ store = Warp::Dir::Store.new(config)
 case config.command
   when 'list'
     Warp::Dir::Point.print(store.points_map)
+  when ''
   else
     puts 'Unknown command ' + config[:command]
     exit 0
@@ -60,5 +64,3 @@ if config.verbose
   require 'pp'
   pp result.to_hash
 end
-
-

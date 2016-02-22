@@ -13,6 +13,9 @@ module Warp
         end
       end
 
+      class CommandError < Warp::Dir::Errors::Runtime; end
+      class InvalidCommand < Warp::Dir::Errors::CommandError; end
+
       class PointError < Warp::Dir::Errors::Runtime
         attr_reader :point
 
@@ -48,4 +51,3 @@ module Warp
     end
   end
 end
-
