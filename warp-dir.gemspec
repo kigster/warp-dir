@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency('methadone', '~> 1.9.2')
   gem.add_dependency('slop', '~> 4.2.1')
 
+  gem.add_development_dependency 'codeclimate-test-reporter'
   gem.add_development_dependency 'bundler'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec', '~> 3'

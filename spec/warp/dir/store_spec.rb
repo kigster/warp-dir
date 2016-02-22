@@ -2,11 +2,11 @@ require 'spec_helper'
 require 'warp/dir'
 require 'warp/dir/config'
 require 'warp/dir/store'
-
+require 'tempfile'
 module Warp
   module Dir
     describe Store do
-      let(:file) { @file ||= Tempfile.new('warp-dir') }
+      let(:file) { @file ||= ::Tempfile.new('warp-dir') }
       let(:config) { Config.new(config: file.path) }
       let(:store) { Store.new(config) }
       after :each do
