@@ -15,7 +15,8 @@ module Warp
       end
 
       def [] name
-        name =~ /^[0-9]+$/ ? points_list[name]&.relative_path : points_map[name]&.relative_path
+        point = (name =~ /^[0-9]+$/ ? points_list[name] : points_map[name])
+        point.is_a?(Warp::Dir::Point) ? point.relative_path : nil
       end
 
       def points
