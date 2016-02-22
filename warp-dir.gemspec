@@ -22,12 +22,9 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency('methadone', '~> 1.9.2')
-  gem.add_dependency('slop')
+  gem.add_dependency('slop', '~> 4.2.1')
 
   gem.add_development_dependency 'bundler'
-  gem.add_development_dependency 'rdoc'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec', '~> 3'
-  gem.add_development_dependency 'rspec-mocks'
-  gem.add_development_dependency 'guard-rspec'
 end

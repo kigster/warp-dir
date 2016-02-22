@@ -6,12 +6,12 @@ require 'warp/dir/store'
 module Warp
   module Dir
     describe Store do
-      let(:dotfile) { @dotfile ||= Tempfile.new('warp-dir') }
-      let(:config) { Config.new(dotfile: dotfile.path) }
+      let(:file) { @file ||= Tempfile.new('warp-dir') }
+      let(:config) { Config.new(config: file.path) }
       let(:store) { Store.new(config) }
       after :each do
-        dotfile.close
-        dotfile.unlink
+        file.close
+        file.unlink
       end
 
       context 'when config file is empty' do
@@ -24,7 +24,7 @@ module Warp
 
         it 'should be able to add a new point to the Store' do
           store.add(point_name, point_path)
-          corrected_path = Warp::Dir.canonical point_path
+          corrected_path = Warp::Dir.relative point_path
           expect(store[point_name]).to eql(corrected_path)
         end
 

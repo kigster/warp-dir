@@ -26,6 +26,9 @@ module Warp
         end
       end
 
+      def [](key)
+        config[key]
+      end
     end
   end
 end

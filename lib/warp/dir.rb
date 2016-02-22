@@ -9,10 +9,17 @@ module Warp
       ENV['PWD'].gsub ENV['HOME'], '~'
     end
 
-    def self.canonical path
+    def self.relative path
       path.gsub ENV['HOME'], '~'
     end
 
+    def self.absolute path
+      path.gsub '~', ENV['HOME']
+    end
+
+    def self.config
+      relative Warp::Dir::Config::DEFAULTS[:config]
+    end
   end
 end
 

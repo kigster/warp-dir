@@ -15,7 +15,7 @@ module Warp
       end
 
       def [] name
-        name =~ /^[0-9]+$/ ? points_list[name]&.path : points_map[name]&.path
+        name =~ /^[0-9]+$/ ? points_list[name]&.relative_path : points_map[name]&.relative_path
       end
 
       def points
@@ -23,8 +23,8 @@ module Warp
       end
 
       def add(name, path)
-        p = Point.new(name, path)
-        return if self[name].eql?(p.path)
+        p = Warp::Dir::Point.new(name, path)
+        return if self[name].eql?(p.relative_path)
         raise Warp::Dir::Errors::PointAlreadyExists.new(p) if self[name]
         points_list << p
         points_map[p.name] = p

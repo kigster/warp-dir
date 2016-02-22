@@ -6,24 +6,29 @@ module Warp
       def initialize name, full_path
         raise ArgumentError.new ":name is required" if name.nil?
         raise ArgumentError.new ":full_path is required" if full_path.nil?
-
-        @name = name
-        @full_path = full_path
+        @full_path  = Warp::Dir.absolute full_path
+        @name       = name
       end
 
-      def path
-        Warp::Dir.canonical self.full_path
+      def absolute_path
+        full_path
       end
+
+      def relative_path
+        Warp::Dir.relative self.absolute_path
+      end
+
+      alias_method :path, :relative_path
 
       def inspect
         sprintf("{ name: '%s', path: '%s' }", name, path)
       end
 
-      def to_s width = ""
-        sprintf("\t%-#{width}s > %s\n", name, full_path)
+      def to_s width = 0
+        sprintf("%#{width}s  ->  %s\n", name, relative_path)
       end
 
-      def puts(width = "")
+      def print(width = 0)
         puts self.to_s(width)
       end
 
@@ -31,7 +36,7 @@ module Warp
 
         def print(points)
           longest_key = points.keys.max { |a, b| a.length <=> b.length }
-          points.each { |point| point.puts(longest_key) }
+          points.values.each { |point| point.print(longest_key.length) }
         end
 
       end
