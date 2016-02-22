@@ -51,7 +51,7 @@ The usage of the tool is a derived superset of the `ZSH`-based inspiration.
   > wd --help 
   Usage: wd [ show | list | clean | validate | wipe ]          [ flags ] 
          wd [ add  [ -f/--force ] | rm | ls | path ] <point>   [ flags ]
-         wd -v/--version
+         wd -v/-
          wd help
          
   Where:
@@ -84,22 +84,66 @@ The usage of the tool is a derived superset of the `ZSH`-based inspiration.
 
 ## Future Features
 
-This is what I envision down the road:
+### Simplify Interface
 
 ```bash
-  wd proj                               # add warp point
-  wd proj -x/-execute "command"         # pass an arbitrary command to execute, and return back to CWD  
+  wd -a/--add    point1
+  wd -r/--remove point1
+  wd -l/--ls     point1
+  wd -p/--path   point1
+  
+  wd -L/--list
+  wd -C/--clean
+  wd -S/--scan           # report whether points exist on the file system
+```  
 
-  wd -g/--group group <point1> <point2>, ..., <pointN>
-                                        # create a group of several warp points
+### Run Commands
 
-  # Run an arbitrary command across all, or a group of warp points, until...
-  wd -a/--all   [ -g group ] command    # all points are done 
-  wd -f/--first [ -g group ] command    # at least one returns non-blank output
-  wd -e/--every [ -g group ] command    # at least one returns blank output
+```bash
+  wd proj -x/--exec -- "command"    # pass an arbitrary command to execute, and return back to CWD  
+```
+
+### Group Commands
+
+```bash
+  # create a group of several warp points
+  wd -g/--group group1 -d/--define "point1,point2,...,pointN"
+  wd -g/--group group1 --remove point1  # remove a point from the group
+  wd -g/--group group1 --add    point1  # add a point to the group
+  
+  # execute command in all warp points of the group
+  wd -x/--exec [ -g/--group group ] [ -r/--return-code ] -- command     
+
+  # as above, until one returns non-blank output (ie, search)
+  # if -r is passed, it stops at the first return code of value passed, or 0
+  wd -f/--find [ -g/--group group ] [ -r/--return-code ] -- command     
+  
+  # as above, until one returns blank output
+  # if -r is passed, it stops at the first return code not equal to the value passed, or 0
+  wd -a/--all  [ -g/--group group ] [ -r/--return-code ] -- command        
   
 ```
 
+The idea here is that you can group several warp points together, and then
+execute a command in all of them. You could use to:
+
+ * search for a specific file in one of the project repos – you expect to exist in 
+   only one of them, and so you want the search to stop once found (indicated
+   by return code equal to 1):
+ 
+```bash
+  wd --find --group project-group --return-code=1 -- \
+      find . -name .aws-credentials.lol
+```
+
+ * you want to run rspec in all projects of the group, and stop at the 
+   first non-zero return: 
+
+```bash
+  wd --all --group project-group --return-code \
+      'bundle exec rspec'
+```
+  
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. 
