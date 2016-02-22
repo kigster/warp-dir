@@ -108,8 +108,8 @@ The usage of the tool is a derived superset of the `ZSH`-based inspiration.
 ```bash
   # create a group of several warp points
   wd -g/--group group1 -d/--define "point1,point2,...,pointN"
-  wd -g/--group group1 --remove point1  # remove a point from the group
-  wd -g/--group group1 --add    point1  # add a point to the group
+  wd -g/--group group1 -r/--remove  point1  # remove a point from the group
+  wd -g/--group group1 -a/--add     point1  # add a point to the group
   
   # execute command in all warp points of the group
   wd -x/--exec [ -g/--group group ] [ -r/--return-code ] -- command     
@@ -133,15 +133,14 @@ execute a command in all of them. You could use to:
  
 ```bash
   wd --find --group project-group --return-code=1 -- \
-      find . -name .aws-credentials.lol
+       find . -name .aws-credentials.lol
 ```
 
  * you want to run rspec in all projects of the group, and stop at the 
    first non-zero return: 
 
 ```bash
-  wd --all --group project-group --return-code \
-      'bundle exec rspec'
+  wd --all --group project-group --return-code -- bundle exec rspec
 ```
   
 ## Development
