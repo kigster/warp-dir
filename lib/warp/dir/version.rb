@@ -1,0 +1,6 @@
+module Warp
+  module Dir
+    VERSION = "0.1.0"
+  end
+end
+

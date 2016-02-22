@@ -1,18 +1,18 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'warp_dir/version'
+require 'warp/dir/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = 'warp_dir'
+  gem.name          = 'warp-dir'
   gem.license       = 'mit'
   gem.authors       = ['Konstantin Gredeskoul']
   gem.email         = ['kig@reinvent.one']
-  gem.version       = WarpDir::VERSION
+  gem.version       = Warp::Dir::VERSION
 
   gem.summary       = %q{Warp Directory: this is drop in replacement of the 'wd' tool available on ZSH. Written in ruby, it is available for any shell.}
   gem.description   = %q{ZSH has a very nifty tool called 'wd' for Warp Directory (https://github.com/mfaerevaag/wd). Unfortunately it only works with ZSH.}
-  gem.homepage      = "https://github.com/kigster/warp_dir"
+  gem.homepage      = "https://github.com/kigster/warp-dir"
 
 
   gem.files         = `git ls-files`.split($\)

@@ -1,8 +1,8 @@
 # Warp Directory
 
-[![Build Status](https://travis-ci.org/kigster/warp_dir.svg?branch=master)](https://travis-ci.org/kigster/warp_dir)
-[![Code Climate](https://codeclimate.com/github/kigster/warp_dir/badges/gpa.svg)](https://codeclimate.com/github/kigster/warp_dir)
-[![Gitter](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)](https://gitter.im/kigster/warp_dir)
+[![Build Status](https://travis-ci.org/kigster/warp-dir.svg?branch=master)](https://travis-ci.org/kigster/warp-dir)
+[![Code Climate](https://codeclimate.com/github/kigster/warp-dir/badges/gpa.svg)](https://codeclimate.com/github/kigster/warp-dir)
+[![Gitter](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)](https://gitter.im/kigster/warp-dir)
 
 This is a ruby implementation of the tool 'wd' (warp directory), 
 [originally written as a zsh module](https://github.com/mfaerevaag/wd) 
@@ -32,7 +32,7 @@ Some future extensions could be based on some additional realizations:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'warp_dir'
+gem 'warp-dir'
 ```
 
 And then execute:
@@ -41,7 +41,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install warp_dir
+    $ gem install warp-dir
 
 ## Usage
 
@@ -114,7 +114,7 @@ to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/kigster/warp_dir.
+Bug reports and pull requests are welcome on GitHub at https://github.com/kigster/warp-dir.
 
 ## Author
 
@@ -122,4 +122,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/kigste
 
 ## License
 
-This project is distributed under the [MIT License](https://raw.githubusercontent.com/kigster/warp_dir/master/LICENSE).
+This project is distributed under the [MIT License](https://raw.githubusercontent.com/kigster/warp-dir/master/LICENSE).
