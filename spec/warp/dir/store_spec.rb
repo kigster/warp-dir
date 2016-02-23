@@ -63,6 +63,14 @@ module Warp
             # adding another point pointing to the same name is not OK
             expect{new_store.add('m1', '98984')}.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
           end
+
+          it 'should be able to find the point' do
+            expect(new_store.find('m1')).to eql(Point.new('m1', 'A1'))
+          end
+
+          it 'should NOT be able to find a non-existent point' do
+            expect(new_store.find('ASDSADAS')).to be_nil
+          end
         end
       end
     end

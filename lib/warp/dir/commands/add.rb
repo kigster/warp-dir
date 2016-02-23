@@ -2,14 +2,14 @@ require_relative 'base'
 module Warp
   module Dir
     module Commands
-      class List < Base
+      class Add < Base
         class << self
           def description
-            %q(Print all stored warp points)
+            %q(Adds the current directory as a new warp point)
           end
         end
         def run
-          ::Warp::Dir::Point.print(store.points_map)
+          store.add warp_point, path
         end
       end
     end

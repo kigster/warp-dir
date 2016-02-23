@@ -4,5 +4,4 @@ module Warp
     end
   end
 end
-
 Warp::Dir.require_all_from '/dir/commands'

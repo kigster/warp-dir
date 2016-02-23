@@ -1,7 +1,14 @@
 module Warp
   module Dir
     class Point
-      attr_accessor :name, :full_path
+      ATTRS = %i(full_path name)
+      attr_accessor *ATTRS
+      class << self
+        def print(points)
+          longest_key = points.keys.max { |a, b| a.length <=> b.length }
+          points.values.each { |point| point.print(longest_key.length) }
+        end
+      end
 
       def initialize name, full_path
         raise ArgumentError.new ":name is required" if name.nil?
@@ -20,6 +27,11 @@ module Warp
 
       alias_method :path, :relative_path
 
+      def print(width = 0)
+        puts self.to_s(width)
+      end
+
+
       def inspect
         sprintf("{ name: '%s', path: '%s' }", name, path)
       end
@@ -28,18 +40,20 @@ module Warp
         sprintf("%#{width}s  ->  %s\n", name, relative_path)
       end
 
-      def print(width = 0)
-        puts self.to_s(width)
-      end
-
-      class << self
-
-        def print(points)
-          longest_key = points.keys.max { |a, b| a.length <=> b.length }
-          points.values.each { |point| point.print(longest_key.length) }
+      def hash
+        sum = ATTRS.inject("") do |sum, attribute|
+          sum += send(attribute).hash.to_s
         end
-
+        Digest::SHA1.base64digest(sum).hash
       end
+
+      def eql?(another)
+        return false unless another.is_a?(Warp::Dir::Point)
+        ATTRS.each do |attribute|
+          return false unless send(attribute).eql?(another.send(attribute))
+        end
+      end
+
     end
   end
 end

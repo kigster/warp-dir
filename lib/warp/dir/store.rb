@@ -31,6 +31,10 @@ module Warp
         points_map[p.name] = p
       end
 
+      def find(name)
+        points_map[name]
+      end
+
       def save *args
         add *args
         save!
@@ -42,4 +46,3 @@ module Warp
     end
   end
 end
-

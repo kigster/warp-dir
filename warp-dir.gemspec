@@ -15,12 +15,13 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/kigster/warp-dir"
 
   gem.files         = `git ls-files`.split($\)
-  gem.executables   = gem.files.grep(%r{^bin/wd$}).map{ |f| File.basename(f) }
+  gem.executables   = gem.files.grep(%r{^bin/(wd\.bash|warp-dir)$})
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
   gem.add_dependency('methadone', '~> 1.9.2')
   gem.add_dependency('slop', '~> 4.2.1')
+  gem.add_dependency('colored')
 
   gem.add_development_dependency 'codeclimate-test-reporter'
   gem.add_development_dependency 'bundler'

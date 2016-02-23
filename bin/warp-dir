@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+require 'bundler/setup'
+require 'warp/dir'
+require 'warp/dir/commands'
+require 'slop'
+require 'colored'
+
+# Slop v4 no longer supports commands, so we fake it:
+# if the first argument does not start with a dash, it must be a command.
+# So fake-add `--command` flag in front of it.
+@manager = Warp::Dir::Commands::Manager.new
+
+first_argument = ARGV[0]
+if first_argument && !first_argument[0].eql?('-')
+  if @manager.commands.include?(first_argument.to_sym)
+    ARGV.unshift('--command')
+  else
+    ARGV.unshift('--warp-point')
+    ARGV.unshift('warp')
+    ARGV.unshift('--command')
+  end
+end
+
+@args = ARGV.dup
+
+opts = Slop::Options.new
+opts.banner = %Q{
+  Usage: wd [ --command ] [ show | list | clean | validate | wipe ]          [ flags ]
+  wd [ --command ] [ add  [ -f/--force ] | rm | ls | path ] <point>   [ flags ]
+  wd --help | help
+
+  Warp Point Commands:
+  add   <point>   Adds the current directory as a new warp point
+  rm    <point>   Removes a warp point
+  show  <point>   Show the path to the warp point
+  ls    <point>   Show files from tne warp point
+  path  <point>   Show the path to given warp point
+
+  Global Commands:
+  show            Print warp points to current directory
+  list            Print all stored warp points
+  clean           Remove points warping to nonexistent directories
+  help            Show this extremely unhelpful text
+}
+@manager.commands.each do |installed_command|
+  opts.banner << sprintf("    %s\n", @manager.find(installed_command).help)
+end
+opts.banner << "\n"
+opts.banner << "  Flags:"
+opts.string '-m', '--command',    'command to run, ie. add, ls, list, rm, etc.'
+opts.string '-w', '--warp-point', 'name of the warp point'
+opts.bool   '-h', '--help',       'show help'
+opts.bool   '-v', '--verbose',    'enable verbose mode'
+opts.bool   '-q', '--quiet',      'suppress output (quiet mode)'
+opts.string '-c', '--config',     'location of the configuration file (default: ' + Warp::Dir.config + ')', default: Warp::Dir.config
+opts.on     '-V', '--version',    'print the version' do
+  puts "Version " + Warp::Dir::VERSION
+  exit
+end
+
+parser = Slop::Parser.new(opts)
+begin
+  result = parser.parse(ARGV)
+rescue Slop::UnknownOption => e
+  STDERR.puts "Invalid option: #{e.message}".red
+  exit 1
+end
+
+config = Warp::Dir::Config.new(result.to_hash)
+
+if config.verbose
+  require 'pp'
+  STDERR.send(:pp, config)
+end
+
+store = Warp::Dir::Store.new(config)
+
+if config.command
+  command_class = @manager.find(config.command)
+  if command_class
+    command_class.new(store, config.warp_point).run
+  else
+    STDERR.puts "command '#{config.command}' was not found.".red
+  end
+else
+  if result.help?
+    puts result
+    exit 0
+  else
+    STDERR.puts "#{$0} #{@argv.join(', ')} is not valid".red
+  end
+end
