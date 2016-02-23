@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/kigster/warp-dir"
 
   gem.files         = `git ls-files`.split($\)
-  gem.executables   = gem.files.grep(%r{^bin/(wd\.bash|warp-dir)$})
+  gem.executables   = gem.files.grep(%r{^(bin/warp-dir|bin/warp-dir.bash)$}).map {|f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 

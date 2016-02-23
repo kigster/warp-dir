@@ -31,13 +31,12 @@ module Warp
         puts self.to_s(width)
       end
 
-
       def inspect
         sprintf("{ name: '%s', path: '%s' }", name, path)
       end
 
       def to_s width = 0
-        sprintf("%#{width}s  ->  %s\n", name, relative_path)
+        sprintf("%#{width}s  ->  %s", name, relative_path)
       end
 
       def hash

@@ -9,7 +9,11 @@ module Warp
           end
         end
         def run
-          ::Warp::Dir::Point.print(store.points_map)
+          out = ""
+          store.points.each do |point|
+            out << "printf \"#{point}\\n\"; "
+          end
+          puts out
         end
       end
     end

@@ -23,6 +23,10 @@ module Warp
         self.points_list.dup
       end
 
+      def print_points
+        points.map(&:to_s).join("\n")
+      end
+
       def add(name, path)
         p = Warp::Dir::Point.new(name, path)
         return if self[name].eql?(p.relative_path)
