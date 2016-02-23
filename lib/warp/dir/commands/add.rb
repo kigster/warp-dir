@@ -10,6 +10,7 @@ module Warp
         end
         def run
           store.add warp_point, path
+          store.save!
         end
       end
     end

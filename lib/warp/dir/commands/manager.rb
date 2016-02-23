@@ -13,19 +13,17 @@ module Warp
         end
 
         def commands
-          initialize!
           Base.installed_commands.keys
         end
 
         def run! command, *args
-          initalize!
           cmd = find(command)
           raise ::Warp::Dir::Errors::InvalidCommand.new(command) unless cmd.is_a?(Class)
           cmd.new(*args).run
         end
 
-        def initialize!
-
+        def inspect
+          Base.installed_commands.inspect
         end
       end
     end

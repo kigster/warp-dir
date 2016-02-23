@@ -25,7 +25,7 @@ module Warp
         it 'should be able to add a new point to the Store' do
           store.add(point_name, point_path)
           corrected_path = Warp::Dir.relative point_path
-          expect(store[point_name]).to eql(corrected_path)
+          expect(store[point_name].path).to eql(corrected_path)
         end
 
         it 'should not be able to add a different point with the same name' do
@@ -39,24 +39,25 @@ module Warp
         it 'should be able to add multiple points to the Store' do
           store.add('m1', '123')
           store.add('m2', '456')
-          expect(store['m1']).to eql('123')
-          expect(store['m2']).to eql('456')
+          expect(store['m1'].path).to eql('123')
+          expect(store.path('m2')).to eql('456')
         end
 
       end
 
       context 'existing config file' do
         before do
-          store.save('m1', 'A1')
-          store.save('m2', 'A2')
+          store.add('m1', 'A1')
+          store.add('m2', 'A2')
+          store.save!
         end
 
         describe 'restoring from persintence' do
           let(:new_store) { Store.new(config) }
 
           it 'should be able to restore the points at a later time' do
-            expect(new_store['m1']).to eql('A1')
-            expect(new_store['m2']).to eql('A2')
+            expect(new_store.path('m1')).to eql('A1')
+            expect(new_store['m2'].path).to eql('A2')
           end
 
           it 'should not allow overwriting without a force flag' do
@@ -65,11 +66,11 @@ module Warp
           end
 
           it 'should be able to find the point' do
-            expect(new_store.find('m1')).to eql(Point.new('m1', 'A1'))
+            expect(new_store['m1']).to eql(Point.new('m1', 'A1'))
           end
 
           it 'should NOT be able to find a non-existent point' do
-            expect(new_store.find('ASDSADAS')).to be_nil
+            expect(new_store['ASDSADAS']).to be_nil
           end
         end
       end

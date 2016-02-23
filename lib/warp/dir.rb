@@ -6,7 +6,7 @@ module Warp
     end
 
     def self.pwd
-      ENV['PWD'].gsub ENV['HOME'], '~'
+      %x(pwd).gsub ENV['HOME'], '~'
     end
 
     def self.relative path
@@ -17,8 +17,8 @@ module Warp
       path.gsub '~', ENV['HOME']
     end
 
-    def self.config
-      relative Warp::Dir::Config::DEFAULTS[:config]
+    def self.default_config
+      relative Warp::Dir::Config::DEFAULTS[:warprc]
     end
   end
 end

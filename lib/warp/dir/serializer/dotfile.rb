@@ -6,7 +6,7 @@ module Warp
       class Dotfile < Base
 
         def restore!
-          File.open(Warp::Dir.absolute(config.config), "r") do |f|
+          File.open(Warp::Dir.absolute(config.warprc), "r") do |f|
             f.each_line do |line|
               line = line.chomp
               next if line.blank?
@@ -20,7 +20,7 @@ module Warp
         end
 
         def persist!
-          File.open(config.config, 'w') do |file|
+          File.open(config.warprc, 'w') do |file|
             buffer = ""
             store.points.each do |point|
               buffer << "#{point.name}:#{point.relative_path}\n"

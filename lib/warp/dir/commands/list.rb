@@ -9,11 +9,7 @@ module Warp
           end
         end
         def run
-          out = ""
-          store.points.each do |point|
-            out << "printf \"#{point}\\n\"; "
-          end
-          puts out
+          STDOUT.puts store.formatted(:bash)
         end
       end
     end

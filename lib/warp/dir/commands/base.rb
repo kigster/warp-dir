@@ -36,7 +36,7 @@ module Warp
           @store = store
           @warp_point = warp_point
           @path = path
-          @point = store.find(warp_point) # can be nil
+          @point = warp_point ? store[warp_point] : nil
         end
 
         def self.inherited subclass
@@ -48,7 +48,12 @@ module Warp
               def help
                 sprintf("%-16s%s", command, self.send(:description))
               end
+              def inspect
+                "#{self.name}[#{self.command}]->(#{self.description})"
+              end
             end
+          end
+          subclass.class_eval do
           end
           self.installed_commands[subclass.command] = subclass
         end
