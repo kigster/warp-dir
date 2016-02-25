@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{ZSH has a very nifty tool called 'wd' for Warp Directory (https://github.com/mfaerevaag/wd). Unfortunately it only works with ZSH.}
   gem.homepage      = "https://github.com/kigster/warp-dir"
 
-  gem.files         = `git ls-files`.split($\)
+  gem.files         = `git ls-files`.split($\).reject{ |f| f =~ /^doc\// }
   gem.executables   = gem.files.grep(%r{^(bin/warp-dir)$}).map {|f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
