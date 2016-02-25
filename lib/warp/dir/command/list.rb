@@ -1,15 +1,17 @@
-require_relative 'base'
+require 'warp/dir/command'
+require 'warp/dir/formatter'
+
 module Warp
   module Dir
-    module Commands
-      class List < Base
+    class Command
+      class List < Warp::Dir::Command
         class << self
           def description
             %q(Print all stored warp points)
           end
         end
         def run
-          STDOUT.puts store.formatted(:bash)
+          happy ::Warp::Dir::Formatter.new(store).format_store
         end
       end
     end

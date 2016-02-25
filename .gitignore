@@ -7,7 +7,6 @@ InstalledFiles
 _yardoc
 Gemfile.lock
 coverage
-doc/
 lib/bundler/man
 pkg
 rdoc

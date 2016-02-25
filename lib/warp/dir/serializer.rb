@@ -2,6 +2,9 @@ module Warp
   module Dir
     SERIALIZERS = {}
     module Serializer
+      def self.default
+        SERIALIZERS.values.first
+      end
     end
   end
 end

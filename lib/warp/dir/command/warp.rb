@@ -1,16 +1,17 @@
-require_relative 'base'
+require 'warp/dir/command'
+
 require 'colored'
 module Warp
   module Dir
-    module Commands
-      class Warp < Base
+    class Command
+      class Warp  < Warp::Dir::Command
         class << self
           def description
             %q(Jumps to the pre-defined warp point)
           end
         end
         def run
-          raise ::Warp::Dir::Errors::PointUnknown.new("For point #{warp_point}") unless point
+          raise ::Warp::Dir::Errors::PointNotFound.new(point) unless point
           if store.config.verbose
             STDERR.puts "warping from #{path} to".blue.bold + " #{point.absolute_path}".yellow.bold
           end

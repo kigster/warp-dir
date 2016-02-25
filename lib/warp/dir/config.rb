@@ -5,7 +5,8 @@ module Warp
     class Config
 
       DEFAULTS = {
-        warprc: ENV['HOME'] + '/.warprc'
+        warprc: ENV['HOME'] + '/.warprc',
+        shell: false
       }
 
       attr_accessor :variables
