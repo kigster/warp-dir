@@ -82,7 +82,7 @@ module Warp
           @config            = Warp::Dir::Config.new(@result.to_hash)
           @verbose           = true if @config.verbose
           @store             = Warp::Dir::Store.singleton(@config)
-          
+
           if @config.warp
             @config.command  = :warp
             @config.warp_point = @config.warp

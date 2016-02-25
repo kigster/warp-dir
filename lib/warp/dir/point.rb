@@ -1,4 +1,5 @@
 require 'forwardable'
+require 'digest'
 module Warp
   module Dir
     class Point
