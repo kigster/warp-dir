@@ -1,8 +1,8 @@
 {
-  "cmd": "bundle exec rspec",
+  "cmd": "bundle",
   "name": "Run All Specs",
-  "args": [ "-c", "-b", "-p 1", "--format progress", "--color"],
-  "keymap": "ctrl-cmd-r",
+  "args": [ "exec", "rspec", "-c", "-b", "-p 1", "--format progress", "--color", "spec/" ],
+  "keymap": "ctrl-r",
   "sh": true,
   "errorMatch": [
     "rspec (?<file>[\\/0-9a-zA-Z\\._]+):(?<line>\\d+) #",
@@ -13,9 +13,10 @@
   ],
   "targets": {
     "Run Current Spec": {
-      "cmd": "bundle exec rspec {FILE_ACTIVE}",
+      "cmd": "bundle",
+      "args": [ "exec", "rspec", "{FILE_ACTIVE}" ],
       "sh": false,
-      "keymap": "ctrl-cmd-snift-r"
+      "keymap": "ctrl-shift-r"
     }
   }
 }
