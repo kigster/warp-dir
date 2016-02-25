@@ -13,9 +13,11 @@ module Warp
 
       extend ::Forwardable
       def_delegators :@variables, :size, :<<, :map, :each
-      define_method(:[]) { |key| send(key) }
-
       def initialize(opts = {})
+        configure(opts)
+      end
+
+      def configure(opts = {})
         options = DEFAULTS.merge(opts)
 
         # Move :config hash key->value to :warprc that is expected by the Config
@@ -48,6 +50,10 @@ module Warp
         end
       end
 
+      # allow syntax @config[:warprc]
+      def [](key)
+        self.send(key)
+      end
 
       # Dispatches redis operations to master/slaves.
       def method_missing(method, *args, &block)
@@ -59,6 +65,7 @@ module Warp
       end
 
       private
+
       def add_config_variable(variable_name, value)
         reader   = variable_name.to_sym
         writer   = "#{reader}=".to_sym

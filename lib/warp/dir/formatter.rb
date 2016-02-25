@@ -23,8 +23,8 @@ module Warp
         print ? STDERR.printf(out) : out
       end
 
-      def format_point(*args)
-        PointFormatter.new(p).format(*args)
+      def format_point(point, *args)
+        PointFormatter.new(point).format(*args)
       end
 
       def format_store(*args)
@@ -66,9 +66,8 @@ module Warp
         # sort by one of the fields.
         def format(type = DEFAULT_FORMAT, sort_field = :name)
           longest_key_length = store.points.map(&:name).map(&:length).sort.last
-          Warp::Dir.sort_by(store.points, sort_field).map do |p|
-            raise ArgumentError.new("#{p} is not a Point") unless p.is_a?(Point)
-            PointFormatter.new(p).format(type, longest_key_length)
+          Warp::Dir.sort_by(store.points, sort_field).map do |point|
+            PointFormatter.new(point).format(type, longest_key_length)
           end.join("\n")
         end
       end

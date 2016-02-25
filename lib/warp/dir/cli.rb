@@ -8,7 +8,7 @@ require 'pp'
 
 module Warp
   module Dir
-    USAGE = <<-EOF
+    USAGE = <<EOF
   Usage:  wd [ --command ] [ show | list | clean | validate | wipe ]          [ flags ]
           wd [ --command ] [ add  [ -f/--force ] | rm | ls | path ] <point>   [ flags ]
           wd --help | help
@@ -24,94 +24,51 @@ module Warp
     show            Print warp points to current directory
     clean           Remove points warping to nonexistent directories
     help            Show this extremely unhelpful text
-    EOF
+EOF
+
     class CLI
-      def not_a_flag arg
-        arg && !arg[0].eql?('-')
-      end
-      def shift_non_flag_argument
-        if not_a_flag ARGV[0]
-          return ARGV.shift
-        end
-        nil
+      attr_accessor :argv, :config, :commander, :store
+
+      def initialize(argv)
+        self.argv      = argv
+        self.commander = ::Warp::Dir.commander
+        self.config    = ::Warp::Dir.config
       end
 
       def run
-        @verbose = false
-        @command_manager = ::Warp::Dir::Command
+        config.verbose = false
+        config.debug = false
+        extract_non_flags!
+
+        result = parse_with_slop!
+        config.configure(result.to_hash)
+
+        if config.debug
+          require 'pp'
+          printf ('_' * 80).yellow + "\n"
+          pp config, argv, commander
+        end
+
         begin
-          # Slop v4 no longer supports commands, so we fake it:
-          # if the first argument does not start with a dash, it must be a command.
-          # So fake-add `--command` flag in front of it.
-          first_argument = shift_non_flag_argument
-          @command       = first_argument if first_argument && @command_manager.find(first_argument.to_sym)
-          second_argument= shift_non_flag_argument
-          @point         = second_argument
+          store          = Warp::Dir.store(config, Warp::Dir::Serializer::Dotfile)
+          config.command = :warp if !config.command && config.warp
+          Warp::Dir.commander.configure(store)
 
-          opts           = Slop::Options.new
-          opts.banner    = USAGE
-          @command_manager.installed_commands.map(&:command_name).each do |installed_command|
-            opts.banner << sprintf("    %s\n", @command_manager.find(installed_command).help)
-          end
-
-          opts.banner << "\n"
-          opts.banner << '  Flags:'
-          opts.string '-m', '--command',    '<command>      – command to run, ie. add, ls, list, rm, etc.'
-          opts.string '-p', '--warp-point', '<point-name>   – name of the warp point'
-          opts.string '-w', '--warp',       '<warp-point>   – warp to a given point'
-          opts.bool   '-h', '--help',       '               – show help'
-          opts.bool   '-v', '--verbose',    '               – enable verbose mode'
-          opts.bool   '-q', '--quiet',      '               – suppress output (quiet mode)'
-          opts.bool   '-d', '--debug',      '               – show stacktrace if errors are detected'
-          opts.string '-c', '--config',     '<config>       – location of the configuration file (default: ' + Warp::Dir.default_config + ')', default: Warp::Dir.default_config
-          opts.boolean'-s', '--shell',      '               – if passed, output is returned for BASH\' eval: eval "($(warp_dir ...))"'
-          opts.on     '-V', '--version',    '               – print the version' do
-            puts 'Version ' + Warp::Dir::VERSION
-            exit
-          end
-
-          @result = nil
-          begin
-            parser  = Slop::Parser.new(opts)
-            @result = parser.parse(ARGV)
-          rescue Slop::UnknownOption => e
-            STDERR.puts "Invalid option: #{e.message}".red
-            exit 1
-          end
-
-          @config            = Warp::Dir::Config.new(@result.to_hash)
-          @verbose           = true if @config.verbose
-          @store             = Warp::Dir::Store.singleton(@config)
-
-          if @config.warp
-            @config.command  = :warp
-            @config.warp_point = @config.warp
-          end
-
-          Warp::Dir::Command.init(@store)
-
-          @config.command    ||= @command if @command
-          @config.warp_point ||= @point if @point
-
-          if @config.debug
-            pp @config
-            pp @store
-          end
-
-          if @config.command
-            command_class = @command_manager.find(@config.command)
+          pp store
+          if config.command
+            command_class = commander.find(config.command)
             if command_class
-              command_class.new(@config.warp_point).run
+              command_class.new(config.point).run
             else
-              STDERR.puts "command '#{@config.command}' was not found.".red
+              STDERR.puts "command '#{config.command}' was not found.".red
             end
           else
-            if @result.help?
-              puts @result.to_s.blue.bold
+            if result.help?
+              puts result.to_s.blue.bold
               exit 0
             else
-              STDERR.puts "#{$0}: passing #{@argv ? @argv.join(', ') : 'no arguments'} is invalid.".white_on_red
-              puts @results.to_s.blue
+              STDERR.puts "#{$0}: passing #{argv ? argv.join(', ') : 'no arguments'} is invalid.".white_on_red
+              puts result.to_s.blue
               abort
             end
           end
@@ -120,14 +77,66 @@ module Warp
         rescue Exception => e
           printf("ERROR: received exception #{e.class}, #{e.message}".red.bold + "\n".white)
           printf(e.backtrace.join("\n\t").yellow.bold + "\n")
-          if @verbose
-            require 'pp'
-            pp @manager
-            pp @config
-            pp @storee
-          end
         end
       end
+
+      #______________________________________________________________________________________________________
+
+      private
+
+      def parse_with_slop!
+        opts        = Slop::Options.new
+        opts.banner = USAGE
+        commander.commands.map(&:command_name).each do |installed_commands|
+          opts.banner << sprintf("    %s\n", commander.find(installed_commands).help)
+        end
+
+        opts.banner << "\n"
+        opts.banner << '  Flags:'
+        opts.string '-m', '--command',    '<command>      – command to run, ie. add, ls, list, rm, etc.'
+        opts.string '-p', '--point',      '<point-name>   – name of the warp point'
+        opts.string '-w', '--warp',       '<warp-point>   – warp to a given point'
+        opts.bool   '-h', '--help',       '               – show help'
+        opts.bool   '-v', '--verbose',    '               – enable verbose mode'
+        opts.bool   '-q', '--quiet',      '               – suppress output (quiet mode)'
+        opts.bool   '-d', '--debug',      '               – show stacktrace if errors are detected'
+        opts.string '-c', '--config',     '<config>       – location of the configuration file (default: ' + Warp::Dir.default_config + ')', default: Warp::Dir.default_config
+        opts.boolean'-s', '--shell',      '               – if passed, output is returned for BASH\' eval: eval "($(warp_dir ...))"'
+        opts.on     '-V', '--version',    '               – print the version' do
+          puts 'Version ' + Warp::Dir::VERSION
+          exit
+        end
+
+        result = nil
+        begin
+          parser  = Slop::Parser.new(opts)
+          result = parser.parse(argv)
+        rescue Slop::UnknownOption => e
+          STDERR.puts "Invalid option: #{e.message}".red
+          exit 1
+        end
+
+        result
+      end
+
+      def extract_non_flags!
+        non_flags = []
+        while is_noflag(argv[0]) do
+          non_flags << argv.shift
+        end
+        case non_flags.size
+          when 1
+            config.point = non_flags[0]
+            config.command = :warp
+          when 2
+            config.command, config.point = non_flags
+        end
+      end
+
+      def is_noflag arg
+        arg && !arg[0].eql?('-')
+      end
+
     end
   end
 end

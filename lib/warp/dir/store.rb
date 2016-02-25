@@ -63,12 +63,14 @@ module Warp
 
       def find_point(name_or_point)
         return if name_or_point.nil?
-        if name_or_point.is_a?(Warp::Dir::Point)
-          self[name_or_point.name]
-        else
-          matching_set = self.points_collection.classify { |p| p.name.to_sym }[name_or_point.to_sym]
-          matching_set && !matching_set.empty? ? matching_set.first : nil
-        end
+        result = if name_or_point.is_a?(Warp::Dir::Point)
+                   self.find_point(name_or_point.name)
+                 else
+                   matching_set = self.points_collection.classify { |p| p.name.to_sym }[name_or_point.to_sym]
+                   (matching_set && !matching_set.empty?) ? matching_set.first : nil
+                 end
+        raise ::Warp::Dir::Errors::PointNotFound.new(name_or_point) unless result
+        result
       end
 
       def save!
@@ -92,17 +94,22 @@ module Warp
       def add(point, overwrite: false)
         # Three use-cases here.
         # if we found this WarpPoint by name, and it's path is different from the incoming...
-        existing = self[point]
+        existing = begin
+          self[point]
+        rescue Warp::Dir::Errors::PointNotFound
+          nil
+        end
+
         if existing.eql?(point) # found, but it's identical
           return
-        elsif existing          # found, but it's different
-          if overwrite                # replace it
+        elsif existing # found, but it's different
+          if overwrite # replace it
             replace(point, existing)
-          else                        # reject it
+          else # reject it
             raise Warp::Dir::Errors::PointAlreadyExists.new(point)
           end
         else # no lookup found
-          self.points_collection << point   # add it
+          self.points_collection << point # add it
         end
       end
 

@@ -9,10 +9,8 @@ module Warp
           end
         end
         def run
-          @store.add_by_name warp_point, path
-          @store.save!
-        rescue ::Warp::Dir::Errors::PointAlreadyExists => e
-          unhappy(e.message)
+          store.add_by_name point_name, point_path
+          store.save!
         end
       end
     end

@@ -1,35 +1,53 @@
 module Warp
   PROJECT = File.dirname(File.absolute_path(__FILE__))
   module Dir
-    def self.require_all_from folder
-      ::Dir.glob(Warp::PROJECT + folder + '/*.rb') { |file| Kernel.require file }
-    end
 
-    def self.pwd
-      %x(pwd).gsub ENV['HOME'], '~'
-    end
+    class << self
+      def require_all_from(folder)
+        ::Dir.glob(Warp::PROJECT + folder + '/*.rb') { |file| Kernel.require file }
+      end
 
-    def self.relative path
-      path.gsub ENV['HOME'], '~'
-    end
+      def pwd
+        %x(pwd).gsub ENV['HOME'], '~'
+      end
 
-    def self.absolute path
-      path.gsub '~', ENV['HOME']
-    end
+      def relative(path)
+        path.gsub ENV['HOME'], '~'
+      end
 
-    def self.default_config
-      relative Warp::Dir::Config::DEFAULTS[:warprc]
-    end
+      def absolute(path)
+        path.gsub '~', ENV['HOME']
+      end
 
-    def self.sort_by(collection, field)
-      collection.sort { |a, b| a.send(field) <=> b.send(field) }
+      def default_config
+        relative Warp::Dir::Config::DEFAULTS[:warprc]
+      end
+
+      def sort_by(collection, field)
+        collection.sort { |a, b| a.send(field) <=> b.send(field) }
+      end
+
+      # Wrappers
+
+      def commander(*args)
+        Module.const_get('Warp::Dir::Commander').instance(*args)
+      end
+
+      def store(*args)
+        @store ||= Module.const_get('Warp::Dir::Store').singleton(*args)
+      end
+
+      def config(*args)
+        @config ||= Module.const_get('Warp::Dir::Config').new(*args)
+      end
+
     end
   end
 end
 
 class Object
   def blank?
-    self.eql?("") || self.nil?
+    self.eql?('') || self.nil?
   end
 end
 

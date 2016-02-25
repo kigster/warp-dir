@@ -9,9 +9,7 @@ module Warp
           end
         end
         def run
-          store.delete warp_point
-        rescue ::Warp::Dir::Errors::PointNotFound => e
-          ::Warp::Dir.error message: e.message.gsub(%r{#{e.class.name}}, '')
+          store.delete point_name
         end
       end
     end

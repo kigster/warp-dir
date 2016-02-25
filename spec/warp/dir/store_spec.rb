@@ -104,7 +104,7 @@ module Warp
           end
 
           it 'should be able to handle when it doesnt find a given element' do
-            expect(new_store['ASDSADAS']).to be_nil
+            expect{ new_store['ASDSADAS']}.to raise_error(Warp::Dir::Errors::PointNotFound)
           end
         end
       end

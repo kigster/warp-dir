@@ -9,13 +9,11 @@ module Warp
           end
         end
         def run(flags)
-          point = store.find warp_point
-          Dir.chdir(point.path)
-          flags ||= '-al'
+          point = store.find_point(point_name)
+          Dir.chdir(point.point_path)
+          flags = '-al' unless flags
           ls_output = `ls #{flags} #{point.path}`
           happy(ls_output)
-        rescue ::Warp::Dir::Errors::PointNotFound => e
-          ::Warp::Dir.error message: e.message
         end
       end
     end

@@ -1,46 +1,13 @@
 require 'set'
 require 'warp/dir/errors'
 require 'warp/dir/formatter'
+require 'warp/dir/commander'
+require 'warp/dir/point'
+require 'forwardable'
 module Warp
   module Dir
     class Command
       class << self
-        attr_accessor :store, :installed_commands, :initialized, :command_lookup
-
-        def init(store)
-          raise 'Already initialized' if self.initialized
-          @store       = store
-          @formatter   = ::Warp::Dir::Formatter.new(@store)
-          @initialized = false
-          validate!
-        end
-
-        def store
-          @store
-        end
-
-        def inherited(subclass)
-          @installed_commands ||= Set.new
-          @installed_commands << subclass
-        end
-
-        def find(command)
-          @command_lookup ||= self.installed_commands.classify { |cmd| cmd.command_name }
-          subset = self.command_lookup[command.to_sym]
-          raise ::Warp::Dir::Errors::InvalidCommand.new(command) unless subset && !subset.empty?
-          subset.first
-        end
-
-        def installed_command_names
-          self.installed_commands.to_a.map(&:command_name)
-        end
-
-        def run(command, *args)
-          cmd = find(command)
-          raise ::Warp::Dir::Errors::InvalidCommand.new(command) unless cmd.is_a?(Class)
-          cmd.new(*args).run
-        end
-
         def command_name
           self.name.gsub(/.*::/, '').downcase.to_sym
         end
@@ -49,43 +16,62 @@ module Warp
           sprintf('%-16s%s', self.command_name, self.send(:description))
         end
 
-
-
-        private
-
-        def validate!
-          self.installed_commands.delete_if do |subclass|
-            if !subclass.respond_to?(:abstract_class?) && !subclass.method_defined?(:run)
-              raise ::Warp::Dir::Errors::InvalidCommand.new(subclass)
+        def inherited(subclass)
+          ::Warp::Dir::Commander.instance.register(subclass)
+          subclass.class_eval do
+            def store
+              ::Warp::Dir::Commander.instance.store
             end
-            subclass.respond_to?(:abstract_class?) || !subclass.method_defined?(:run)
+            def command_name
+              self.class.command_name
+            end
+            def help
+              self.class.help
+            end
+            def description
+              self.class.description
+            end
           end
-          @initialized = installed_commands.size > 0 ? true : false
         end
 
+        def installed_commands
+          ::Warp::Dir::Commander.instance.commands
+        end
       end
 
-      attr_reader :warp_point, :path, :point, :config, :store
+      attr_accessor :point_name, :point_path, :point
 
-      def initialize(warp_point = nil, path = ::Warp::Dir.pwd)
-        @store      = self.class.superclass.store
-        @warp_point = warp_point
-        @path       = path
-        @point      = warp_point ? store[warp_point] : nil
-        @config     = @store.config
+      def initialize(point_name = nil, point_path = nil)
+        if point_name
+          if point_name.is_a?(::Warp::Dir::Point)
+            self.point = point_name
+          else
+            self.point_name = point_name
+          end
+          if point_path
+            self.point_path = point_path
+            unless point
+              point = ::Warp::Dir::Point.new(point_name, point_path)
+            end
+          end
+        end
+      end
+
+      def config
+        self.store.config
       end
 
       def chain_command(another_command)
-        command = self.class.find(another_command.name)
-        command.new(warp_point, path).run
+        command = Warp::Dir.commander.find(another_command.name)
+        command.new(point_name, point_path).run
       end
 
       def happy(*args)
-        STDOUT.printf(*args)
+        self.puts(STDOUT, *args)
       end
 
       def unhappy(*args)
-        STDERR.printf(*args)
+        self.puts(STDERR, *args)
       end
 
       def inspect
