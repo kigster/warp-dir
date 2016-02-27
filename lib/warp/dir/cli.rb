@@ -45,7 +45,7 @@ EOF
 
         if config.debug
           require 'pp'
-          printf ('_' * 80).yellow + "\n"
+          printf('_' * 80).yellow + "\n"
           pp config, argv, commander
         end
 
