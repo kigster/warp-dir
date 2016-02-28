@@ -17,20 +17,13 @@ module Warp
         end
 
         def inherited(subclass)
-          ::Warp::Dir::Commander.instance.register(subclass)
+          ::Warp::Dir.commander.register(subclass)
           subclass.class_eval do
             def store
               ::Warp::Dir::Commander.instance.store
             end
-            def command_name
-              self.class.command_name
-            end
-            def help
-              self.class.help
-            end
-            def description
-              self.class.description
-            end
+            extend Forwardable
+            def_delegators :@klazz, :command_name, :help, :description
           end
         end
 
@@ -42,6 +35,7 @@ module Warp
       attr_accessor :point_name, :point_path, :point
 
       def initialize(point_name = nil, point_path = nil)
+        @klazz = self.class
         if point_name
           if point_name.is_a?(::Warp::Dir::Point)
             self.point = point_name
