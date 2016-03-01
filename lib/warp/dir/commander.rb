@@ -7,22 +7,24 @@ module Warp
     class Commander
       include Singleton
 
-      attr_accessor :store, :commands, :formatter
+      attr_reader :store, :commands, :formatter
+      def initialize
+        @commands  ||= Set.new # a pre-caution, normally it would already by defined by now
+      end
 
       def configure(store)
         @store     = store
         @formatter = ::Warp::Dir::Formatter.new(@store)
-        @commands  ||= Set.new # a pre-caution, normally it would already by defined by now
         validate!
       end
 
       def register(command)
-        @commands ||= Set.new
-        @commands << command
+        @commands << command if command
+        self
       end
 
       def installed_commands
-        self.commands.to_a.map(&:command_name)
+        commands.to_a.map(&:command_name)
       end
 
       def find(command_name)

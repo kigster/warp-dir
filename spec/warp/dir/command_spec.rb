@@ -9,10 +9,10 @@ describe Warp::Dir::Command do
 
   describe 'when we remove inherited hierarchy' do
     before do
-      commander.commands = Set.new
+      commander.commands.clear
     end
     after do
-      commander.commands = installed_commands.dup
+      commander.commands.merge(installed_commands.dup)
     end
 
     it 'should start with a blank list' do
