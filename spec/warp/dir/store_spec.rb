@@ -5,7 +5,7 @@ require 'warp/dir/store'
 require 'tempfile'
 module Warp
   module Dir
-    describe aStore do
+    describe Store do
       include_context :fake_serializer
 
       context 'when store responds to common methods on collections' do
