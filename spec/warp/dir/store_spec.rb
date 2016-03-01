@@ -5,14 +5,8 @@ require 'warp/dir/store'
 require 'tempfile'
 module Warp
   module Dir
-    describe Store do
-      include_context :store_can_be_recreated
-      let(:file) { @file ||= ::Tempfile.new('warp-dir') }
-      let(:config) { Config.new(config: file.path) }
-      after :each do
-        file.close
-        file.unlink
-      end
+    describe aStore do
+      include_context :fake_serializer
 
       context 'when store responds to common methods on collections' do
         let(:point_name) { 'moo' }
