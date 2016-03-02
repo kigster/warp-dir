@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'warp/dir'
-require 'warp/dir/command'
 require 'slop'
 require 'colored'
 require 'pp'
@@ -25,14 +24,14 @@ module Warp
     clean           Remove points warping to nonexistent directories
     help            Show this extremely unhelpful text
 EOF
-
     class CLI
-      attr_accessor :argv, :config, :commander, :store
+      attr_accessor :argv, :config, :commander, :store, :response
 
       def initialize(argv)
         self.argv      = argv
         self.commander = ::Warp::Dir.commander
         self.config    = ::Warp::Dir.config
+        self.response  = ::Warp::Dir::Response.new
       end
 
       def run
@@ -45,8 +44,9 @@ EOF
 
         if config.debug
           require 'pp'
-          printf('_' * 80).yellow + "\n"
+          printf('_' * 80).green + "\n"
           pp config, argv, commander
+          printf('_' * 80).green + "\n"
         end
 
         begin
@@ -58,19 +58,18 @@ EOF
           if config.command
             command_class = commander.find(config.command)
             if command_class
-              command_class.new(config.point).run
+              response.type = command_class.new(config.point).run
             else
               STDERR.puts "command '#{config.command}' was not found.".red
             end
           else
             if result.help?
-              puts result.to_s.blue.bold
-              exit 0
+              response
             else
-              STDERR.puts "#{$0}: passing #{argv ? argv.join(', ') : 'no arguments'} is invalid.".white_on_red
-              puts result.to_s.blue
-              abort
+              response = Response.error
+              response.messages << "#{$0}: passing #{argv ? argv.join(', ') : 'no arguments'} is invalid.".red
             end
+            response << result.to_s.blue
           end
         rescue SystemExit
           return
@@ -78,6 +77,8 @@ EOF
           printf("ERROR: received exception #{e.class}, #{e.message}".red.bold + "\n".white)
           printf(e.backtrace.join("\n\t").yellow.bold + "\n")
         end
+
+        response
       end
 
       #______________________________________________________________________________________________________

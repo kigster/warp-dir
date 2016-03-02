@@ -4,6 +4,8 @@ require 'warp/dir/formatter'
 require 'warp/dir/commander'
 require 'warp/dir/point'
 require 'forwardable'
+require_relative 'response'
+
 module Warp
   module Dir
     class Command
@@ -22,6 +24,7 @@ module Warp
             def store
               ::Warp::Dir::Commander.instance.store
             end
+
             extend Forwardable
             def_delegators :@klazz, :command_name, :help, :description
           end
@@ -55,17 +58,22 @@ module Warp
         self.store.config
       end
 
-      def chain_command(another_command)
-        command = Warp::Dir.commander.find(another_command.name)
-        command.new(point_name, point_path).run
-      end
+      # def chain(another_command)
+      #   command = Warp::Dir.commander.find(another_command.name)
+      #   command.new(point_name, point_path).run
+      # end
 
-      def happy(*args)
-        self.puts(STDOUT, *args)
-      end
-
-      def unhappy(*args)
-        self.puts(STDERR, *args)
+      # @param [Object] type – a symbol: :success, :error, :shell
+      # @param [Object] block - a block where response is defined
+      # eg.
+      #
+      # finish :success do
+      #   code 100
+      #   message 'Awesome thanks!'
+      # end
+      #
+      def finish(type, &block)
+        Response.new(type).exit(&block)
       end
 
       def inspect

@@ -3,6 +3,7 @@ require 'warp/dir'
 
 RSpec.describe Warp::Dir::Point do
   include_context :fake_serializer
+  include_context :initialized_store
 
   let(:path_absolute) { ENV['HOME'] + '/workspace' }
   let(:path_relative) { '~/workspace' }

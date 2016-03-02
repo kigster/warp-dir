@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'warp/dir/formatter'
 
 RSpec.describe Warp::Dir::Formatter do
-  include_context :fake_serializer
+  include_context :initialized_store
 
   let(:path_absolute) { ENV['HOME'] + '/workspace' }
   let(:path_relative) { '~/workspace' }

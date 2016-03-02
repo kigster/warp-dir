@@ -11,7 +11,10 @@ module Warp
           end
         end
         def run
-          happy ::Warp::Dir::Formatter.new(store).format_store
+          s = self.store
+          finish :success do
+            message ::Warp::Dir::Formatter.new(s).format_store
+          end
         end
       end
     end

@@ -3,6 +3,7 @@ require 'spec_helper'
 
 RSpec.describe Warp::Dir::Errors do
   include_context :fake_serializer
+  include_context :initialized_store
 
   it 'should properly throw point already exists error' do
     expect(store.class).to eql(Warp::Dir::Store)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Warp::Dir::Config do
+RSpec.describe Warp::Dir::Config do
   let(:c1) { Warp::Dir::Config.new(blah: 'blah blah') }
 
   it 'should have a default folder' do

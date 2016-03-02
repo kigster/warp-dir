@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Warp::Dir::Command do
-  include_context :fake_serializer
+RSpec.describe Warp::Dir::Command do
+  include_context :initialized_store
   installed_commands = Warp::Dir::Command.installed_commands.dup.freeze
 
   let(:command) { Warp::Dir::Command }

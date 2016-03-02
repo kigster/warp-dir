@@ -11,6 +11,9 @@ module Warp
         def run
           store.add_by_name point_name, point_path
           store.save!
+          finish :success do
+            message 'Warp point saved!'
+          end
         end
       end
     end

@@ -12,11 +12,9 @@ module Warp
         end
         def run
           raise ::Warp::Dir::Errors::PointNotFound.new(point) unless point
-          if store.config.verbose
-            happy "warping from #{path} to".blue.bold + " #{point.absolute_path}".yellow.bold
+          finish :shell do
+            message "cd #{point.absolute_path}"
           end
-          happy "cd #{point.absolute_path}"
-          exit 0
         end
       end
     end
