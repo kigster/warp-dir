@@ -3,11 +3,8 @@ module Warp
   module Dir
     class Command
       class LS < Warp::Dir::Command
-        class << self
-          def description
-            %q(Lists directory contents of a warp point without changing current directory)
-          end
-        end
+        description %q(Lists directory contents of a warp point without changing current directory)
+
         def run(flags)
           point = store.find_point(point_name)
           Dir.chdir(point.point_path)

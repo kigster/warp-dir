@@ -1,16 +1,13 @@
 require 'warp/dir/command'
-module Warp
-  module Dir
-    class Command
-      class Remove < Warp::Dir::Command
-        class << self
-          def description
-            %q(Removes a given warp point from the database)
-          end
-        end
-        def run
-          store.delete point_name
-        end
+class Warp::Dir::Command
+  class Remove < Warp::Dir::Command
+    description %q(Removes a given warp point from the database)
+
+    def run
+      # store.find(point_name).destroy
+      store.delete point_name
+      on :success do
+        message 'Warp point deleted.'
       end
     end
   end

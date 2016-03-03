@@ -28,6 +28,15 @@ module Warp
             extend Forwardable
             def_delegators :@klazz, :command_name, :help, :description
           end
+
+          subclass.instance_eval do
+            class << self
+              def description value = nil
+                @description = value if value
+                @description
+              end
+            end
+          end
         end
 
         def installed_commands
@@ -62,18 +71,8 @@ module Warp
       #   command = Warp::Dir.commander.find(another_command.name)
       #   command.new(point_name, point_path).run
       # end
-
-      # @param [Object] type – a symbol: :success, :error, :shell
-      # @param [Object] block - a block where response is defined
-      # eg.
-      #
-      # finish :success do
-      #   code 100
-      #   message 'Awesome thanks!'
-      # end
-      #
-      def finish(type, &block)
-        Response.new(type).exit(&block)
+      def on(type, &block)
+        ::Warp::Dir.on(type, &block)
       end
 
       def inspect

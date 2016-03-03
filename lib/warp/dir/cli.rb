@@ -60,7 +60,9 @@ EOF
             if command_class
               response.type = command_class.new(config.point).run
             else
-              STDERR.puts "command '#{config.command}' was not found.".red
+              on :error do
+                message "command '#{config.command}' was not found.".red
+              end
             end
           else
             if result.help?

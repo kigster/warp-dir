@@ -41,7 +41,21 @@ module Warp
         @config ||= Module.const_get('Warp::Dir::Config').new(*args)
       end
 
+
+      # @param [Object] type – a symbol: :success, :error, :shell
+      # @param [Object] block - a block where response is defined
+      # eg.
+      #
+      # on :success do
+      #   code 100
+      #   message 'Awesome thanks!'
+      # end
+      #
+      def on(type, &block)
+        Response.new(type).exit(&block)
+      end
     end
+
   end
 end
 
