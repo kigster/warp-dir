@@ -52,12 +52,7 @@ module Warp
           else
             self.point_name = point_name
           end
-          if point_path
-            self.point_path = point_path
-            unless point
-              self.point = ::Warp::Dir::Point.new(point_name, point_path)
-            end
-          end
+          self.point_path = point_path if point_path
         end
       end
 

@@ -13,6 +13,7 @@ RSpec.describe Warp::Dir::Command::Add do
   let(:point) { Warp::Dir::Point.new(wp_name, wp_path) }
 
   let(:add_command) { command_class.new(store, wp_name, wp_path) }
+
   before do
     expect(store).to receive(:config).and_return(config).at_least(:once)
   end
@@ -32,8 +33,7 @@ RSpec.describe Warp::Dir::Command::Add do
 
   describe '#run' do
     it 'should call #save! on store after adding new wp' do
-      expect(store).to receive(:add_by_name).with(wp_name, wp_path).and_return(point)
-      expect(store).to receive(:save!)
+      expect(store).to receive(:insert).with(point: nil, point_name: wp_name, point_path: wp_path, overwrite: false).and_return(point)
       add_command.run
     end
   end

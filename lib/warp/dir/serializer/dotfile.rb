@@ -14,7 +14,7 @@ module Warp
               if name.nil? || path.nil?
                 raise Warp::Dir::Errors::StoreFormatError.new("File may be corrupt - #{config.warprc}:#{line}", line)
               end
-              store.add_by_name name, path
+              store.add point_name: name, point_path: path
             end
           end
         end

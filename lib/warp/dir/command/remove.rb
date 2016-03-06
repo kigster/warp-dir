@@ -4,10 +4,9 @@ class Warp::Dir::Command
     description %q(Removes a given warp point from the database)
 
     def run
-      # store.find(point_name).destroy
-      store.delete point_name
+      store.remove point_name
       on :success do
-        message 'Warp point deleted.'
+        message "Warp point #{point_name.yellow} has been removed."
       end
     end
   end

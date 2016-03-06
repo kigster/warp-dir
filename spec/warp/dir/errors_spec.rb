@@ -9,8 +9,8 @@ RSpec.describe Warp::Dir::Errors do
     expect(store.class).to eql(Warp::Dir::Store)
     expect(point.class).to eql(Warp::Dir::Point)
 
-    store.add(point.dup)
+    store.add(point: point.dup)
     point.full_path = '~/booomania'
-    expect { store.add(point) }.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
+    expect { store.add(point: point) }.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
   end
 end

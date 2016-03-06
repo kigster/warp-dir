@@ -20,7 +20,7 @@ RSpec.describe Warp::Dir::Command::List do
     let(:formatter) { Warp::Dir::Formatter.new(store) }
     let(:output) { formatter.format_store(:ascii) }
     before do
-      store.add(point)
+      store.add(point: point)
     end
 
     it 'should return formatted warp points from the store' do
@@ -29,7 +29,7 @@ RSpec.describe Warp::Dir::Command::List do
 
     it 'should return response and print the listing' do
       response = list.new(store).run
-      expect(response.messages.first).to eql(output)
+      expect(response.messages.first).to eql(output.blue.bold)
       expect(STDOUT).to receive(:printf).at_least(1).times
       response.print
     end

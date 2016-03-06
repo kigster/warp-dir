@@ -24,8 +24,8 @@ RSpec.describe Warp::Dir::Store do
     end
 
     it 'it should respond to #<< and add a new point' do
-      store.add(p1)
-      store.add(p2)
+      store.add(point: p1)
+      store.add(point: p2)
       store << Warp::Dir::Point.new('123', '436')
       expect(store.size).to eql(3)
     end
@@ -51,22 +51,22 @@ RSpec.describe Warp::Dir::Store do
     end
 
     it 'should be able to add a new point to the Store' do
-      store.add_by_name(point_name, point_path)
+      store.add(point_name: point_name, point_path: point_path)
       corrected_path = Warp::Dir.absolute point_path
       expect(store[point_name].path).to eql(corrected_path)
     end
 
     it 'should not be able to add a different point with the same name' do
-      store.add_by_name(point_name, point_path)
+      store.add(point_name: point_name, point_path: point_path)
       # double adding the same point is ok
-      expect { store.add_by_name(point_name, point_path) }.to_not raise_error
+      expect { store.add(point_name: point_name, point_path: point_path) }.to_not raise_error
       # adding another point pointing to the same name is not OK
-      expect { store.add_by_name(point_name, point_path + '98984') }.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
+      expect { store.add(point_name: point_name, point_path: point_path + '98984') }.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
     end
 
     it 'should be able to add multiple points to the Store' do
-      store.add_by_name('m1', '123')
-      store.add_by_name('m2', '456')
+      store.add(point_name: 'm1', point_path: '123')
+      store.add(point_name: 'm2', point_path: '456')
       expect(store['m1'].path).to eql('123')
       expect(store['m2'].path).to eql('456')
     end
@@ -75,8 +75,8 @@ RSpec.describe Warp::Dir::Store do
   context 'data store contains some warp points already' do
     let(:store) { Warp::Dir::Store.new(config) }
     before do
-      store.add_by_name('m1', 'A1')
-      store.add_by_name('m2', 'A2')
+      store.add(point_name: 'm1', point_path: 'A1')
+      store.add(point_name: 'm2', point_path: 'A2')
       store.save!
     end
 
@@ -90,7 +90,7 @@ RSpec.describe Warp::Dir::Store do
 
       it 'should not allow overwriting without a force flag' do
         # adding another point pointing to the same name is not OK
-        expect { new_store.add_by_name('m1', '98984') }.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
+        expect { new_store.add(point_name: 'm1', point_path: '98984') }.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
       end
 
       it 'should be able to find previously saved item' do

@@ -39,12 +39,13 @@ module Warp
 
       def <<(value)
         raise ArgumentError.new("#{value} is not a Point") unless value.is_a?(Point)
-        self.add(value)
+        self.add(point: value)
       end
 
-      def remove(name)
-        point = name.is_a?(Warp::Dir::Point) ? name : self[name]
+      def remove(point_name)
+        point = point_name.is_a?(Warp::Dir::Point) ? point_name : self[point_name]
         self.points_collection.delete(point) if point
+        save!
       end
 
       def points
@@ -73,15 +74,19 @@ module Warp
         save!
       end
 
-      def add_by_name(warp_point_name, path, *args)
-        if !(warp_point_name) || !(path)
-          raise ArgumentError.new('invalid arguments')
-        end
-        add(Warp::Dir::Point.new(warp_point_name, path), *args)
-      end
-
       # add to memory representation only
-      def add(point, overwrite: false)
+      def add(point: nil,
+              point_name: nil,
+              point_path: nil,
+              overwrite: false)
+
+        unless point
+          if !(point_name && point_path)
+            raise ArgumentError.new('invalid arguments')
+          end
+          point = Warp::Dir::Point.new(point_name, point_path)
+        end
+
         # Three use-cases here.
         # if we found this WarpPoint by name, and it's path is different from the incoming...
         existing = begin
