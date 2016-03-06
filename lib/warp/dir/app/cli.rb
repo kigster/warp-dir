@@ -91,6 +91,7 @@ module Warp
           opts.string  '-m', '--command', '<command>      – command to run, ie. add, ls, list, rm, etc.'
           opts.string  '-p', '--point',   '<point-name>   – name of the warp point'
           opts.string  '-w', '--warp',    '<warp-point>   – warp to a given point'
+          opts.bool    '-f', '--force',   '               - force, ie. overwrite existing point when adding'
           opts.bool    '-h', '--help',    '               – show help'
           opts.bool    '-v', '--verbose', '               – enable verbose mode'
           opts.bool    '-q', '--quiet',   '               – suppress output (quiet mode)'
@@ -120,6 +121,8 @@ module Warp
               end
             when 2
               result[:command], result[:point] = non_flags.map(&:to_sym)
+            when 3
+              result[:command], result[:point], result[:point_path] = non_flags.map(&:to_sym)
           end
           result
         end

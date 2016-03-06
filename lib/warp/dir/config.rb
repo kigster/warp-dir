@@ -6,7 +6,8 @@ module Warp
 
       DEFAULTS = {
         warprc: ENV['HOME'] + '/.warprc',
-        shell: false
+        shell: false,
+        force: false
       }
 
       attr_accessor :variables
