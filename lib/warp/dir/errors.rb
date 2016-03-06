@@ -28,25 +28,31 @@ module Warp
         def name
           super.gsub(%r{#{self.class.name}}, '')
         end
+
+        def color_error instance_type, instance, result
+          instance_type.red.bold +
+            instance.yellow.bold +
+            result.red.bold
+        end
       end
 
       class InvalidCommand < ::Warp::Dir::Errors::InstanceError
         def initialize(instance = nil)
           self.instance = instance
-          super instance.is_a?(Symbol) ? "command #{instance} is invalid" : instance
+          super instance.is_a?(Symbol) ? color_error('Command ', instance, ' is invalid.') : instance
         end
       end
 
       class PointNotFound < ::Warp::Dir::Errors::InstanceError
         def initialize(point)
           self.instance = point
-          super "point '#{point}' is not found"
+          super color_error('Point ', point.to_s, ' was not found.')
         end
       end
       class PointAlreadyExists < ::Warp::Dir::Errors::InstanceError
         def initialize(point)
           self.instance = point
-          super "point '#{point.name}' already exists. Pass --force to overwrite."
+          super color_error('Point ', point.to_s, ' already exists. Pass --force to overwrite.')
         end
       end
     end

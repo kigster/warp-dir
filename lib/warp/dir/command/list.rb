@@ -7,7 +7,7 @@ class Warp::Dir::Command::List < Warp::Dir::Command
   def run
     formatted_list = ::Warp::Dir::Formatter.new(store).format_store
     on :success do
-      message formatted_list
+      message formatted_list.blue.bold
     end
   end
 end
