@@ -9,6 +9,9 @@ RSpec.describe Warp::Dir::App::CLI do
   include_context :fixture_file
   include_context :initialized_store
 
+  let(:config_args) { ['--config', config.warprc] }
+  let(:warprc) { config_args.join(' ') }
+
   describe 'arg list' do
     let(:cli) { Warp::Dir::App::CLI.new(argv) }
     before do
@@ -50,23 +53,19 @@ RSpec.describe Warp::Dir::App::CLI do
 
   describe 'flags' do
     describe '--help' do
-      subject { '--help' }
-      let(:argv) { ['--help'] }
+      let(:argv) { ['--help', *config_args ] }
       it 'prints help message' do
-        expect('--help').to output(/<point>/, /Usage:/)
-        expect('--help').not_to output(/^cd /)
+        expect("--help #{warprc}").to output(/<point>/, /Usage:/)
+        expect("--help #{warprc}").not_to output(/^cd /)
       end
 
       it 'should exit with zero status' do
-        expect('--help').to exit_with(0)
+        expect("--help #{warprc}").to exit_with(0)
       end
     end
   end
 
   describe 'commands' do
-    let(:config_args) { ['--config', config.warprc] }
-    let(:warprc) { config_args.join(' ') }
-
     describe 'list' do
       let(:argv) { ['list', *config_args] }
 
