@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-ifs_backup=$IFS
-IFS="+"
-output=$(warp-dir $* 2>&1)
-code=$?
-eval ${output}
-IFS=$ifc_backup
+wdf {
+  ifs_backup=$IFS
+  IFS="+"
+  output=$(warp-dir $@ 2>&1)
+  code=$?
+  eval ${output}
+  IFS=$ifc_backup
+}
 
+wdf $@

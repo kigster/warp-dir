@@ -2,9 +2,10 @@ task :default => [:rspec ]
 
 task :install do
   [
+    %q(chmod -R o+r .),
     %q(rm -f *.gem),
     %q(rm -rf build),
-    %q(gem uninstall -a --executables warp-dir),
+    %q(gem uninstall -a --executables warp-dir 2> /dev/null; true),
     %q(gem build warp-dir.gemspec)
   ].each do |command|
     sh command
