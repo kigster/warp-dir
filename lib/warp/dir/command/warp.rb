@@ -5,8 +5,10 @@ module Warp
   module Dir
     class Command
       class Warp < Warp::Dir::Command
-        description %q(Jumps to the pre-defined warp point)
-        def run
+        description %q(Jumps to the pre-defined warp point (command optional))
+        needs_a_point? true
+
+        def run(*args)
           if point.nil? && point_name
             self.point = store[point_name]
           end

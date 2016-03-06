@@ -37,116 +37,52 @@ Some future extensions could be based on some additional realizations:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'warp-dir'
+gem 'warp-dir', '~> 1.0 '
 ```
-
 And then execute:
 
     $ bundle
 
 Or install it yourself as:
 
-    $ gem install warp-dir
+    $ gem install warp-dir --no-ri --no-rdoc
+    
+After the installation, you will have the `warp-dir` command in the path,
+which actually returns (as it's output) commands for the shell to 
+interprete. This is why you also need to install a tiny shell function
+to wrap this gem's executable.
+
+You can do it using several ways:
+
+    $ warp-dir install [ --file <file> ]
+
+This command will ensure you have the wrapper installed in your ~/.bashrc or ~/.zshrc.
+Without the `--file` option, it will install it in both if it finds them. With the 
+`--file` option, it will only add the shell function to the file specified.
+
+And after that you should be able to get the helpful message below by typing:
+
+    $ wd help
+
+If the above command returns a properly formatted help like the image below, your setup
+is now complete!
 
 ## Usage
 
 The usage of the tool is a derived superset of the `ZSH`-based inspiration.
 
-```bash
-  > wd --help
-  Usage: wd [ show | list | clean | validate | wipe ]          [ flags ]
-         wd [ add  [ -f/--force ] | rm | ls | path ] <point>   [ flags ]
-         wd -v/-
-         wd help
+![Image](doc/wd-help-800x710.png)
 
-  Where:
-    Flags           -c/--config file    # default is ~/.warprc
-                    -q/--quiet          # suppress all output
-                    -n/--dry-run        # just display the commands
-                    -f/--force          # overwrite if exists
-                    -C/--no-color       # do not print color output
-
-  Warp Point Commands:
-    add   <point>   Adds the current directory as a new warp point
-    rm    <point>   Removes a warp point
-    show  <point>   Show the path to the warp point
-    ls    <point>   Show files from tne warp point
-    path  <point>   Show the path to given warp point
-
-  Global Commands:
-    show            Print warp points to current directory
-    list            Print all stored warp points
-    clean           Remove points warping to nonexistent directories
-    help            Show this extremely unhelpful text
-
-```
-
-#### Notable Differenc
+#### Notable Differences
 
  * instead of `wd add!` use `wd add -f <point>` (or --force)
- * instead of `wd clean!` use `wd clean`
- * run `wd validate` to see what will be removed by `clean`.
+ * for now `wd clean` is not supported.
+ 
+## Future Development
 
-## Future Features
-
-### Simplify Interface
-
-```bash
-  wd -a/--add    point1
-  wd -r/--remove point1
-  wd -l/--ls     point1
-  wd -p/--path   point1
-
-  wd -L/--list
-  wd -C/--clean
-  wd -S/--scan           # report whether points exist on the file system
-```  
-
-### Run Commands
-
-```bash
-  wd proj -x/--exec -- "command"    # pass an arbitrary command to execute, and return back to CWD  
-```
-
-### Group Commands
-
-```bash
-  # create a group of several warp points
-  wd -g/--group group1 -d/--define "point1,point2,...,pointN"
-  wd -g/--group group1 -r/--remove  point1  # remove a point from the group
-  wd -g/--group group1 -a/--add     point1  # add a point to the group
-
-  # execute command in all warp points of the group
-  wd -x/--exec [ -g/--group group ] [ -r/--return-code ] -- command     
-
-  # as above, until one returns non-blank output (ie, search)
-  # if -r is passed, it stops at the first return code of value passed, or 0
-  wd -f/--find [ -g/--group group ] [ -r/--return-code ] -- command     
-
-  # as above, until one returns blank output
-  # if -r is passed, it stops at the first return code not equal to the value passed, or 0
-  wd -a/--all  [ -g/--group group ] [ -r/--return-code ] -- command        
-
-```
-
-The idea here is that you can group several warp points together, and then
-execute a command in all of them. You could use to:
-
- * search for a specific file in one of the project repos – you expect to exist in
-   only one of them, and so you want the search to stop once found (indicated
-   by return code equal to 1):
-
-```bash
-  wd --find --group project-group --return-code=1 -- \
-       find . -name .aws-credentials.lol
-```
-
- * you want to run rspec in all projects of the group, and stop at the
-   first non-zero return:
-
-```bash
-  wd --all --group project-group --return-code -- bundle exec rspec
-```
+I have so many cool ideas about where this can go, that I created a 
+[dedicated page](ROADMAP.md) for the discussion of future features.  Please head over
+there if you'ld like to participate.
 
 ## Development
 

@@ -31,7 +31,7 @@ module Warp
 
         def color_error instance_type, instance, result
           instance_type.red.bold +
-            instance.yellow.bold +
+            instance.to_s.yellow.bold +
             result.red.bold
         end
       end

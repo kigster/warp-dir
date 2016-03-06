@@ -7,7 +7,6 @@ begin
 rescue LoadError
   lib_path = File.dirname(__FILE__) + '/../lib'
   if File.exist?(lib_path)
-    puts "printf 'adding lib path #{lib_path}'"
     $LOAD_PATH << lib_path
     require 'warp/dir'
     require 'warp/dir/app/cli'

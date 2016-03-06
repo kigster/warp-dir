@@ -9,12 +9,15 @@ module Warp
   module Dir
     module App
       class CLI
-        attr_accessor :argv, :config, :commander, :store, :valid
+        attr_accessor :argv, :config, :commander, :store, :valid, :opts, :flags
 
         def initialize(argv)
           self.argv      = argv
+          self.flags     = argv.dup # anything after --
+
           self.commander = ::Warp::Dir::Commander.instance
           self.config    = ::Warp::Dir::Config.new
+          self.opts      = nil
         end
 
         def validate
@@ -24,20 +27,21 @@ module Warp
           config.verbose = false
           config.debug   = false
 
-          non_flag_commands = shift_non_flag_commands
+          commands       = shift_non_flag_commands
+          argument       = self.flags.shift until argument.eql?('--') || self.flags.empty?
 
           begin
-            result = parse_with_slop(self.argv)
+            self.opts = parse_with_slop(self.argv)
           rescue Slop::UnknownOption => e
             return on :error do
               "Invalid option: #{e.message}".red
             end
           end
 
-          config.configure(result.to_hash.merge(non_flag_commands))
+          config.configure(opts.to_hash.merge(commands))
           self.store = Warp::Dir::Store.new(config, Warp::Dir::Serializer::Dotfile)
 
-          config.command = :help if (result.help? || no_arguments)
+          config.command = :help if (opts.help? || no_arguments)
           config.command = :warp if !config.command && config.warp
 
           if config[:command]
@@ -55,6 +59,10 @@ module Warp
           yield response if block_given?
           response
         rescue Exception => e
+          if config.debug
+            STDERR.puts(e.inspect)
+            STDERR.puts(e.backtrace.join("\n"))
+          end
           on :error do
             message e.message.red
           end
@@ -63,7 +71,9 @@ module Warp
         private
 
         def on(*args, &block)
-          Warp::Dir.on(*args, &block)
+          response = Warp::Dir.on(*args, &block)
+          response.config = self.config
+          response
         end
 
         def process_command
@@ -71,7 +81,7 @@ module Warp
           if config.command
             command_class = commander.find(config.command)
             if command_class
-              command_class.new(store, config.point).run
+              command_class.new(store, config.point).run(flags)
             else
               on :error do
                 message "command '#{config.command}' was not found.".red
@@ -96,8 +106,9 @@ module Warp
           opts.bool    '-v', '--verbose', '               – enable verbose mode'
           opts.bool    '-q', '--quiet',   '               – suppress output (quiet mode)'
           opts.bool    '-d', '--debug',   '               – show stacktrace if errors are detected'
+          opts.string  '-s', '--dotfile', '<config>       – shell dotfile to be used for install command'
           opts.string  '-c', '--config',  '<config>       – location of the configuration file (default: ' + Warp::Dir.default_config + ')', default: Warp::Dir.default_config
-          opts.boolean '-s', '--shell',   '               – if passed, output is returned for BASH\' eval: eval "($(warp_dir ...))"'
+          opts.boolean '-e', '--no-shell','                 – do not expect output to be evaluated by BASH', default: false
           opts.on      '-V', '--version', '               – print the version' do
             puts 'Version ' + Warp::Dir::VERSION
             exit

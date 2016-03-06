@@ -14,8 +14,12 @@ module Warp
 
         class Type < Struct.new(:exit_code, :stream)
           def print(msg)
-            msg.split("\n").each do |line|
-              stream.printf(%Q{printf '#{line}\\n';})
+            if msg == ' '
+              stream.printf(%Q{printf '\\n'; })
+            else
+              msg.split("\n").each do |line|
+                stream.printf(%Q{printf -- '#{line}\\n';})
+              end
             end
           end
           def header
@@ -23,6 +27,9 @@ module Warp
           end
           def footer
             # stream.printf(%q[}; wd_out ])
+          end
+          def to_s
+            "code:#{exit_code}, stream:#{stream == STDOUT ? "STDOUT" : "STDERR"}"
           end
         end
 
@@ -46,7 +53,7 @@ module Warp
           shell:   SHELL
         }
 
-        attr_accessor :messages
+        attr_accessor :messages, :config
 
         def initialize
           @messages = []
@@ -102,6 +109,14 @@ module Warp
           else
             @type.exit_code
           end
+        end
+
+        def inspect
+          "#{self.class.name}={#{type.inspect}, #{messages.inspect}}"
+        end
+
+        def to_s
+          "AppResponse[type: {#{type}}, messages: '#{messages.join(' ')}']"
         end
 
         private

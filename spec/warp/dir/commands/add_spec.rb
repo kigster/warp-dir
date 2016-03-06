@@ -25,15 +25,15 @@ RSpec.describe Warp::Dir::Command::Add do
   describe '#help' do
     it 'should define a help message' do
       expect(add_command.command_name).to eql(:add)
-      expect(add_command.description).to eql(%q(Adds the current directory as a new warp point))
+      expect(add_command.description).to match(%r(Adds the current directory)i)
       expect(add_command.help).to match /add/
-      expect(add_command.help).to match /Adds the current directory as a new warp point/
+      expect(add_command.help).to match /Adds the current directory/
     end
   end
 
   describe '#run' do
     it 'should call #save! on store after adding new wp' do
-      expect(store).to receive(:insert).with(point: nil, point_name: wp_name, point_path: wp_path, overwrite: false).and_return(point)
+      expect(store).to receive(:insert).with(point_name: wp_name, point_path: wp_path, overwrite: false).and_return(point)
       add_command.run
     end
   end

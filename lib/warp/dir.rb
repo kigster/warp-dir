@@ -8,7 +8,7 @@ module Warp
       end
 
       def pwd
-        %x(pwd).gsub ENV['HOME'], '~'
+        %x(pwd).chomp.gsub ENV['HOME'], '~'
       end
 
       def relative(path)

@@ -15,7 +15,12 @@ module Warp
         end
 
         def help
-          sprintf('%-25s%s', self.command_name.to_s.yellow, self.send(:description).blue)
+          sprintf('%15s %-20s %s%s',
+                  self.command_name.to_s.yellow,
+                  (self.send(:needs_a_point?) ? '<point>'.cyan : ' '.cyan),
+                  self.send(:description).blue.bold,
+                  (self.respond_to?(:aliases) && !aliases.empty? ? ", aka: " + aliases.join(', ').blue + '' : '')
+          )
         end
 
         def inherited(subclass)
@@ -26,10 +31,27 @@ module Warp
           end
 
           subclass.instance_eval do
+            @description = nil
+            @aliases = []
+            @needs_a_point = false
+
             class << self
-              def description value = nil
+              def description(value = nil)
                 @description = value if value
                 @description
+              end
+
+              def aliases(*args)
+                if args
+                  @aliases << args unless !args || args.empty?
+                  @aliases.flatten!
+                end
+                @aliases
+              end
+
+              def needs_a_point?(value = nil)
+                @needs_a_point = value if value
+                @needs_a_point
               end
             end
           end
@@ -43,9 +65,9 @@ module Warp
       attr_accessor :store, :formatter, :point_name, :point_path, :point
 
       def initialize(store, point_name = nil, point_path = nil)
-        @store = store
+        @store     = store
         @formatter = ::Warp::Dir::Formatter.new(@store)
-        @klazz = self.class
+        @klazz     = self.class
         if point_name
           if point_name.is_a?(::Warp::Dir::Point)
             self.point = point_name
@@ -53,6 +75,11 @@ module Warp
             self.point_name = point_name
           end
           self.point_path = point_path if point_path
+        end
+
+        if store.config.debug
+          pp 'Initialized Command:'.yellow
+          pp self
         end
       end
 
@@ -65,11 +92,18 @@ module Warp
       #   command.new(point_name, point_path).run
       # end
       def on(type, &block)
-        ::Warp::Dir.on(type, &block)
+        this_config = self.store.config
+        ::Warp::Dir.on(type, &block).configure do
+          self.config = this_config
+        end
       end
 
       def inspect
-        "#{self.name}[#{self.command}]->(#{self.description})"
+        "#{self.class.name}[#{self.command_name}]->(#{self.description})"
+      end
+
+      def needs_point?
+        false # the default
       end
 
       def puts(stream, *args)

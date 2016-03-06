@@ -21,8 +21,17 @@ module Warp
         @config            = config
         serializer_class   ||= Warp::Dir::Serializer.default
         @serializer        = serializer_class.new(self)
+        restore!
+      end
+
+      def restore!
         @points_collection = Set.new
         self.serializer.restore!
+
+        if config.debug
+          pp 'Restored From Disk:'.yellow
+          pp self
+        end
       end
 
       def [](name)
@@ -42,7 +51,7 @@ module Warp
         self.add(point: value)
       end
 
-      def remove(point_name)
+      def remove(point_name: nil)
         point = point_name.is_a?(Warp::Dir::Point) ? point_name : self[point_name]
         self.points_collection.delete(point) if point
         save!
@@ -79,7 +88,6 @@ module Warp
               point_name: nil,
               point_path: nil,
               overwrite: false)
-
         unless point
           if !(point_name && point_path)
             raise ArgumentError.new('invalid arguments')
@@ -96,11 +104,20 @@ module Warp
         end
 
         if existing.eql?(point) # found, but it's identical
+          if config.debug
+            puts "Point being added #{point} is identical to existing #{existing}, ignore."
+          end
           return
         elsif existing # found, but it's different
           if overwrite # replace it
+            if config.debug
+             puts "Point being added #{point} is replacing the existing #{existing}."
+            end
             replace(point, existing)
           else # reject it
+            if config.debug
+             puts "Point being added #{point} already exists, but no overwrite was set"
+            end
             raise Warp::Dir::Errors::PointAlreadyExists.new(point)
           end
         else # no lookup found
@@ -108,13 +125,9 @@ module Warp
         end
       end
 
-      def replace(point, existing_point = nil)
-        existing_point ||= self[point.name]
-        if existing_point && existing_point.path != point.path
-          remove(existing_point)
-        end
-        self.points_collection.add(point) # new warp point
-        point
+      def replace(point, existing_point)
+        remove(point_name: existing_point)
+        insert(point: point)
       end
     end
   end

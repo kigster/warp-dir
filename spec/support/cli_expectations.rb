@@ -9,9 +9,8 @@ def run_command!(arguments)
   cli.validate
   if block_given?
     cli.valid ? yield(cli) : nil
-  else
-    cli.run
   end
+  cli.run
 end
 
 def output_matches(output, expected)
@@ -26,16 +25,24 @@ end
 
 RSpec::Matchers.define :output do |*expectations|
   match do |actual|
+    @response = nil
     expectations.all? do |expected|
-      response = run_command!(actual)
-      response.messages.any? { |m| output_matches(m, expected) }
+      @response = run_command!(actual)
+      result = @response.messages.any? { |m| output_matches(m, expected) }
     end
   end
+  failure_message do |actual|
+    "expected $(wd #{actual}) to produce output containing #{expected}, got #{@response.messages.size}"
+  end
   match_when_negated do |actual|
+    @response = nil
     expectations.none? do |expected|
-      response = run_command!(actual)
-      response.messages.any? { |m| output_matches(m, expected) }
+      @response = run_command!(actual)
+      @response.messages.any? { |m| output_matches(m, expected) }
     end
+  end
+  failure_message_when_negated do |actual|
+    "expected #{actual} not to contain #{expected}, got #{@response}"
   end
 end
 
@@ -43,13 +50,23 @@ RSpec::Matchers.define :validate do |expected|
   match do |actual|
     expected = expected || block_arg
     if expected.is_a?(Proc)
-      run_command!(actual) do |cli|
-        expected.call(cli)
+      begin
+        @response = run_command!(actual) do |cli|
+          expected.call(cli)
+        end
+      rescue Exception => e
+        STDERR.puts(e.inspect)
+        STDERR.puts(e.backtrace.join("\n"))
+        raise
       end
     else
       raise TypeError.new('Expected must be a block')
     end
   end
+  failure_message do |actual|
+    "expected #{actual} to evaluate block to true"
+  end
+
 end
 
 RSpec::Matchers.define :exit_with do |expected|

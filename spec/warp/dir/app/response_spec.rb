@@ -87,8 +87,8 @@ RSpec.describe Warp::Dir::App::Response do
       end
 
       it 'should properly format messages for eval' do
-        expect(stream).to receive(:printf).with(%Q{printf 'Hello\\n';}).once
-        expect(stream).to receive(:printf).with(%Q{printf 'World\\n';}).once
+        expect(stream).to receive(:printf).with(%Q{printf -- 'Hello\\n';}).once
+        expect(stream).to receive(:printf).with(%Q{printf -- 'World\\n';}).once
         expect(response.type).to receive(:header)
         expect(response.type).to receive(:footer)
         response.configure do

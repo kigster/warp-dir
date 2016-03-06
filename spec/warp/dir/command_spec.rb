@@ -24,6 +24,23 @@ RSpec.describe Warp::Dir::Command do
       expect(commander.installed_commands).to eql([:mycommand])
       expect(commander.find :mycommand).to eql(Warp::Dir::Command::MyCommand)
     end
+
+    it 'should be possible to lookup the command by alias' do
+      class Warp::Dir::Command::CommandWithAlias < Warp::Dir::Command
+        aliases :with_alias, :without_alias
+        def run;
+        end;
+      end
+
+      expect(commander.installed_commands).to eql([:commandwithalias])
+      expect(commander.find :commandwithalias).to eql(Warp::Dir::Command::CommandWithAlias)
+      expect(commander.find :with_alias).to eql(Warp::Dir::Command::CommandWithAlias)
+      expect(commander.find :without_alias).to eql(Warp::Dir::Command::CommandWithAlias)
+
+      expect { commander.find :boo }.to raise_error Warp::Dir::Errors::InvalidCommand
+    end
+
+
     describe '#validate!' do
       it 'should raise exception when subclass command does not have a #run method ' do
         class Warp::Dir::Command::Random < Warp::Dir::Command;

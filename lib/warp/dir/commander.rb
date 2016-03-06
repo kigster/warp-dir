@@ -8,8 +8,11 @@ module Warp
       include Singleton
 
       attr_reader :commands
+      attr_accessor :command_map
+
       def initialize
-        @commands  ||= Set.new # a pre-caution, normally it would already by defined by now
+        @commands ||= Set.new # a pre-caution, normally it would already by defined by now
+        @command_map   = {}
       end
 
       def register(command)
@@ -18,12 +21,12 @@ module Warp
       end
 
       def installed_commands
-        commands.to_a.map(&:command_name)
+        @commands.map(&:command_name)
       end
 
       def lookup(command_name)
-        subset = self.commands.classify { |cmd| cmd.command_name }[command_name.to_sym] || []
-        subset.first
+        reindex!
+        command_map[command_name]
       end
 
       def find(command_name)
@@ -40,7 +43,20 @@ module Warp
         cmd.new(*args).run
       end
 
-      private
+      def reindex!
+        commands.each do |command|
+          if command.respond_to?(:aliases)
+            command.aliases.each do |an_alias|
+              if self.command_map[an_alias] && !self.command_map[an_alias] == command
+                raise Warp::Dir::Errors::InvalidCommand.new("Duplicate alias for command #{command}")
+              end
+              self.command_map[an_alias] = command
+            end
+          end
+          self.command_map[command.command_name] = command
+        end
+        self
+      end
 
       def validate!
         self.commands.delete_if do |subclass|

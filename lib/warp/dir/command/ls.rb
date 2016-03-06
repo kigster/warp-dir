@@ -3,14 +3,22 @@ module Warp
   module Dir
     class Command
       class LS < Warp::Dir::Command
-        description %q(Lists directory contents of a warp point without changing current directory)
+        description %q(List directory contents of a Warp Point)
+        needs_a_point? true
+        aliases :dir
 
-        def run(flags)
-          point = store.find_point(point_name)
-          Dir.chdir(point.point_path)
-          flags = '-al' unless flags
-          ls_output = `ls #{flags} #{point.path}`
-          happy(ls_output)
+        # @param [Object] args
+        def run(args)
+          point     = store.find_point(point_name)
+          flags     = if args && !args.empty?
+                        args
+                      else
+                        [ '-al' ]
+                      end
+          ls_output = `ls #{flags.join(' ')} #{point.path}/`
+          on :success do
+            message ls_output.bold
+          end
         end
       end
     end

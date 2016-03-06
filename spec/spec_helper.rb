@@ -58,7 +58,12 @@ RSpec.shared_context :fake_serializer do
 end
 
 RSpec.shared_context :fixture_file do
-  let(:file) { @file ||= File.new('spec/fixtures/warprc') }
+  let(:fixture_file) { 'spec/fixtures/warprc'}
+  let(:config_path) { '/tmp/warprc' }
+  let(:file) {
+    FileUtils.cp(fixture_file, config_path)
+    File.new(config_path)
+  }
   let(:config) { Warp::Dir::Config.new(config: file.path) }
 end
 
