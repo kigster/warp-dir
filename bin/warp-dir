@@ -1,9 +1,18 @@
 #!/usr/bin/env ruby
 
 require 'bundler/setup'
-require 'warp/dir'
-require 'warp/dir/app/cli'
-
-Warp::Dir::App::CLI.new(ARGV.dup).run do |response|
-  response.print.exit! if response
+begin
+  require 'warp/dir'
+  require 'warp/dir/app/cli'
+rescue LoadError
+  lib_path = File.dirname(__FILE__) + '/../lib'
+  if File.exist?(lib_path)
+    puts "printf 'adding lib path #{lib_path}'"
+    $LOAD_PATH << lib_path
+    require 'warp/dir'
+    require 'warp/dir/app/cli'
+  end
 end
+
+response = Warp::Dir::App::CLI.new(ARGV.dup).run
+response.print.exit! if response
