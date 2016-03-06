@@ -18,7 +18,9 @@ module Warp
         end
 
         def validate
-          self.valid = false
+          no_arguments   = argv.empty?
+
+          self.valid     = false
           config.verbose = false
           config.debug   = false
 
@@ -35,7 +37,7 @@ module Warp
           config.configure(result.to_hash.merge(non_flag_commands))
           self.store = Warp::Dir::Store.new(config, Warp::Dir::Serializer::Dotfile)
 
-          config.command = :help if result.help?
+          config.command = :help if (result.help? || no_arguments)
           config.command = :warp if !config.command && config.warp
 
           if config[:command]
@@ -49,10 +51,13 @@ module Warp
 
         def run(&block)
           validate unless @valid
-
           response = process_command
           yield response if block_given?
           response
+        rescue Exception => e
+          on :error do
+            message e.message.red
+          end
         end
 
         private
