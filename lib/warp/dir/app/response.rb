@@ -19,10 +19,10 @@ module Warp
             end
           end
           def header
-            stream.printf(%q[function wd_out() { ])
+            # stream.printf(%q[function wd_out() { ])
           end
           def footer
-            stream.printf(%q[}; wd_out ])
+            # stream.printf(%q[}; wd_out ])
           end
         end
 

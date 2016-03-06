@@ -30,7 +30,7 @@ RSpec.describe Warp::Dir::Command::List do
     it 'should return response and print the listing' do
       response = list.new(store).run
       expect(response.messages.first).to eql(output)
-      expect(STDOUT).to receive(:printf).at_least(3).times
+      expect(STDOUT).to receive(:printf).at_least(1).times
       response.print
     end
   end
