@@ -1,18 +1,24 @@
 require 'spec_helper'
 require 'warp/dir'
 require 'warp/dir/config'
-require 'warp/dir/cli'
+require 'warp/dir/app/cli'
 
-RSpec.describe Warp::Dir::CLI do
+RSpec.describe Warp::Dir::App::CLI do
   include_context :fixture_file
 
-  let(:cli) { Warp::Dir::CLI.new(argv) }
+  let(:cli) { Warp::Dir::App::CLI.new(argv) }
 
   describe 'flags' do
     describe '--help' do
       let(:argv) { %w(--help) }
       it 'prints help message' do
-        # expect(cli.run).to start_with(Warp::Dir::USAGE)
+        response = cli.run
+        expect(response.type).to eql(Warp::Dir::App::Response::INFO)
+        expect(response.messages.first).to eql(Warp::Dir::Command::Help::USAGE)
+      end
+      it 'should exit with zero status' do
+        response = cli.run
+        expect(response.code).to eql(0)
       end
     end
   end
@@ -43,15 +49,15 @@ RSpec.describe Warp::Dir::CLI do
     describe 'add warp point' do
       it ''
 
-    end
 
-    describe 'remove warp point' do
+      describe 'remove warp point' do
 
 
-    end
+      end
 
-    describe 'list warp points' do
+      describe 'list warp points' do
 
+      end
     end
   end
 end

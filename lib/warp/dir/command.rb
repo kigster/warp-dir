@@ -4,7 +4,7 @@ require 'warp/dir/formatter'
 require 'warp/dir/commander'
 require 'warp/dir/point'
 require 'forwardable'
-require_relative 'response'
+require_relative 'app/response'
 
 module Warp
   module Dir

@@ -4,9 +4,37 @@ require 'rspec/core'
 
 CodeClimate::TestReporter.start
 
+module Warp
+  module Dir
+    module App
+      class Response
+        class << self
+          attr_accessor :exit_disabled
+
+          def enable_exit!
+            self.exit_disabled = false
+          end
+
+          def disable_exit!
+            self.exit_disabled = true
+          end
+
+          def exit_disabled?
+            self.exit_disabled
+          end
+        end
+      end
+    end
+  end
+end
+
 RSpec.configure do |config|
   config.before do
-    Warp::Dir::Response.disable_exit!
+    Warp::Dir::App::Response.disable_exit!
+    Warp::Dir::App::Response.instance.configure do
+      @messages.clear
+      @type = nil
+    end
   end
 end
 

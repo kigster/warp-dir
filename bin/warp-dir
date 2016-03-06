@@ -3,4 +3,6 @@
 require 'bundler/setup'
 require 'warp/dir'
 
-Warp::Dir::CLI.new(ARGV.dup).run 
+Warp::Dir::App::CLI.new(ARGV.dup).run do |response|
+  response.print.exit! if response
+end

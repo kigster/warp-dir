@@ -4,11 +4,11 @@ require 'warp/dir/formatter'
 RSpec.describe Warp::Dir::Command::List do
 
   let(:commander) { Warp::Dir.commander }
-  let(:command_list) { Warp::Dir::Command::List }
+  let(:list) { Warp::Dir::Command::List }
 
   describe '#help' do
-    it 'define a help message' do
-      expect(command_list.help).to eql('list            Print all stored warp points')
+    it 'should define a help message' do
+      expect(list.help).to eql('list            Print all stored warp points')
     end
   end
 
@@ -17,25 +17,21 @@ RSpec.describe Warp::Dir::Command::List do
     include_context :initialized_store
 
     let(:formatter) { Warp::Dir::Formatter.new(store) }
-
+    let(:output) { formatter.format_store(:ascii) }
     before do
       commander.configure(store)
       store.add(point)
     end
 
-    it 'should properly return formatted warp points from the store' do
-      expect(formatter.format_store(:ascii)).to eql(%Q{harro  ->  ~/workspace/tinker-mania})
+    it 'should return formatted warp points from the store' do
+      expect(output).to eql(%Q{harro  ->  ~/workspace/tinker-mania})
     end
 
-    describe 'with fake store' do
-      it 'should call #save! on store after adding new wp' do
-        output = formatter.format_store(:ascii)
-        expect(output).not_to eql('')
-        expect(output).not_to be_nil
-        expect(STDOUT).to receive(:printf).with(output).and_return(nil)
-        expect(store).to be_kind_of(Warp::Dir::Store)
-        command_list.new().run
-      end
+    it 'should return response and print the listing' do
+      response = list.new.run
+      expect(response.messages.first).to eql(output)
+      expect(STDOUT).to receive(:printf).with("printf '#{output}\n'").and_return(nil)
+      response.print
     end
   end
 end

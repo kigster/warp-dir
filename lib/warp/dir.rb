@@ -1,7 +1,7 @@
+require_relative 'dir/app/response'
 module Warp
   PROJECT = File.dirname(File.absolute_path(__FILE__))
   module Dir
-
     class << self
       def require_all_from(folder)
         ::Dir.glob(Warp::PROJECT + folder + '/*.rb') { |file| Kernel.require file }
@@ -52,7 +52,7 @@ module Warp
       # end
       #
       def on(type, &block)
-        Response.new(type).exit(&block)
+        Warp::Dir::App::Response.instance.type(type).configure(&block)
       end
     end
 
