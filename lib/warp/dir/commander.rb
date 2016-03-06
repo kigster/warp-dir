@@ -7,15 +7,9 @@ module Warp
     class Commander
       include Singleton
 
-      attr_reader :store, :commands, :formatter
+      attr_reader :commands
       def initialize
         @commands  ||= Set.new # a pre-caution, normally it would already by defined by now
-      end
-
-      def configure(store)
-        @store     = store
-        @formatter = ::Warp::Dir::Formatter.new(@store)
-        validate!
       end
 
       def register(command)
@@ -27,10 +21,17 @@ module Warp
         commands.to_a.map(&:command_name)
       end
 
-      def find(command_name)
-        subset = self.commands.classify { |cmd| cmd.command_name }[command_name]
-        raise ::Warp::Dir::Errors::InvalidCommand.new(command_name) unless subset && !subset.empty?
+      def lookup(command_name)
+        subset = self.commands.classify { |cmd| cmd.command_name }[command_name.to_sym] || []
         subset.first
+      end
+
+      def find(command_name)
+        command = lookup(command_name)
+        if command.nil?
+          raise ::Warp::Dir::Errors::InvalidCommand.new(command_name)
+        end
+        command
       end
 
       def run(command_name, *args)

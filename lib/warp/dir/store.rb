@@ -10,26 +10,8 @@ module Warp
     # Due to us wanting to pass parameters to the singleton class's #new method,
     # using standard Singleton becomes more hassle than it's worth.
     class Store
-
-      @@semaphore = Mutex.new
-      # Here we are reimplementing Singleton, but with a twist: we need to be able
-      class << self
-        attr_accessor :instance
-
-        def singleton(*args, &block)
-          return self.instance if self.instance
-          @@semaphore.synchronize do
-            self.instance ||= new(*args, &block)
-          end
-        end
-
-        private
-        def new(*args, &block)
-          super
-        end
-      end
-
       extend Forwardable
+
       def_delegators :@points_collection, :size, :clear, :each, :map
       def_delegators :@config, :warprc, :shell
 
@@ -45,6 +27,14 @@ module Warp
 
       def [](name)
         find_point(name)
+      end
+
+      def first
+        points_collection.to_a.sort.first
+      end
+
+      def last
+        points_collection.to_a.sort.last
       end
 
       def <<(value)

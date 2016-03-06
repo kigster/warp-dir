@@ -15,17 +15,9 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/kigster/warp-dir"
 
   gem.files         = `git ls-files`.split($\).reject{ |f| f =~ /^doc\// }
-  gem.executables   = gem.files.grep(%r{^(bin/warp-dir)$}).map {|f| File.basename(f) }
+  gem.executables   = gem.files.grep(%r{^(bin/w)$}).map {|f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
-
-  bash_install      = File.read('bin/warp-dir.bash')
-  gem.post_install_message =%Q(
-Thanks for installing warp-dir! In order for this command to work transparently from your
-shell, you need to add the following lines to your ~/.bashrc or ~/.bash_profile files:
-
-#{bash_install}
-)
 
   gem.add_dependency('slop', '~> 4.2.1')
   gem.add_dependency('colored')

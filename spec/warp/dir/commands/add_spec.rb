@@ -12,10 +12,9 @@ RSpec.describe Warp::Dir::Command::Add do
   let(:wp_name) { 'harro' }
   let(:point) { Warp::Dir::Point.new(wp_name, wp_path) }
 
-  let(:add_command) { command_class.new(wp_name, wp_path) }
+  let(:add_command) { command_class.new(store, wp_name, wp_path) }
   before do
     expect(store).to receive(:config).and_return(config).at_least(:once)
-    commander.configure(store)
   end
 
   it 'should have the commander defined' do
@@ -26,7 +25,8 @@ RSpec.describe Warp::Dir::Command::Add do
     it 'should define a help message' do
       expect(add_command.command_name).to eql(:add)
       expect(add_command.description).to eql(%q(Adds the current directory as a new warp point))
-      expect(add_command.help).to eql('add             Adds the current directory as a new warp point')
+      expect(add_command.help).to match /add/
+      expect(add_command.help).to match /Adds the current directory as a new warp point/
     end
   end
 

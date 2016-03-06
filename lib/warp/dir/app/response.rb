@@ -14,7 +14,15 @@ module Warp
 
         class Type < Struct.new(:exit_code, :stream)
           def print(msg)
-            stream.printf(%Q{printf '#{msg}\n'})
+            msg.split("\n").each do |line|
+              stream.printf(%Q{printf '#{line}\\n';})
+            end
+          end
+          def header
+            stream.printf(%q[function wd_out() { ])
+          end
+          def footer
+            stream.printf(%q[}; wd_out ])
           end
         end
 
@@ -47,7 +55,9 @@ module Warp
         # Public Methods
         def print
           raise ::ArgumentError.new('No type defined for Response object') unless @type
+          @type.header
           @type.print(@messages.shift) until @messages.empty?
+          @type.footer
           self
         end
 

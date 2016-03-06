@@ -15,16 +15,12 @@ module Warp
         end
 
         def help
-          sprintf('%-16s%s', self.command_name, self.send(:description))
+          sprintf('%-25s%s', self.command_name.to_s.yellow, self.send(:description).blue)
         end
 
         def inherited(subclass)
-          ::Warp::Dir.commander.register(subclass)
+          ::Warp::Dir::Commander.instance.register(subclass)
           subclass.class_eval do
-            def store
-              ::Warp::Dir::Commander.instance.store
-            end
-
             extend Forwardable
             def_delegators :@klazz, :command_name, :help, :description
           end
@@ -44,9 +40,11 @@ module Warp
         end
       end
 
-      attr_accessor :point_name, :point_path, :point
+      attr_accessor :store, :formatter, :point_name, :point_path, :point
 
-      def initialize(point_name = nil, point_path = nil)
+      def initialize(store, point_name = nil, point_path = nil)
+        @store = store
+        @formatter = ::Warp::Dir::Formatter.new(@store)
         @klazz = self.class
         if point_name
           if point_name.is_a?(::Warp::Dir::Point)
@@ -57,7 +55,7 @@ module Warp
           if point_path
             self.point_path = point_path
             unless point
-              point = ::Warp::Dir::Point.new(point_name, point_path)
+              self.point = ::Warp::Dir::Point.new(point_name, point_path)
             end
           end
         end

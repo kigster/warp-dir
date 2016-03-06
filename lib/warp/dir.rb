@@ -27,32 +27,12 @@ module Warp
         collection.sort { |a, b| a.send(field) <=> b.send(field) }
       end
 
-      # Wrappers
-
-      def commander(*args)
-        Module.const_get('Warp::Dir::Commander').instance(*args)
-      end
-
-      def store(*args)
-        @store ||= Module.const_get('Warp::Dir::Store').singleton(*args)
-      end
-
-      def config(*args)
-        @config ||= Module.const_get('Warp::Dir::Config').new(*args)
-      end
-
-
-      # @param [Object] type – a symbol: :success, :error, :shell
-      # @param [Object] block - a block where response is defined
-      # eg.
-      #
-      # on :success do
-      #   code 100
-      #   message 'Awesome thanks!'
-      # end
-      #
       def on(type, &block)
         Warp::Dir::App::Response.instance.type(type).configure(&block)
+      end
+
+      def commander
+        ::Warp::Dir::Commander.instance
       end
     end
 

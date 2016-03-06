@@ -1,62 +1,98 @@
 require 'spec_helper'
+require 'support/cli_expectations'
 require 'warp/dir'
 require 'warp/dir/config'
 require 'warp/dir/app/cli'
+require 'pp'
 
 RSpec.describe Warp::Dir::App::CLI do
   include_context :fixture_file
+  include_context :initialized_store
 
-  let(:cli) { Warp::Dir::App::CLI.new(argv) }
+  describe 'arg list' do
+    let(:cli) { Warp::Dir::App::CLI.new(argv) }
+    before do
+      cli.config = config
+    end
+
+    let(:result) { cli.send(:shift_non_flag_commands) }
+    describe 'when only one argument passed' do
+
+      describe 'and is a command' do
+        let(:argv) { %w(list --verbose) }
+
+        it 'invokes list command message' do
+          expect(cli.argv).to eql(%w(list --verbose))
+          expect(result[:command]).to eql(:list)
+          expect(cli.argv).to eql(['--verbose'])
+        end
+      end
+      describe 'and is a warp point' do
+        let(:argv) { %w(awesome-point) }
+
+        it 'defaults to the :warp command' do
+          expect(result[:command]).to eql(:warp)
+          expect(result[:point]).to eql(:'awesome-point')
+          expect(cli.argv).to be_empty
+        end
+      end
+    end
+    describe 'when two non-flag arguments passed' do
+      let(:argv) { %w(add mypoint) }
+
+      it 'interprets as a command and a point' do
+        expect(result[:command]).to eql(:add)
+        expect(result[:point]).to eql(:mypoint)
+        expect(cli.argv).to be_empty
+      end
+    end
+  end
 
   describe 'flags' do
     describe '--help' do
-      let(:argv) { %w(--help) }
+      subject { '--help' }
+      let(:argv) { ['--help'] }
       it 'prints help message' do
-        response = cli.run
-        expect(response.type).to eql(Warp::Dir::App::Response::INFO)
-        expect(response.messages.first).to eql(Warp::Dir::Command::Help::USAGE)
+        expect('--help').to output(/<point>/, /Usage:/)
+        expect('--help').not_to output(/^cd /)
       end
+
       it 'should exit with zero status' do
-        response = cli.run
-        expect(response.code).to eql(0)
+        expect('--help').to exit_with(0)
       end
     end
   end
 
   describe 'commands' do
+    let(:config_args) { ['--config', config.warprc] }
+    let(:warprc) { config_args.join(' ') }
 
-    describe 'warp directory' do
-      context 'shell execution context' do
-        it 'returns exit code of 111' do
+    describe 'list' do
+      let(:argv) { ['list', *config_args] }
 
-        end
-        it 'returns cd command for the shell eval' do
-
-        end
+      it 'should return listing of the warp points' do
+        expect("list #{warprc}").to output %r{log  ->  /var/log}
+        expect("list #{warprc}").to output %r{tmp  ->  /tmp}
       end
 
-      context 'when warp point was not found' do
-        it 'returns exit code of 0' do
-
-        end
-
-        it 'prints an error message' do
-
-        end
+      it 'should exit with zero status' do
+        expect("list #{warprc}").to exit_with(0)
       end
     end
 
-    describe 'add warp point' do
-      it ''
+    describe 'warp' do
+      let(:wp_name) { store.last.name }
+      let(:wp_path) { store.last.path }
+      let(:warp_args) { "#{wp_name} #{warprc}" }
 
-
-      describe 'remove warp point' do
-
-
-      end
-
-      describe 'list warp points' do
-
+      it "should return response with a 'cd' to a warp point" do
+        warp_point = wp_name
+        expect(warp_args).to validate { |cli|
+          expect(cli.config.point).to eql(warp_point)
+          expect(cli.config.command).to eql(:warp)
+          expect(cli.store[warp_point]).to eql(Warp::Dir::Point.new(wp_name, wp_path))
+        }
+        expect(warp_args).to output("cd #{wp_path}")
       end
     end
   end

@@ -4,53 +4,69 @@ require 'warp/dir'
 require 'warp/dir/app/response'
 require 'slop'
 require 'colored'
-require 'pp'
 
 module Warp
   module Dir
     module App
       class CLI
-        attr_accessor :argv, :config, :commander, :store
+        attr_accessor :argv, :config, :commander, :store, :valid
 
         def initialize(argv)
           self.argv      = argv
-          self.commander = ::Warp::Dir.commander
-          self.config    = ::Warp::Dir.config
+          self.commander = ::Warp::Dir::Commander.instance
+          self.config    = ::Warp::Dir::Config.new
         end
 
-        def run(&block)
+        def validate
+          self.valid = false
           config.verbose = false
           config.debug   = false
-          extract_non_flags!
+
+          non_flag_commands = shift_non_flag_commands
 
           begin
-            result = parse_with_slop(argv)
+            result = parse_with_slop(self.argv)
           rescue Slop::UnknownOption => e
             return on :error do
               "Invalid option: #{e.message}".red
             end
           end
 
-          config.configure(result.to_hash)
-
-          store = Warp::Dir.store(config, Warp::Dir::Serializer::Dotfile)
-          Warp::Dir.commander.configure(store)
+          config.configure(result.to_hash.merge(non_flag_commands))
+          self.store = Warp::Dir::Store.new(config, Warp::Dir::Serializer::Dotfile)
 
           config.command = :help if result.help?
           config.command = :warp if !config.command && config.warp
 
-          response = process_command(config)
+          if config[:command]
+            self.valid = true
+          else
+            raise Warp::Dir::Errors::InvalidCommand.new('Unable to determine what command to run.'.red)
+          end
+          yield self if block_given?
+          valid
+        end
+
+        def run(&block)
+          validate unless @valid
+
+          response = process_command
           yield response if block_given?
           response
         end
 
         private
 
-        def process_command(config)
+        def on(*args, &block)
+          Warp::Dir.on(*args, &block)
+        end
+
+        def process_command
+          argv = self.argv
           if config.command
             command_class = commander.find(config.command)
             if command_class
-              command_class.new(config.point).run
+              command_class.new(store, config.point).run
             else
               on :error do
                 message "command '#{config.command}' was not found.".red
@@ -84,24 +100,28 @@ module Warp
           Slop::Parser.new(opts).parse(arguments)
         end
 
-        def extract_non_flags!
+        def shift_non_flag_commands
+          result = {}
           non_flags = []
-          while is_noflag(argv[0]) do
-            non_flags << argv.shift
-          end
+          non_flags << argv.shift while not_a_flag(argv.first)
           case non_flags.size
             when 1
-              config.point   = non_flags[0]
-              config.command = :warp
+              argument = non_flags.first.to_sym
+              if commander.lookup(argument)
+                result[:command] = argument
+              else
+                result[:command] = :warp
+                result[:point] = argument
+              end
             when 2
-              config.command, config.point = non_flags
+              result[:command], result[:point] = non_flags.map(&:to_sym)
           end
+          result
         end
 
-        def is_noflag arg
+        def not_a_flag(arg)
           arg && !arg[0].eql?('-')
         end
-
       end
     end
   end

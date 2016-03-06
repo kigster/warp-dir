@@ -8,7 +8,8 @@ RSpec.describe Warp::Dir::Command::List do
 
   describe '#help' do
     it 'should define a help message' do
-      expect(list.help).to eql('list            Print all stored warp points')
+      expect(list.help).to match /list/
+      expect(list.help).to match /Print all stored warp points/
     end
   end
 
@@ -19,7 +20,6 @@ RSpec.describe Warp::Dir::Command::List do
     let(:formatter) { Warp::Dir::Formatter.new(store) }
     let(:output) { formatter.format_store(:ascii) }
     before do
-      commander.configure(store)
       store.add(point)
     end
 
@@ -28,9 +28,9 @@ RSpec.describe Warp::Dir::Command::List do
     end
 
     it 'should return response and print the listing' do
-      response = list.new.run
+      response = list.new(store).run
       expect(response.messages.first).to eql(output)
-      expect(STDOUT).to receive(:printf).with("printf '#{output}\n'").and_return(nil)
+      expect(STDOUT).to receive(:printf).at_least(3).times
       response.print
     end
   end

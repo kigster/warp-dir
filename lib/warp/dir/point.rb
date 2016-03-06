@@ -36,6 +36,10 @@ module Warp
         Digest::SHA1.base64digest("#{full_path.hash}#{name.hash}").hash
       end
 
+      def <=>(other)
+        name <=> other.name
+      end
+
       def eql?(another)
         return false unless another.is_a?(Warp::Dir::Point)
         %i(name full_path).each do |attribute|

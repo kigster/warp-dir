@@ -11,7 +11,7 @@ RSpec.describe Warp::Dir::Store do
   context 'when store responds to common methods on collections' do
     let(:point_name) { 'moo' }
     let(:point_path) { ENV['HOME'] + '/tmp/12398485' }
-    let(:store) { Warp::Dir::Store.create(config) }
+    let(:store) { Warp::Dir::Store.new(config) }
     let(:p1) { Warp::Dir::Point.new('p', ENV['HOME'] + '/workspace') }
     let(:p2) { Warp::Dir::Point.new('n', ENV['HOME'] + '/workspace/new-project') }
 
@@ -34,7 +34,7 @@ RSpec.describe Warp::Dir::Store do
   context 'when the data storeis empty' do
     let(:point_name) { 'moo' }
     let(:point_path) { ENV['HOME'] + '/tmp/12398485' }
-    let(:store) { Warp::Dir::Store.create(config) }
+    let(:store) { Warp::Dir::Store.new(config) }
 
     it 'should be able to initialize the Store' do
       expect(store.points).to be_empty
@@ -73,7 +73,7 @@ RSpec.describe Warp::Dir::Store do
   end
 
   context 'data store contains some warp points already' do
-    let(:store) { Warp::Dir::Store.create(config) }
+    let(:store) { Warp::Dir::Store.new(config) }
     before do
       store.add_by_name('m1', 'A1')
       store.add_by_name('m2', 'A2')
@@ -81,7 +81,7 @@ RSpec.describe Warp::Dir::Store do
     end
 
     describe 'reading data' do
-      let(:new_store) { Warp::Dir::Store.create(config) }
+      let(:new_store) { Warp::Dir::Store.new(config) }
 
       it 'should restore correctly compared to last saved' do
         expect(new_store['m1'].path).to eql('A1')

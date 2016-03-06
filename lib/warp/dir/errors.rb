@@ -31,9 +31,9 @@ module Warp
       end
 
       class InvalidCommand < ::Warp::Dir::Errors::InstanceError
-        def initialize(instance)
+        def initialize(instance = nil)
           self.instance = instance
-          super "command #{instance} is invalid"
+          super instance.is_a?(Symbol) ? "command #{instance} is invalid" : instance
         end
       end
 

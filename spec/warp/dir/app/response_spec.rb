@@ -87,8 +87,10 @@ RSpec.describe Warp::Dir::App::Response do
       end
 
       it 'should properly format messages for eval' do
-        expect(stream).to receive(:printf).with(%Q{printf 'Hello\n'}).once
-        expect(stream).to receive(:printf).with(%Q{printf 'World\n'}).once
+        expect(stream).to receive(:printf).with(%Q{printf 'Hello\\n';}).once
+        expect(stream).to receive(:printf).with(%Q{printf 'World\\n';}).once
+        expect(response.type).to receive(:header)
+        expect(response.type).to receive(:footer)
         response.configure do
           message 'Hello'
           message 'World'
@@ -119,6 +121,8 @@ RSpec.describe Warp::Dir::App::Response do
           message 'ls -al'
           code 1231 # this should be ignored
         end
+        expect(response.type).to receive(:header)
+        expect(response.type).to receive(:footer)
         expect(stream).to receive(:printf).with('ls -al;').once
         expect(Kernel).to receive(:exit).with(2).once
         response.print.exit!
