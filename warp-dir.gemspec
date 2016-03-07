@@ -10,8 +10,8 @@ Gem::Specification.new do |gem|
   gem.email         = ['kig@reinvent.one']
   gem.version       = Warp::Dir::VERSION
 
-  gem.summary       = %q{Warp Directory: this is drop in replacement of the 'wd' tool available on ZSH. Written in ruby, it is available for any shell.}
-  gem.description   = %q{ZSH has a very nifty tool called 'wd' for Warp Directory (https://github.com/mfaerevaag/wd). Unfortunately it only works with ZSH.}
+  gem.summary       = %q{Warp-Dir (aka 'wd') is a command line tool that lets you bookmark any folders, and then 'wd' between any two points on file system in one command.}
+  gem.description   = %q{Warp-Dir is compatible (and inspired by) the popular 'wd' tool available as a ZSH module. This one is written in ruby and so it should work in any shell. Credits for the original zsh-only tool go to (https://github.com/mfaerevaag/wd).}
   gem.homepage      = "https://github.com/kigster/warp-dir"
 
   gem.files         = `git ls-files`.split($\).reject{ |f| f =~ /^doc\// }
@@ -25,8 +25,19 @@ For this gem to work, you must also install the coupled shell function
 into your ~/.bashrc file (or any other shell initialization file). The
 following command should complete the setup.
 
-  gem install warp-dir --no-wrappers --force
-  warp-dir install --
+  $ warp-dir install
+
+By default, the installer will check common "rc" scripts, but you can
+tell warp-dir where to add shell wrapper with --dotfile <filename>, i.e.
+
+  $ warp-dir install --dotfile ~/.bashrc
+
+Restart your shell, and you should now have 'wd' shell function that
+should be used instead of the warp-dir executable.
+
+Start with
+
+  $ wd help
 
 Thank you!
 

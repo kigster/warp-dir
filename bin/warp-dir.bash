@@ -3,12 +3,8 @@
 # warp-dir shell wrapper
 wd() {
   if [ -z "${warp_dir_exec_installed}" ]; then
-    printf "checking if the warp-dir executable is installed... "
     $(which 'warp-dir') 2>&1 > /dev/null
     export warp_dir_exec_installed=$?
-    if [ ${warp_dir_exec_installed} -eq 0 ]; then
-      printf "yep! You are super awesome :)\n\n"
-    fi
   fi
 
   if [ ${warp_dir_exec_installed} -eq 0 ]; then
