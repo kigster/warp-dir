@@ -3,7 +3,9 @@ module Warp
   PROJECT_HOME = PROJECT_LIBS + '/../..'
 
   module Dir
-    DOTFILES = %w(~/.bashrc ~/.zshrc ~/.profile)
+    # tried in order.
+    DOTFILES = %w(~/.bashrc ~/.bash_profile ~/.profile)
+
     SHELL_WRAPPER = "#{PROJECT_HOME}/bin/warp-dir.bash"
 
     class << self
