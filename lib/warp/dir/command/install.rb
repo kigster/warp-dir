@@ -32,7 +32,7 @@ class Warp::Dir::Command::Install < Warp::Dir::Command
 
   def run(*args)
     self.shell_init_files = config[:dotfile].split(',') if config[:dotfile]
-    self.shell_init_files.each { |dotfile| append_wrapper_to(dotfile) }
+    self.shell_init_files.any? { |dotfile| append_wrapper_to(dotfile) }
     local_existing    = self.existing
     local_installed   = self.installed
     local_shell_files = self.shell_init_files
