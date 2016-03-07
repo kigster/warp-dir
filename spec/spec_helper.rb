@@ -31,10 +31,6 @@ end
 RSpec.configure do |config|
   config.before do
     Warp::Dir::App::Response.disable_exit!
-    Warp::Dir::App::Response.instance.configure do
-      @messages.clear
-      @type = nil
-    end
   end
 end
 

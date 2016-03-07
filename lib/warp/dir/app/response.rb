@@ -4,7 +4,6 @@ module Warp
   module Dir
     module App
       class Response
-        include Singleton
 
         # Use Case                       exit code       stream
         #----------------------------------------------------------------

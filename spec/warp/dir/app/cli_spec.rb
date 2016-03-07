@@ -19,8 +19,18 @@ RSpec.describe Warp::Dir::App::CLI do
       cli.config = config
     end
 
-    let(:result) { cli.send(:shift_non_flag_commands) }
+    describe 'with suffix flags' do
+      subject { cli.send(:extract_suffix_flags, argv) }
+      describe 'and with at leats two arguments' do
+        let(:argv) { 'command argument --flag1 --flag2 -- --suffix1 --suffix2 suffix-argument'.split(' ')}
+        it 'extracts them well' do
+          should eql(%w(--suffix1 --suffix2 suffix-argument))
+        end
+      end
+    end
+
     describe 'with only one argument' do
+      let(:result) { cli.send(:shift_non_flag_commands) }
 
       describe "that's a list command" do
         let(:argv) { %w(list --verbose) }
@@ -45,6 +55,7 @@ RSpec.describe Warp::Dir::App::CLI do
 
     describe 'with two command args' do
       let(:argv) { %w(add mypoint) }
+      let(:result) { cli.send(:shift_non_flag_commands) }
 
       it 'should interpret as a command and a point' do
         expect(result[:command]).to eql(:add)
@@ -58,12 +69,31 @@ RSpec.describe Warp::Dir::App::CLI do
     describe 'and found --help' do
       let(:argv) { ['--help', *config_args] }
       it 'should print the help message' do
-        expect("--help #{warprc}").to output(/<point>/, /Usage:/)
-        expect("--help #{warprc}").not_to output(/^cd /)
+        expect(argv).to output(/<point>/, /Usage:/)
+        expect(argv).not_to output(/^cd /)
       end
-
       it 'should exit with zero status' do
-        expect("--help #{warprc}").to exit_with(0)
+        expect(argv).to exit_with(0)
+      end
+    end
+
+    describe 'and a flag is no found' do
+      let(:argv) { [ '--boo mee --moo', *config_args ] }
+      it 'should report invalid option' do
+        expect(argv).to output( /unknown option/)
+      end
+    end
+
+    describe 'when an exception error occurs' do
+      let(:argv) { [ %w(boo dkk --debug), *config_args ].flatten }
+      context 'and --debug is given' do
+        it 'should print backtrace' do
+          expect(argv.join(' ')).to eql('boo dkk --debug --config /tmp/warprc')
+          expect(STDERR).to receive(:puts).twice
+          expect(argv).to validate(false) { |cli|
+            expect(cli.config.debug).to be_truthy
+          }
+        end
       end
     end
   end

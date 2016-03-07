@@ -9,52 +9,45 @@ module Warp
   module Dir
     module App
       class CLI
-        attr_accessor :argv, :config, :commander, :store, :valid, :opts, :flags
+        attr_accessor :argv, :config, :commander, :store, :validated, :opts, :flags
 
         def initialize(argv)
           self.argv      = argv
-          self.flags     = argv.dup # anything after --
 
+          # flags are everything that follows -- and is typically flags for the command.
+          # for example: 'wd ls project-point -- -alF' would extract flags = [ '-alF' ]
+          self.flags     = extract_suffix_flags(argv.dup)
           self.commander = ::Warp::Dir::Commander.instance
           self.config    = ::Warp::Dir::Config.new
           self.opts      = nil
         end
 
         def validate
+          self.validated = false
           no_arguments   = argv.empty?
-
-          self.valid     = false
-          config.verbose = false
-          config.debug   = false
-
           commands       = shift_non_flag_commands
-          argument       = self.flags.shift until argument.eql?('--') || self.flags.empty?
-
-          begin
-            self.opts = parse_with_slop(self.argv)
-          rescue Slop::UnknownOption => e
-            return on :error do
-              "Invalid option: #{e.message}".red
-            end
-          end
-
+          self.opts      = parse_with_slop(self.argv)
+          # merge first few non-flag args which we filtered into `commands` hash
+          # merge onto the hash resulting from options
+          # and pass on to override the default config opts for the final config.
           config.configure(opts.to_hash.merge(commands))
-          self.store = Warp::Dir::Store.new(config, Warp::Dir::Serializer::Dotfile)
+
+          self.store     = Warp::Dir::Store.new(config, Warp::Dir::Serializer::Dotfile)
 
           config.command = :help if (opts.help? || no_arguments)
           config.command = :warp if !config.command && config.warp
 
           if config[:command]
-            self.valid = true
+            self.validated = true
           else
             raise Warp::Dir::Errors::InvalidCommand.new('Unable to determine what command to run.'.red)
           end
           yield self if block_given?
-          valid
+          validated
         end
 
         def run(&block)
-          validate unless @valid
+          validate unless validated?
           response = process_command
           yield response if block_given?
           response
@@ -108,7 +101,7 @@ module Warp
           opts.bool    '-d', '--debug',   '               – show stacktrace if errors are detected'
           opts.string  '-s', '--dotfile', '<config>       – shell dotfile to be used for install command'
           opts.string  '-c', '--config',  '<config>       – location of the configuration file (default: ' + Warp::Dir.default_config + ')', default: Warp::Dir.default_config
-          opts.boolean '-e', '--no-shell','                 – do not expect output to be evaluated by BASH', default: false
+          opts.boolean '-e', '--no-eval', '               – do not expect command output to be evaluated by a shell', default: false
           opts.on      '-V', '--version', '               – print the version' do
             puts 'Version ' + Warp::Dir::VERSION
             exit
@@ -117,6 +110,13 @@ module Warp
           Slop::Parser.new(opts).parse(arguments)
         end
 
+        # Given args of the form:
+        # [ 'ls' 'project' --verbose --debug -- -alF ]
+        # this returns:
+        # {
+        #    command: :ls,
+        #      point: :project
+        # }
         def shift_non_flag_commands
           result = {}
           non_flags = []
@@ -133,9 +133,26 @@ module Warp
             when 2
               result[:command], result[:point] = non_flags.map(&:to_sym)
             when 3
+              #
+              # This is for the hypothetical but awesome future:
+              #
+              #   wd add proj_remote kig@remote.server.com:~/workspace/proj
+              #   wd proj_remote
+              #
+              # >>>>.... ssh kig@remote.server.com -c "cd ~/workspace/proj"
+              #
               result[:command], result[:point], result[:point_path] = non_flags.map(&:to_sym)
           end
           result
+        end
+
+        def extract_suffix_flags(list)
+          element = list.shift until element.eql?('--') || list.empty?
+          list
+        end
+
+        def validated?
+          self.validated
         end
 
         def not_a_flag(arg)

@@ -16,16 +16,17 @@ Gem::Specification.new do |gem|
 
   gem.files         = `git ls-files`.split($\).reject{ |f| f =~ /^doc\// }
   gem.executables   << 'warp-dir'
-  gem.executables   << 'wd'
 
   gem.post_install_message =<<-EOF
 
 PLEASE NOTE:
 
-You must install this gem with --no-wrappers flag, which is passed to `gem`.
-If you did not use --no-wrappers, please the gem, this time with the flag:
+For this gem to work, you must also install the coupled shell function
+into your ~/.bashrc file (or any other shell initialization file). The
+following command should complete the setup.
 
-  gem install warp-dir --no-wrappers --version #{Warp::Dir::VERSION}
+  gem install warp-dir --no-wrappers --force
+  warp-dir install --
 
 Thank you!
 

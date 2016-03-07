@@ -14,13 +14,13 @@ class Warp::Dir::Command::Install < Warp::Dir::Command
     files.each do |dotfile|
       file = ::Warp::Dir.absolute(dotfile)
       if File.exist?(file)
-        matches = `grep "wd()" #{file}`
+        matches = `egrep 'wd()|warp-dir' #{file}`
         if matches.nil? || matches == '' || config[:force]
           File.open(file, 'a') do |f|
             f.puts <<-EOF
 # warp-dir auto installer
 wd() {
-  if [ -n "$(which warp-dir) "]; then
+  if [ -n "$(which warp-dir)" ]; then
     ifs_backup=$IFS
     IFS="+" # this is needed so that the tabulated output does not collapse
     output=$(warp-dir $@ 2>&1)

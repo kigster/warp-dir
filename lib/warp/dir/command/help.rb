@@ -25,7 +25,7 @@ EOF
      change directory in the outer shell (parent process). Do not worry about this if you
      do not understand it, but please run this command:
 
-     #{'wd install [ --shell [ bash | zsh | sh ] ]'.bold.green}
+     #{'wd install [ --shell [ bash | zsh ] ]'.bold.green}
 
      This command will ensure you have the wrapper installed in your ~/.bashrc or ~/.zshrc
      files. Once installed, just restart your shell!

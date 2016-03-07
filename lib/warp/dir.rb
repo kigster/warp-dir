@@ -28,7 +28,7 @@ module Warp
       end
 
       def on(type, &block)
-        Warp::Dir::App::Response.instance.type(type).configure(&block)
+        Warp::Dir::App::Response.new.type(type).configure(&block)
       end
 
       def commander

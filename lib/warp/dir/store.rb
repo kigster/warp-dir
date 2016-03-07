@@ -27,11 +27,6 @@ module Warp
       def restore!
         @points_collection = Set.new
         self.serializer.restore!
-
-        if config.debug
-          pp 'Restored From Disk:'.yellow
-          pp self
-        end
       end
 
       def [](name)
