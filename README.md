@@ -37,7 +37,7 @@ Some future extensions could be based on some additional realizations:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'warp-dir', '~> 1.0 '
+gem 'warp-dir'
 ```
 And then execute:
 
@@ -47,20 +47,18 @@ Or install it yourself as:
 
     $ gem install warp-dir --no-ri --no-rdoc
     
-After the installation, you will have the `warp-dir` command in the path,
-which actually returns (as it's output) commands for the shell to 
-interprete. This is why you also need to install a tiny shell function
-to wrap this gem's executable.
+After the installation, you will have the `warp-dir` command in the path. You can use
+this command almost like `wd` except it can not warp you to another folder due to 
+UNIX parent/child process restrictions. To do that you need to also install the shell
+function wrapper in your `~/.bashrc` or similar file:
 
-You can do it using several ways:
+You can do like so (if you don't provide file, it will install in `~/.bashrc`, `~/.profile`
+or `~/.zshrc` – so use `--file` to override).
 
     $ warp-dir install [ --file <file> ]
 
-This command will ensure you have the wrapper installed in your ~/.bashrc or ~/.zshrc.
-Without the `--file` option, it will install it in both if it finds them. With the 
-`--file` option, it will only add the shell function to the file specified.
-
-And after that you should be able to get the helpful message below by typing:
+And after that you need to restart your sheel, and then you should be able to get the 
+helpful message below by typing:
 
     $ wd help
 
