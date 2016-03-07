@@ -5,8 +5,16 @@ module Warp
     module Serializer
       class Dotfile < Base
 
+        def warprc_file_path
+          Warp::Dir.absolute(config.warprc)
+        end
+
         def restore!
-          File.open(Warp::Dir.absolute(config.warprc), "r") do |f|
+          unless File.exist?(warprc_file_path)
+            STDERR.puts "No warprc file found in the path #{warprc_file_path}" if config.debug
+            return
+          end
+          File.open(warprc_file_path, 'r') do |f|
             f.each_line do |line|
               line = line.chomp
               next if line.blank?
@@ -20,7 +28,7 @@ module Warp
         end
 
         def persist!
-          File.open(Warp::Dir.absolute(config.warprc), 'w') do |file|
+          File.open(warprc_file_path, 'wt') do |file|
             buffer = ''
             store.points.each do |point|
               buffer << "#{point.name}:#{point.relative_path}\n"

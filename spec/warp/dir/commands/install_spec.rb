@@ -13,7 +13,7 @@ RSpec.describe Warp::Dir::Command::Install do
 
     context 'when shell files do not exist' do
       it 'should return :error type response' do
-        expect('install --dotfile ~/.do_not_exist').to output(/not found/)
+        expect("install #{warprc_args} --dotfile ~/.do_not_exist").to output(/not found/)
       end
     end
   end

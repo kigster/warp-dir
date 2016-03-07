@@ -31,12 +31,13 @@ end
 RSpec.configure do |config|
   config.before do
     Warp::Dir::App::Response.disable_exit!
+    srand 117
   end
 end
 
 RSpec.shared_context :fake_serializer do
   let(:file) { @file ||= ::Tempfile.new('warp-dir') }
-  let(:config) { Warp::Dir::Config.new(config: file.path) }
+  let(:config) { Warp::Dir::Config.new(warprc: file.path) }
   let(:serializer) {
     @initialized_store ||= FakeSerializer ||= Class.new(Warp::Dir::Serializer::Base) do
       def persist!;
@@ -55,12 +56,13 @@ end
 
 RSpec.shared_context :fixture_file do
   let(:fixture_file) { 'spec/fixtures/warprc'}
+  let(:warprc_args)  { " --config #{fixture_file}" }
   let(:config_path) { '/tmp/warprc' }
   let(:file) {
     FileUtils.cp(fixture_file, config_path)
     File.new(config_path)
   }
-  let(:config) { Warp::Dir::Config.new(config: file.path) }
+  let(:config) { Warp::Dir::Config.new(warprc: file.path) }
 end
 
 RSpec.shared_context :initialized_store do
