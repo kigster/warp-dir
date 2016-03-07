@@ -74,7 +74,12 @@ The usage of the tool is a derived superset of the `ZSH`-based inspiration.
 #### Notable Differences
 
  * instead of `wd add!` use `wd add -f <point>` (or --force)
- * for now `wd clean` is not supported.
+
+These features will be added shortly:
+
+ * for now `wd clean` is not supported 
+ * for now history is not supported
+ * for now '-' is not supported
  
 ## Future Development
 
