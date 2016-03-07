@@ -212,9 +212,11 @@ RSpec.describe Warp::Dir::App::CLI do
           end
         end
         context '-- -elf' do
-          let(:warp_args) { "ls #{wp_name} #{warprc} -- -efl" }
-          it 'should list directory with hidden files' do
-            expect(warp_args).to output(%r{total \d+\n}, %r{ warprc\n}, %r{\.\n}, %r{\.\.\n})
+          let(:warp_args) { "ls #{wp_name} #{warprc} -- -alF" }
+          [%r{total \d+\n}, %r{ warprc\n}].each do |reg|
+            it "should list directory and match #{reg}" do
+              expect(warp_args).to output(reg)
+            end
           end
         end
       end
