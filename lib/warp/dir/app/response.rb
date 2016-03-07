@@ -13,20 +13,16 @@ module Warp
 
         class Type < Struct.new(:exit_code, :stream)
           def print(msg)
+            under_shell = ::Warp::Dir.eval_context?
             if msg == ' '
-              stream.printf(%Q{printf '\\n'; })
+              under_shell ? stream.printf(%Q{printf '\\n'; }) : stream.printf("\n")
             else
               msg.split("\n").each do |line|
-                stream.printf(%Q{printf -- '#{line}\\n';})
+                under_shell ? stream.printf(%Q{printf -- '#{line}\\n';}) : stream.printf("#{line}\n")
               end
             end
           end
-          def header
-            # stream.printf(%q[function wd_out() { ])
-          end
-          def footer
-            # stream.printf(%q[}; wd_out ])
-          end
+
           def to_s
             "code:#{exit_code}, stream:#{stream == STDOUT ? "STDOUT" : "STDERR"}"
           end
@@ -38,7 +34,15 @@ module Warp
 
         SHELL.instance_eval do
           def print(msg)
-            stream.printf("#{msg};")
+            under_shell = ::Warp::Dir.eval_context?
+            if under_shell then
+              stream.printf("#{msg};")
+            else
+              stream.printf(
+                'WARNING: '.red +
+                "This functionality is only available within shell eval{} context:\n\n\t#{msg.yellow.bold}\n\n" +
+                "Please install shell wrapper 'wd' via the 'install' command.\n")
+            end
           end
 
           # can't change exit code in SHELL
@@ -61,9 +65,7 @@ module Warp
         # Public Methods
         def print
           raise ::ArgumentError.new('No type defined for Response object') unless @type
-          @type.header
           @type.print(@messages.shift) until @messages.empty?
-          @type.footer
           self
         end
 

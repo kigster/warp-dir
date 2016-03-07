@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'warp/dir'
-require 'warp/dir/app/response'
 require 'slop'
 require 'colored'
 
@@ -17,6 +16,7 @@ module Warp
           # flags are everything that follows -- and is typically flags for the command.
           # for example: 'wd ls project-point -- -alF' would extract flags = [ '-alF' ]
           self.flags     = extract_suffix_flags(argv.dup)
+          self.flags.flatten!
           self.commander = ::Warp::Dir::Commander.instance
           self.config    = ::Warp::Dir::Config.new
           self.opts      = nil
@@ -74,7 +74,7 @@ module Warp
           if config.command
             command_class = commander.find(config.command)
             if command_class
-              command_class.new(store, config.point).run(opts, flags)
+              command_class.new(store, config.point).run(opts, *flags)
             else
               on :error do
                 message "command '#{config.command}' was not found.".red
@@ -98,9 +98,8 @@ module Warp
           opts.bool    '-v', '--verbose', '               – enable verbose mode'
           opts.bool    '-q', '--quiet',   '               – suppress output (quiet mode)'
           opts.bool    '-d', '--debug',   '               – show stacktrace if errors are detected'
-          opts.string  '-s', '--dotfile', '<dotfile>      – shell dotfile to be used for install command, ie. ~/.bashrc'
+          opts.string  '-s', '--dotfile', '<dotfile>      – shell init file to append the wd wrapper, eg. ~/.bashrc'
           opts.string  '-c', '--config',  '<config>       – location of the configuration file (default: ' + Warp::Dir.default_config + ')', default: Warp::Dir.default_config
-          opts.boolean '-e', '--no-eval', '               – do not expect command output to be evaluated by a shell', default: false
           opts.on      '-V', '--version', '               – print the version' do
             puts 'Version ' + Warp::Dir::VERSION
             exit

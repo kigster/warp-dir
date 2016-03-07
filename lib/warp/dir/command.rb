@@ -76,6 +76,12 @@ module Warp
           end
           self.point_path = point_path if point_path
         end
+
+        if store.config.debug
+          require 'pp'
+          STDERR.printf 'Initialized Command: '.yellow.bold
+          pp self
+        end
       end
 
       def config

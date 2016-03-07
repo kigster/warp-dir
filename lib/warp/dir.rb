@@ -1,10 +1,18 @@
-require_relative 'dir/app/response'
 module Warp
-  PROJECT = File.dirname(File.absolute_path(__FILE__))
+  PROJECT_LIBS = File.dirname(File.absolute_path(__FILE__))
+  PROJECT_HOME = PROJECT_LIBS + '/../..'
+
   module Dir
+    DOTFILES = %w(~/.bashrc ~/.zshrc ~/.profile)
+    SHELL_WRAPPER = "#{PROJECT_HOME}/bin/warp-dir.bash"
+
     class << self
       def require_all_from(folder)
-        ::Dir.glob(Warp::PROJECT + folder + '/*.rb') { |file| Kernel.require file }
+        ::Dir.glob(Warp::PROJECT_LIBS + folder + '/*.rb') { |file| Kernel.require file }
+      end
+
+      def eval_context?
+        ENV['WARP_DIR_SHELL'] == 'yes'
       end
 
       def pwd
@@ -27,6 +35,16 @@ module Warp
         collection.sort { |a, b| a.send(field) <=> b.send(field) }
       end
 
+    end
+    end
+end
+
+Warp::Dir.require_all_from '/dir'
+Warp::Dir.require_all_from '/dir/command'
+
+module Warp
+  module Dir
+    class << self
       def on(type, &block)
         Warp::Dir::App::Response.new.type(type).configure(&block)
       end
@@ -45,5 +63,3 @@ class Object
   end
 end
 
-Warp::Dir.require_all_from '/dir/command'
-Warp::Dir.require_all_from '/dir'
