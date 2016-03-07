@@ -53,10 +53,10 @@ this command almost like `wd` except it can not warp you to another folder due t
 UNIX parent/child process restrictions. To do that you need to also install the shell
 function wrapper in your `~/.bashrc` or similar file:
 
-You can do like so (if you don't provide file, it will install in `~/.bashrc`, `~/.profile`
-or `~/.zshrc` – so use `--file` to override).
+You can do like so (if you don't provide file, it will install in `~/.bashrc`, `~/.bash_profile`
+or `~/.profile` whichever works first, – so use `--file` to override it if you need to).
 
-    $ warp-dir install [ --file <file> ]
+    $ warp-dir install [ --dotfile <file> ]
 
 And after that you need to restart your sheel, and then you should be able to get the 
 helpful message below by typing:
