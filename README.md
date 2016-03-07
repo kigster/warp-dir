@@ -1,5 +1,6 @@
 # Warp Directory
 
+[![Gem Version](https://badge.fury.io/rb/warp-dir.svg)](https://badge.fury.io/rb/warp-dir)
 [![Build Status](https://travis-ci.org/kigster/warp-dir.svg?branch=master)](https://travis-ci.org/kigster/warp-dir)
 [![Code Climate](https://codeclimate.com/github/kigster/warp-dir/badges/gpa.svg)](https://codeclimate.com/github/kigster/warp-dir)
 [![Test Coverage](https://codeclimate.com/github/kigster/warp-dir/badges/coverage.svg)](https://codeclimate.com/github/kigster/warp-dir/coverage)
@@ -67,9 +68,27 @@ is now complete!
 
 ## Usage
 
-The usage of the tool is a derived superset of the `ZSH`-based inspiration.
+The usage of the tool is derived from `ZSH`-based inspiration. If it ain't broke, don't fix it!
+I like how `wd` can be used with very short warp points, so it's so much less typing. I often name
+my points `pu` so that I can jump there with `wd pu`.
 
-![Image](doc/wd-help-800x710.png)
+Unlike ZSH counterpart, this tool includes full command line parsing, so 
+you can (if you want to) use flags to achieve the same effect with more
+characters to type, for example all below commands do the same thing. 
+
+```bash
+  wd pu
+  wd --warp --point pu
+  wd -m warp -p pu
+```
+
+You can run a comman in the target directory without leaving the current via
+`wd ls pu`, but in this implementation you can also pass arguments to `ls` after
+the `--` in argument list, for example, to run `ls -1` I would do `wd ls pu -- -1`.
+ 
+Here is a full command / help summary.
+
+![Image](doc/wd-help.png)
 
 #### Notable Differences
 

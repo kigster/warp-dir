@@ -47,8 +47,8 @@ EOF
     INSTALLATION = <<EOF
 
 #{'Installation'.bold.green}
-    It appears that you already have a wrapper installed in one of your
-    shell init files (#{::Warp::Dir::DOTFILES.join(', ')}
+    It appears that you already have a wrapper installed in one of the default
+    shell init files (#{::Warp::Dir::DOTFILES.join(', ')}).
 
     Which means that 'wd' should be working on your system.  If not, edit your
     shell init file, remove any lines related to warp-dir gem, and then reinstall:
