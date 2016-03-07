@@ -15,7 +15,7 @@ module Warp
         end
 
         def help
-          sprintf('%15s %-20s %s%s',
+          sprintf('%16s %-20s %s%s',
                   self.command_name.to_s.yellow,
                   (self.send(:needs_a_point?) ? '<point>'.cyan : ' '.cyan),
                   self.send(:description).blue.bold,

@@ -74,7 +74,7 @@ module Warp
           if config.command
             command_class = commander.find(config.command)
             if command_class
-              command_class.new(store, config.point).run(flags)
+              command_class.new(store, config.point).run(opts, flags)
             else
               on :error do
                 message "command '#{config.command}' was not found.".red
@@ -89,8 +89,7 @@ module Warp
 
         def parse_with_slop(arguments)
           opts        = Slop::Options.new
-          opts.banner << "\n"
-          opts.banner << '  Flags:'
+          opts.banner = nil
           opts.string  '-m', '--command', '<command>      – command to run, ie. add, ls, list, rm, etc.'
           opts.string  '-p', '--point',   '<point-name>   – name of the warp point'
           opts.string  '-w', '--warp',    '<warp-point>   – warp to a given point'
@@ -99,7 +98,7 @@ module Warp
           opts.bool    '-v', '--verbose', '               – enable verbose mode'
           opts.bool    '-q', '--quiet',   '               – suppress output (quiet mode)'
           opts.bool    '-d', '--debug',   '               – show stacktrace if errors are detected'
-          opts.string  '-s', '--dotfile', '<config>       – shell dotfile to be used for install command'
+          opts.string  '-s', '--dotfile', '<dotfile>      – shell dotfile to be used for install command, ie. ~/.bashrc'
           opts.string  '-c', '--config',  '<config>       – location of the configuration file (default: ' + Warp::Dir.default_config + ')', default: Warp::Dir.default_config
           opts.boolean '-e', '--no-eval', '               – do not expect command output to be evaluated by a shell', default: false
           opts.on      '-V', '--version', '               – print the version' do
