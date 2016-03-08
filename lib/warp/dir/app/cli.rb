@@ -35,7 +35,7 @@ module Warp
           self.store     = Warp::Dir::Store.new(config, Warp::Dir::Serializer::Dotfile)
 
           config.command = :help if (opts.help? || no_arguments)
-          config.command = :warp if !config.command && config.warp
+          config.command = :warp if config.warp || config.command == 'warp'
 
           if config[:command]
             self.validated = true

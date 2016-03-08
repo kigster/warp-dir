@@ -129,6 +129,20 @@ RSpec.describe Warp::Dir::App::CLI do
           }
           expect(warp_args).to output("cd #{wp_path}")
         end
+
+        describe 'when using --command' do
+          let(:warp_args) { "--command warp -p #{wp_name} #{warprc}"}
+          it "should return response with a 'cd' to a warp point" do
+            warp_point = wp_name
+            expect(warp_args).to validate { |cli|
+              expect(cli.config.point).to eql(warp_point.to_s)
+              expect(cli.config.command).to eql(:warp)
+              expect(cli.store[warp_point]).to eql(Warp::Dir::Point.new(wp_name, wp_path))
+            }
+            expect(warp_args).to output("cd #{wp_path}")
+          end
+
+        end
       end
 
       describe 'remove <point>' do
