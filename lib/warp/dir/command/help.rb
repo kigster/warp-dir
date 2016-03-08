@@ -7,24 +7,33 @@ class Warp::Dir::Command::Help < Warp::Dir::Command
 
   def run(opts, flags = [])
     commander = ::Warp::Dir.commander
+    cmd = self
     on :success do
       message USAGE
       message ' '
       message 'Warp Point Commands:'.bold.green
       message ' '
-      commander.commands.select{|cmd| cmd.needs_a_point?}.map(&:command_name).each do |installed_commands|
-        message sprintf("  %s\n", commander.find(installed_commands).help)
-      end
+      message cmd.commands_needing_points(commander, needing_point: true)
       message ' '
       message 'Global Commands:'.bold.green
       message ' '
-      commander.commands.reject{|cmd| cmd.needs_a_point?}.map(&:command_name).each do |installed_commands|
-        message sprintf("  %s\n", commander.find(installed_commands).help)
-      end
+      message cmd.commands_needing_points(commander, needing_point: false)
       message EXAMPLES
       message INSTALLATION
       message opts.to_s
     end
+  end
+
+  def commands_needing_points(commander,
+                              needing_point: true)
+    help = ''
+    commander.
+      commands.
+      select{|cmd| needing_point ? cmd.needs_a_point? : !cmd.needs_a_point? }.
+      map(&:command_name).each do |installed_commands|
+      help << sprintf("  %s\n", commander.find(installed_commands).help)
+    end
+    help
   end
 
   USAGE = <<EOF
