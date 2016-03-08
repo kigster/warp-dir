@@ -18,7 +18,7 @@ module Warp
           warp_to_path = if point
             point.absolute_path
           else
-            point_name if Dir.exist?(point_name)
+            point_name if ::Dir.exist?(point_name.to_s)
           end
           raise ::Warp::Dir::Errors::PointNotFound.new(point_name) unless warp_to_path
           on :shell do
