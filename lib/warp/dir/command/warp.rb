@@ -9,18 +9,16 @@ module Warp
         needs_a_point? true
 
         def run(*args)
-          warp_to_path = nil
           if point.nil? && point_name
             begin
               self.point = store[point_name]
             rescue ::Warp::Dir::Errors::PointNotFound
             end
           end
-          if point
-            warp_to_path = point.absolute_path
+          warp_to_path = if point
+            point.absolute_path
           else
-            files         = ::Dir.glob("#{point_name}*")
-            warp_to_path = files.first if files.size == 1
+            point_name if Dir.exist?(point_name)
           end
           raise ::Warp::Dir::Errors::PointNotFound.new(point_name) unless warp_to_path
           on :shell do
