@@ -24,7 +24,6 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 1.3.6'
 
   s.add_dependency('slop', '~> 4.2')
-  s.add_dependency('colored', '~> 1')
 
   s.add_development_dependency 'codeclimate-test-reporter', '~> 0.5'
   s.add_development_dependency 'bundler', '~> 1.11'

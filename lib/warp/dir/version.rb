@@ -1,4 +1,4 @@
-require 'colored'
+require_relative '../../colored'
 module Warp
   module Dir
     VERSION = '1.1.3'
