@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
+require "colored"
 require "warp/dir"
 
 # (If you use this, don't forget to add pry to your Gemfile!)

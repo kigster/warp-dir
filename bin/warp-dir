@@ -1,13 +1,12 @@
 #!/usr/bin/env ruby
 
-require 'bundler/setup'
-
 lib_path = File.dirname(__FILE__) + '/../lib'
 if File.exist?(lib_path)
   $LOAD_PATH << lib_path
-  require 'warp/dir'
-  require 'warp/dir/app/cli'
 end
+
+require 'warp/dir'
+require 'warp/dir/app/cli'
 
 response = Warp::Dir::App::CLI.new(ARGV.dup).run
 response.print.exit! if response
