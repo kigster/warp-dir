@@ -18,7 +18,7 @@ vendor/
 **/.DS_Store
 
 .idea/.rakeTasks
-
+.idea/*.iml
 # User-specific stuff:
 .idea/workspace.xml
 .idea/tasks.xml
