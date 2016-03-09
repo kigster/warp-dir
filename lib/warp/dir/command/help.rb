@@ -37,6 +37,7 @@ class Warp::Dir::Command::Help < Warp::Dir::Command
   end
 
   USAGE = <<EOF
+
 #{"Usage:".bold.green}  wd [ --command ] [ list | help ] [ wd-flags ]
         wd [ --command ] [ [ warp ] | add  [-f] | rm | ls ] [ wd flags ] <point> -- [ cmd-flags ]
         wd --help | help
@@ -45,11 +46,11 @@ EOF
   EXAMPLES = <<EOF
 
 #{'Examples'.bold.green}
-       wd add proj    add current directory as a warp point
-       cd ~/
-       wd proj        jumps to proj
-       wd list        lists all points
-       wd rm proj     removes proj
+       wd add proj    # add current directory as a warp point
+       wd ~/          # wd works just like 'cd' for regular folders
+       wd proj        # jumps to proj
+       wd list        # lists all 'bookmarked' points
+       wd rm proj     # removes proj
 EOF
 
   if ::Warp::Dir::Command::Install.wrapper_installed?
