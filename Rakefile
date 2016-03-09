@@ -1,5 +1,4 @@
 task :default => [:rspec ]
-
 task :install do
   [
     %q(chmod -R o+r .),
@@ -13,7 +12,11 @@ task :install do
   sh <<-EOF
 export gem_file=$(ls -1 *.gem | tail -1)
 export gem_name=${gem_file//.gem/}
-gem install $gem_file --no-wrappers --force --quiet
+if [ "$(which ruby)" == "/usr/bin/ruby" ]; then
+  gem install $gem_file -n /usr/local/bin --no-ri --no-rdoc
+else
+  gem install $gem_file --no-ri --no-rdoc
+fi
   EOF
   exit 0
 end
