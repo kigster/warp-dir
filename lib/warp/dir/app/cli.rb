@@ -37,6 +37,8 @@ module Warp
           config.command = :help if (opts.help? || no_arguments)
           config.command = :warp if config.warp || config.command == 'warp'
 
+          String.disable_colors if config.no_color
+
           if config[:command]
             self.validated = true
           else
@@ -93,6 +95,7 @@ module Warp
           opts.string  '-m', '--command', '<command>      – command to run, ie. add, ls, list, rm, etc.'
           opts.string  '-p', '--point',   '<point-name>   – name of the warp point'
           opts.string  '-w', '--warp',    '<warp-point>   – warp to a given point'
+          opts.bool          '--no-color','               - do not use ASCII color'
           opts.bool    '-f', '--force',   '               - force, ie. overwrite existing point when adding'
           opts.bool    '-h', '--help',    '               – show help'
           opts.bool    '-v', '--verbose', '               – enable verbose mode'

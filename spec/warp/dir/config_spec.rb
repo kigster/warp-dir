@@ -12,7 +12,7 @@ RSpec.describe Warp::Dir::Config do
   end
 
   it 'should add new parameter to the params array' do
-    expect(c1.variables).to eql([:warprc, :shell, :force, :debug, :blah])
+    expect(c1.variables.sort).to include(:warprc, :shell, :force, :debug, :blah)
   end
 
   it 'should be able to create a attr_writer also' do
@@ -38,7 +38,7 @@ RSpec.describe Warp::Dir::Config do
     end
 
     it 'should add new parameter to the params array' do
-      expect(c2.variables).to eql([:warprc, :shell, :force, :debug, :poo])
+      expect(c2.variables).to include(:warprc, :shell, :force, :debug, :poo)
     end
 
   end

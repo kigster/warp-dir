@@ -32,3 +32,15 @@ wd_not_found() {
     printf "    $ hash -r\n"
     printf "    $ warp-dir install [ --dotfile ~/.bashrc ]\n"
 }
+
+_wd() {
+    local WDWORDS cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+
+    WDWORDS=$(wd list --no-color  | awk '{ print $1 }')
+    COMPREPLY=( $( compgen -W "$WDWORDS" -- "$cur" ) )
+}
+
+complete -F _wd wd

@@ -20,8 +20,6 @@ unless Object.const_defined? :Colored
       'reversed'  => 7
     }
 
-    @@enforced_colors = nil
-
     COLORS.each do |color, value|
       define_method(color) do
         colorize(self, :foreground => color)
@@ -65,35 +63,32 @@ unless Object.const_defined? :Colored
     end
 
     def extra(extra_name)
-      return '' unless is_tty
+      return '' if String.colors_disabled
       extra_name = extra_name.to_s
       "\e[#{EXTRAS[extra_name]}m" if EXTRAS[extra_name]
     end
 
     def color(color_name)
-      return unless is_tty
+      return '' if String.colors_disabled
       background = color_name.to_s =~ /on_/
       color_name = color_name.to_s.sub('on_', '')
       return unless color_name && COLORS[color_name]
       "\e[#{COLORS[color_name] + (background ? 10 : 0)}m"
     end
-
-    def is_tty
-      if @@enforced_colors.nil?
-        $stdout.tty?
-      else
-        @@enforced_colors
-      end
-    end
-
-    def enable
-      @@enforced_colors = true
-    end
-
-    def disable
-      @@enforced_colors = false
-    end
   end
 end
 
 String.send(:include, Colored)
+
+class String
+  class << self
+    attr_accessor :colors_disabled
+
+    def enable_colors
+      self.colors_disabled = false
+    end
+    def disable_colors
+      self.colors_disabled = true
+    end
+  end
+end

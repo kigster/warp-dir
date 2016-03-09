@@ -8,7 +8,8 @@ module Warp
         warprc: ENV['HOME'] + '/.warprc',
         shell: false,
         force: false,
-        debug: false
+        debug: false,
+        no_color: false
       }
 
       attr_accessor :variables
