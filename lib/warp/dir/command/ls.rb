@@ -5,7 +5,7 @@ module Warp
       class LS < Warp::Dir::Command
         description %q(List directory contents of a Warp Point)
         needs_a_point? true
-        aliases :dir
+        aliases :dir, :ll
 
         # @param [Object] args
         def run(opts, *flags)

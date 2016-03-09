@@ -3,6 +3,7 @@ require 'warp/dir/formatter'
 
 class Warp::Dir::Command::List < Warp::Dir::Command
   description %q(Print all stored warp points)
+  aliases :l
 
   def run(*args)
     formatted_list = ::Warp::Dir::Formatter.new(store).format_store
