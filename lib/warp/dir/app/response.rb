@@ -18,7 +18,7 @@ module Warp
               under_shell ? stream.printf(%Q{printf '\\n'; }) : stream.printf("\n")
             else
               msg.split("\n").each do |line|
-                under_shell ? stream.printf(%Q{printf -- '#{line}\\n';}) : stream.printf("#{line}\n")
+                under_shell ? stream.printf(%Q{printf -- '#{line.gsub(/['`]/, '\"')}\\n';}) : stream.printf("#{line}\n")
               end
             end
           end
