@@ -1,7 +1,7 @@
 require_relative '../../colored'
 module Warp
   module Dir
-    VERSION = '1.1.3'
+    VERSION = '1.1.4'
 
     @install_notice = <<-EOF
 
