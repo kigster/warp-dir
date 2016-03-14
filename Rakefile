@@ -1,5 +1,4 @@
-task :install do
-
+task :reinstall do
   [ %q(chmod -R o+r .),
     %q(rm -f *.gem),
     %q(rm -rf build),
@@ -20,14 +19,39 @@ task :install do
   EOF
 end
 
-desc 'Install development dependencies for this gem'
-task :deps do
-  sh %q{
-    echo "source 'https://rubygems.org'; gemspec" > Gemfile
-    [[ -n $(which bundle) ]] || gem install bundler --no-ri --no-rdoc
-    bundle install
-    rm -f Gemfile
-  }
+namespace :gemfile do
+  desc 'Install dependencies by creating a temporary Gemfile'
+  task :install => [:setup, :cleanup]
+
+  task :setup do
+    sh %q{
+      echo "source 'https://rubygems.org'; gemspec" > Gemfile
+      [[ -n $(which bundle) ]] || gem install bundler --no-ri --no-rdoc
+      bundle install
+    }.gsub(%r{^\s+}m, '')
+  end
+
+  task :cleanup do
+    sh %q{ rm -f Gemfile }
+  end
+
+  namespace :bundler do
+    task :load do
+      require 'bundler'
+      require 'bundler/gem_tasks'
+    end
+    desc "Invoke Bundler's 'release' task to push the gem to RubyGems.org"
+    task :release => [ :setup, :load ] do
+      Rake::Task["release"].invoke
+      Rake::Task["gemfile:cleanup"].invoke
+    end
+
+    desc "Installs and invokes Bundler's 'release' task"
+    task :install => [ :setup, :load ] do
+      Rake::Task["install:local"].invoke
+      Rake::Task["gemfile:cleanup"].invoke
+    end
+  end
 end
 
 require 'rake/clean'

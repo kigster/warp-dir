@@ -47,19 +47,13 @@ And then execute:
 Or install it yourself as:
 
     $ gem install warp-dir --no-ri --no-rdoc
-    
-After the installation, you will have the `warp-dir` command in the path. You can use
-this command almost like `wd` except it can not warp you to another folder due to 
-UNIX parent/child process restrictions. To do that you need to also install the shell
-function wrapper in your `~/.bashrc` or similar file:
 
-You can do like so (if you don't provide file, it will install in `~/.bashrc`, `~/.bash_profile`
-or `~/.profile` whichever works first, – so use `--file` to override it if you need to).
-
+The last step is to install the `wd` bash function, which enables the `cd`-like behavior.
+Choose 
     $ warp-dir install [ --dotfile <file> ]
 
-And after that you need to restart your sheel, and then you should be able to get the 
-helpful message below by typing:
+And after that you need to restart your shell, and then you should get the command's
+"help" message by typing:
 
     $ wd help
 
@@ -72,9 +66,9 @@ The usage of the tool is derived from `ZSH`-based inspiration. If it ain't broke
 I like how `wd` can be used with very short warp points, so it's so much less typing. I often name
 my points `pu` so that I can jump there with `wd pu`.
 
-Unlike ZSH counterpart, this tool includes full command line parsing, so 
+Unlike ZSH counterpart, this tool includes full command line parsing, so
 you can (if you want to) use flags to achieve the same effect with more
-characters to type, for example all below commands do the same thing. 
+characters to type, for example all below commands do the same thing.
 
 ```bash
   wd pu
@@ -85,7 +79,7 @@ characters to type, for example all below commands do the same thing.
 You can run a comman in the target directory without leaving the current via
 `wd ls pu`, but in this implementation you can also pass arguments to `ls` after
 the `--` in argument list, for example, to run `ls -1` I would do `wd ls pu -- -1`.
- 
+
 Here is a full command / help summary.
 
 ![Image](doc/wd-help.png)
@@ -96,13 +90,13 @@ Here is a full command / help summary.
 
 These features will be added shortly:
 
- * for now `wd clean` is not supported 
+ * for now `wd clean` is not supported
  * for now history is not supported
  * for now '-' is not supported
- 
+
 ## Future Development
 
-I have so many cool ideas about where this can go, that I created a 
+I have so many cool ideas about where this can go, that I created a
 [dedicated page](ROADMAP.md) for the discussion of future features.  Please head over
 there if you'ld like to participate.
 
