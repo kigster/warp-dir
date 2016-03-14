@@ -4,8 +4,8 @@ module Warp
 
   module Dir
     # tried in order.
-    DOTFILES = %w(~/.bashrc ~/.bash_profile ~/.profile)
-
+    DOTFILES = %w(.bash_profile .bashrc .profile .bash_login).map{|f| "~/#{f}" }
+    DOTFILE_CREATED='.bash_profile'
     SHELL_WRAPPER = "#{PROJECT_HOME}/bin/warp-dir.bash"
 
     class << self
@@ -64,4 +64,3 @@ class Object
     self.eql?('') || self.nil?
   end
 end
-
