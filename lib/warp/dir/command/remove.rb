@@ -1,6 +1,6 @@
 require 'warp/dir/command'
 class Warp::Dir::Command
-  class Remove < Warp::Dir::Command
+  class Remove < ::Warp::Dir::Command
     description %q(Removes a given warp point from the database)
     needs_a_point? true
     aliases :rm, :delete

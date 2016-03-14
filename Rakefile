@@ -20,10 +20,17 @@ task :install do
   EOF
 end
 
-require 'bundler'
-require "bundler/gem_tasks"
-require 'rake/clean'
+desc 'Install development dependencies for this gem'
+task :deps do
+  sh %q{
+    echo "source 'https://rubygems.org'; gemspec" > Gemfile
+    [[ -n $(which bundle) ]] || gem install bundler --no-ri --no-rdoc
+    bundle install
+    rm -f Gemfile
+  }
+end
 
+require 'rake/clean'
 CLEAN.include %w(pkg coverage *.gem)
 
 begin

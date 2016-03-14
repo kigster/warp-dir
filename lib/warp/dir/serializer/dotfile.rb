@@ -1,5 +1,6 @@
 require_relative '../errors'
 require_relative '../../dir'
+require_relative 'base'
 module Warp
   module Dir
     module Serializer

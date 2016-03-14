@@ -2,7 +2,7 @@ require 'warp/dir/command'
 module Warp
   module Dir
     class Command
-      class LS < Warp::Dir::Command
+      class LS < ::Warp::Dir::Command
         description %q(List directory contents of a Warp Point)
         needs_a_point? true
         aliases :dir, :ll

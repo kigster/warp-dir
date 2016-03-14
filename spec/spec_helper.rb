@@ -1,8 +1,11 @@
-require 'codeclimate-test-reporter'
+begin
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
+rescue LoadError
+end
 require 'warp/dir'
 require 'rspec/core'
 
-CodeClimate::TestReporter.start
 
 module Warp
   module Dir
