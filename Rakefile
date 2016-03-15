@@ -19,10 +19,11 @@ task :reinstall do
   EOF
 end
 
-namespace :gemfile do
-  desc 'Install dependencies by creating a temporary Gemfile'
+namespace :development do
+  desc 'Setup temporary Gemfile, install all dependencies, and remove Gemfile'
   task :install => [:setup, :cleanup]
 
+  desc 'Setup temporary Gemfile and install all dependencies.'
   task :setup do
     sh %q{
       echo "source 'https://rubygems.org'; gemspec" > Gemfile
@@ -42,14 +43,14 @@ namespace :gemfile do
     end
     desc "Invoke Bundler's 'release' task to push the gem to RubyGems.org"
     task :release => [ :setup, :load ] do
-      Rake::Task["release"].invoke
-      Rake::Task["gemfile:cleanup"].invoke
+      Rake::Task['release'].invoke
+      Rake::Task['development:cleanup'].invoke
     end
 
-    desc "Installs and invokes Bundler's 'release' task"
+    desc 'Package and install the gem locally'
     task :install => [ :setup, :load ] do
-      Rake::Task["install:local"].invoke
-      Rake::Task["gemfile:cleanup"].invoke
+      Rake::Task['install:local'].invoke
+      Rake::Task['development:cleanup'].invoke
     end
   end
 end
@@ -61,6 +62,10 @@ begin
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec)
 rescue LoadError
+end
+
+task :spec => [ 'development:setup' ] do
+  Rake::Task['development:cleanup'].invoke
 end
 
 task :default => [:spec]
