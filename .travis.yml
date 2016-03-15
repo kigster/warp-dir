@@ -4,7 +4,7 @@ env:
 rvm:
   - 2.2.3
   - 2.3.0
-script: "gem install bundler rake --no-ri --no-rdoc; rake gemfile:install; exec rspec"
+script: "gem install bundler rake --no-ri --no-rdoc; rake gemfile:install; rspec"
 notifications:
   email:
     recipients:
