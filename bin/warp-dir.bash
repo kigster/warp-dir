@@ -34,13 +34,31 @@ wd_not_found() {
 }
 
 _wd() {
-    local WDWORDS cur
+    local WD_OPTS WD_POINTS cur prev
+
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    #printf "\n%s\n" "cur is [${cur}], prev is [${prev}]"
 
     COMPREPLY=()
-    _get_comp_words_by_ref cur
 
-    WDWORDS=$(wd list --no-color  | awk '{ print $1 }')
-    COMPREPLY=( $( compgen -W "$WDWORDS" -- "$cur" ) )
+    # Only perform completion if the current word starts with a dash ('-'),
+    # meaning that the user is trying to complete an option.
+    if [[ ${cur} == -* ]] ; then
+      # COMPREPLY is the array of possible completions, generated with
+      WD_COMP_OPTIONS=$(wd --help | awk 'BEGIN{FS="--"}{print "--" $2}' | sed -E '/^--$/d' | egrep -v ']|help' | egrep -- "${cur}" | awk '{if ($1 != "") { printf "%s\n", $1} } ')
+    else
+      if [[ -z "${cur}" ]] ; then
+        WD_POINTS=$(wd list --no-color  | awk '{ print $1 }')
+        WD_DIRS=$(ls -1p | grep '/')
+      else
+        WD_POINTS=$(wd list --no-color  | awk '{ print $1 }' | egrep -e "^${cur}")
+        WD_DIRS=$(ls -1p | grep '/' | egrep -e "^${cur}")
+      fi
+      WD_COMP_OPTIONS="$WD_POINTS $WD_DIRS"
+    fi
+    COMPREPLY=( $(compgen -W "${WD_COMP_OPTIONS}" -- ${cur}) )
+    return 0
 }
 
 complete -F _wd wd
