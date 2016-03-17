@@ -38,7 +38,6 @@ _wd() {
 
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    #printf "\n%s\n" "cur is [${cur}], prev is [${prev}]"
 
     COMPREPLY=()
 
@@ -48,6 +47,7 @@ _wd() {
       # COMPREPLY is the array of possible completions, generated with
       WD_COMP_OPTIONS=$(wd --help | awk 'BEGIN{FS="--"}{print "--" $2}' | sed -E '/^--$/d' | egrep -v ']|help' | egrep -- "${cur}" | awk '{if ($1 != "") { printf "%s\n", $1} } ')
     else
+      WD_COMMANDS="add ls remove warp install help list"
       if [[ -z "${cur}" ]] ; then
         WD_POINTS=$(wd list --no-color  | awk '{ print $1 }')
         WD_DIRS=$(ls -1p | grep '/')
@@ -57,6 +57,7 @@ _wd() {
       fi
       WD_COMP_OPTIONS="$WD_POINTS $WD_DIRS"
     fi
+    [[ $COMP_CWORD == 1 ]] && WD_COMP_OPTIONS="${WD_COMP_OPTIONS} ${WD_COMMANDS}"
     COMPREPLY=( $(compgen -W "${WD_COMP_OPTIONS}" -- ${cur}) )
     return 0
 }
