@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'bundler/setup'
 require 'warp/dir'
 require 'slop'
 require 'colored'
