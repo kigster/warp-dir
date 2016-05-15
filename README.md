@@ -10,81 +10,96 @@
 [![Gitter](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)](https://gitter.im/kigster/warp-dir)
 <hr/>
 
-This is a ruby implementation of the tool 'wd' (warp directory),
-[originally written as a zsh module](https://github.com/mfaerevaag/wd)
+This is a ruby implementation of the tool `wd` (warp directory),
+[originally written as a `ZSH` module](https://github.com/mfaerevaag/wd)
 by [Markus Færevaag](https://github.com/mfaerevaag).
 
-After finding it very useful, but having to switch to `bash` on occasion, I wanted to have a completely
-compatible tool that is well tested, and can be extended to do some more interesting things.
+I personaly went back to `bash` after trying out `ZSH`, but it was the `wd` plugin that I really missed.
 
-Markus kindly offered a ruby version in a [separate branch of this module](https://github.com/mfaerevaag/wd/tree/ruby),
-which served as an inspiration for this gem.
+While Markus kindly offered a ruby version in a [separate branch of this module](https://github.com/mfaerevaag/wd/tree/ruby),
+it wasn't quite as extensible as I wanted to (or well tested), so it ended up being an inspiration for this gem.
 
-The overall concept comes from the realization that when we work on the command line, we
+## Warp This
 
- * often have to deal with a limited number of folders at any given time
- * it would be nice to quickly switch between these folders (which we call __warp points__).
- * it should be easy to add, remove, list, and validate warp points
- * everything should require as few characters as possible :)
+WarpDir is a UNIX command line tool that works somewhat similar to the standard built-in command `cd` — "change directory". 
 
-Some future extensions could be based on some additional realizations:
+The main difference is that `wd` is able to add/remove/list folder "shortcuts", and allows you to jump to these shortcuts from anywhere on the filesystem. 
 
- * each folder often represents a project, some of which are managed by `git`
- * eventually we might want to do things across all projects, such as perform group `git pull`,
-   or even `git push` etc.
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'warp-dir'
-```
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install warp-dir --no-ri --no-rdoc
-
-The last step is to install the `wd` bash function, which enables the `cd`-like behavior.
-Choose 
-    $ warp-dir install [ --dotfile <file> ]
-
-And after that you need to restart your shell, and then you should get the command's
-"help" message by typing:
-
-    $ wd help
-
-If the above command returns a properly formatted help like the image below, your setup
-is now complete!
+This of this as a folder-navigation super-charge tool that you'd use on a most frequently-used set of folders. This becomes __really useful__ if you are often finding youself going into a small number of deeply nested folders with a long path prefix. 
 
 ## Usage
 
-The usage of the tool is derived from `ZSH`-based inspiration. If it ain't broke, don't fix it!
-I like how `wd` can be used with very short warp points, so it's so much less typing. I often name
-my points `pu` so that I can jump there with `wd pu`.
+__NOTE:__ in the below examples, the characters `~ ❯ ` denote the current shell prompt, showing the current folder you are in. The command to type is on the right hand side of the "❯".
 
-Unlike ZSH counterpart, this tool includes full command line parsing, so
-you can (if you want to) use flags to achieve the same effect with more
-characters to type, for example all below commands do the same thing.
+Let's first bookmark a long directory:
 
 ```bash
-  wd pu
-  wd --warp --point pu
-  wd -m warp -p pu
+    ~ ❯ cd ~/workspace/arduino/robots/command-bridge/src
+    ~/workspace/arduino/robots/command-bridge/src ❯ wd add cbsrc
+    Warp point saved!
+    
+    ~/workspace/arduino/robots/command-bridge/src ❯ cd ~/workspace/c++/foo/src
+    ~/workspace/c++/foo/src ❯ wd add foosrc
+    Warp point saved!
+    
+    ~/workspace/c++/foo/src ❯ cd /usr/local/Cellar
+    /usr/local/Cellar ❯ wd add brew
+    Warp point saved!
 ```
 
-You can run a comman in the target directory without leaving the current via
-`wd ls pu`, but in this implementation you can also pass arguments to `ls` after
-the `--` in argument list, for example, to run `ls -1` I would do `wd ls pu -- -1`.
+Now we can list/inspect current set of warp points:
 
-Here is a full command / help summary.
+```bash
+    /usr/local/Cellar ❯ wd l
+       cbsrc -> ~/workspace/arduino/robots/command-bridge/src
+      foosrc -> ~/workspace/c++/foo/src
+        brew -> /usr/local/Cellar
+```
+
+Now we can jump around these warp points, as well as run 'ls' inside (even passing arbitrary arguments to the `ls` itself):
+
+```bash
+    /usr/local/Cellar ❯ wd cbsrc
+    ~/workspace/arduino/robots/command-bridge/src ❯ wd foosrc
+    ~/workspace/c++/foo/src ❯  1 wd ls brew -- -alF | head -4        # run ls -alF inside /usr/local/Cellar
+total 0
+drwxrwx---  73 kig  staff  2482 May  7 15:29 ./
+drwxrwx---  21 kig  staff   714 Apr 28 11:40 ../
+drwxrwx---   3 kig  staff   102 Dec 24 03:14 ack/
+```
+
+### Command Completion
+
+If you installed `wd` properly, it should register it's own command completion for BASH and be ready for your tabs :)
+
+Note that you can use `wd` to change directory by giving an absolute or relative directory name, just like `cd` (so not just using warp-points), so when you type `wd [TAB]` you will see all saved warp points as well as the local directories you can `cd` into.
+
+That's basically it!  
+
+All of the mappings are stored in the `~/.warprc` file, where the warp point name is followed by a colon, and the path it maps to. So it's trivial to do a global search/replace on that file in your favorite editor, if, for example, a commond top level folder had changed. 
+
+Happy warping!
+
+### Detailed Usage
 
 ![Image](doc/wd-help.png)
 
-#### Notable Differences
+## `wd` Concept 
+
+The overall concept comes from the realization that when we work on the command line, we often do things that `wd` tool provides straight out of the box, such as:
+
+ * we often have to deal with a limited number of folders at any given time
+ * on occastion have to jump between these folders (which we call __warp points__), which may require mult-level `cd` command, for example: `cd ~/workspace/foo/src/include/; ....; cd ~/Documents/Microsoft\ Word/; ...` 
+ * seems like it should be easy to add, remove and list warp points
+ * everything should require typing few characters as possible :)
+ * it would be great to have full BASH completion support
+
+Some future extensions could be based on some additional realizations:
+
+ * perhaps you might want to inspect a bookmarked folder without leaving your current place. 
+ * maybe by inspecting we mean — running a `find`, or `ls` or any other command for that matter
+
+### Notable Differences with original `wd`
 
  * instead of `wd add!` use `wd add -f <point>` (or --force)
 
@@ -93,6 +108,29 @@ These features will be added shortly:
  * for now `wd clean` is not supported
  * for now history is not supported
  * for now '-' is not supported
+
+## Installation
+
+Three steps:
+
+ 1. This `wd` requires version 2+ of ruby interpreter. Check your default ruby with `ruby --version`. You should see something like "ruby 2.3.0p0....". If you see version 1.9 or earlier, upgrade your ruby with `brew update; brew install ruby`.
+ 2. Install warp-dir gem:
+```bash
+     ~ ❯ gem install warp-dir --no-ri --no-rdoc
+```
+ 3. The last step is to install the `wd` BASH function and auto-completion:
+```bash
+    ~ ❯ warp-dir install --dotfile ~/.bash_profile
+```
+
+This last step appends the required shell function to the shell initialization file specified with the `--dotfile` flag. If you are unsure what that means, please run the command above as is.
+
+And step 3 you will need to restart your shell, so reopen your Terminal or [iTerm2](https://www.iterm2.com/) (please use iTerm over Terminal — it's soooo much better!), and then type:
+
+    ~ ❯ wd help
+
+If the above command returns a properly formatted help like the image below, your setup
+is now complete!
 
 ## Future Development
 
