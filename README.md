@@ -34,34 +34,34 @@ __NOTE:__ in the below examples, the characters `~ ❯ ` denote the current shel
 Let's first bookmark a long directory:
 
 ```bash
-    ~ ❯ cd ~/workspace/arduino/robots/command-bridge/src
-    ~/workspace/arduino/robots/command-bridge/src ❯ wd add cbsrc
-    Warp point saved!
-    
-    ~/workspace/arduino/robots/command-bridge/src ❯ cd ~/workspace/c++/foo/src
-    ~/workspace/c++/foo/src ❯ wd add foosrc
-    Warp point saved!
-    
-    ~/workspace/c++/foo/src ❯ cd /usr/local/Cellar
-    /usr/local/Cellar ❯ wd add brew
-    Warp point saved!
+~ ❯ cd ~/workspace/arduino/robots/command-bridge/src
+~/workspace/arduino/robots/command-bridge/src ❯ wd add cbsrc
+Warp point saved!
+
+~/workspace/arduino/robots/command-bridge/src ❯ cd ~/workspace/c++/foo/src
+~/workspace/c++/foo/src ❯ wd add foosrc
+Warp point saved!
+
+~/workspace/c++/foo/src ❯ cd /usr/local/Cellar
+/usr/local/Cellar ❯ wd add brew
+Warp point saved!
 ```
 
 Now we can list/inspect current set of warp points:
 
 ```bash
-    /usr/local/Cellar ❯ wd l
-       cbsrc -> ~/workspace/arduino/robots/command-bridge/src
-      foosrc -> ~/workspace/c++/foo/src
-        brew -> /usr/local/Cellar
+/usr/local/Cellar ❯ wd l
+   cbsrc -> ~/workspace/arduino/robots/command-bridge/src
+  foosrc -> ~/workspace/c++/foo/src
+    brew -> /usr/local/Cellar
 ```
 
 Now we can jump around these warp points, as well as run 'ls' inside (even passing arbitrary arguments to the `ls` itself):
 
 ```bash
-    /usr/local/Cellar ❯ wd cbsrc
-    ~/workspace/arduino/robots/command-bridge/src ❯ wd foosrc
-    ~/workspace/c++/foo/src ❯  1 wd ls brew -- -alF | head -4        # run ls -alF inside /usr/local/Cellar
+/usr/local/Cellar ❯ wd cbsrc
+~/workspace/arduino/robots/command-bridge/src ❯ wd foosrc
+~/workspace/c++/foo/src ❯  1 wd ls brew -- -alF | head -4        # run ls -alF inside /usr/local/Cellar
 total 0
 drwxrwx---  73 kig  staff  2482 May  7 15:29 ./
 drwxrwx---  21 kig  staff   714 Apr 28 11:40 ../
@@ -116,18 +116,20 @@ Three steps:
  1. This `wd` requires version 2+ of ruby interpreter. Check your default ruby with `ruby --version`. You should see something like "ruby 2.3.0p0....". If you see version 1.9 or earlier, upgrade your ruby with `brew update; brew install ruby`.
  2. Install warp-dir gem:
 ```bash
-     ~ ❯ gem install warp-dir --no-ri --no-rdoc
+~ ❯ gem install warp-dir --no-ri --no-rdoc
 ```
  3. The last step is to install the `wd` BASH function and auto-completion:
 ```bash
-    ~ ❯ warp-dir install --dotfile ~/.bash_profile
+~ ❯ warp-dir install --dotfile ~/.bash_profile
 ```
 
 This last step appends the required shell function to the shell initialization file specified with the `--dotfile` flag. If you are unsure what that means, please run the command above as is.
 
 And step 3 you will need to restart your shell, so reopen your Terminal or [iTerm2](https://www.iterm2.com/) (please use iTerm over Terminal — it's soooo much better!), and then type:
 
-    ~ ❯ wd help
+```bash
+~ ❯ wd help
+```
 
 If the above command returns a properly formatted help like the image below, your setup
 is now complete!
