@@ -76,7 +76,13 @@ Note that you can use `wd` to change directory by giving an absolute or relative
 
 That's basically it!  
 
+### Config File (aka. Warp Points Database)
+
 All of the mappings are stored in the `~/.warprc` file, where the warp point name is followed by a colon, and the path it maps to. So it's trivial to do a global search/replace on that file in your favorite editor, if, for example, a commond top level folder had changed. 
+
+The format of the file was left identical to that of the `ZSH` version of `wd` so that one could switch back and force between the two versions of `wd` and still be able to use their collection of warp points. 
+
+See? I think we thought of everything :) 
 
 Happy warping!
 
