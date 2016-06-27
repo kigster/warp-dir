@@ -6,7 +6,7 @@ require 'tempfile'
 
 RSpec.describe Warp::Dir::Store do
 
-  describe 'with no existin warprc file' do
+  describe 'when warprc file does not yet exist' do
     let(:config_path) { "/tmp/warprc#{srand()}" }
     let(:config) { Warp::Dir::Config.new(warprc: config_path) }
     let(:store) { Warp::Dir::Store.new(config) }
@@ -28,7 +28,7 @@ RSpec.describe Warp::Dir::Store do
     end
   end
 
-  describe 'with an exiting warprc file' do
+  describe 'when warprc file already exists' do
     include_context :fake_serializer
     include_context :initialized_store
 
@@ -55,7 +55,7 @@ RSpec.describe Warp::Dir::Store do
       end
     end
 
-    context 'when the data storeis empty' do
+    context 'when the data store is empty' do
       let(:point_name) { 'moo' }
       let(:point_path) { ENV['HOME'] + '/tmp/12398485' }
       let(:store) { Warp::Dir::Store.new(config) }

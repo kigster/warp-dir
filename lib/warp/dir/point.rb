@@ -3,6 +3,34 @@ require 'digest'
 module Warp
   module Dir
     class Point
+
+      # This method creates/defines methods used to
+      # access the #full_path component of the Point instance, but
+      # enclosing it in a chain of provided filters.
+      def self.filtered_paths(path_hash)
+        path_hash.each_pair do |method, filters|
+          define_method method.to_sym do |*args|
+            filters.inject(self.full_path) do |memo, filter|
+              self.send(filter, memo)
+            end
+          end
+        end
+      end
+
+      def self.deserialize(line)
+        name, path = line.split(/:/)
+        if name.nil? || path.nil?
+          raise Warp::Dir::Errors::StoreFormatError.new("File may be corrupt - #{config.warprc}:#{line}", line)
+        end
+        self.new(name, path)
+      end
+
+      filtered_paths    absolute_path: %i(quote_spaces),
+                                 path: %i(quote_spaces),
+                        relative_path: %i(make_relative quote_spaces)
+
+      #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
       attr_accessor :full_path, :name
 
       def initialize(name, full_path)
@@ -11,19 +39,6 @@ module Warp
         @full_path = Warp::Dir.absolute full_path
         @name      = name.to_sym
       end
-
-      def absolute_path
-        full_path
-      end
-
-      def relative_path
-        Warp::Dir.relative full_path
-      end
-
-      def path
-        absolute_path
-      end
-
       def inspect
         sprintf("(#{object_id})[name: '%s', path: '%s']", name, relative_path)
       end
@@ -48,6 +63,20 @@ module Warp
         true
       end
 
+      def serialize
+        "#{name}:#{full_path}"
+      end
+
+      private
+
+      # Filters that receive a path, and return a possibly decorated path back
+      def make_relative(path)
+        Warp::Dir.relative(path)
+      end
+
+      def quote_spaces(path)
+        path =~ /\s+/ ? %Q("#{path}") : path
+      end
     end
   end
 end

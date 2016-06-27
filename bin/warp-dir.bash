@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
-
-# warp-dir shell wrapper
+#
+# %WARP-DIR% shell wrapper, installed by a gem 'warp-dir'
+#
+# © 2015-2016, Konstantin Gredeskoul
+# https://github.com/kigster/warp-dir
+#
+#
 wd() {
   if [ -z "${warp_dir_exec_installed}" -o "${warp_dir_exec_installed}" == "1" ]; then
     $(which 'warp-dir') 2>&1 > /dev/null

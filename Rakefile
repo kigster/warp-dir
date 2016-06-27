@@ -27,8 +27,8 @@ namespace :development do
   task :setup do
     sh %q{
       echo "source 'https://rubygems.org'; gemspec" > Gemfile
-      [[ -n $(which bundle) ]] || gem install bundler --no-ri --no-rdoc
-      bundle install
+      [[ -n $(which bundle) ]] || gem install bundler --no-ri --no-rdoc --quiet
+      bundle install --quiet
     }.gsub(%r{^\s+}m, '')
   end
 

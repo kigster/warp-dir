@@ -37,4 +37,5 @@ RSpec.describe Warp::Dir::Command::Add do
       add_command.run
     end
   end
+
 end

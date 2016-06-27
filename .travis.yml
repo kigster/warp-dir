@@ -3,11 +3,11 @@ env:
   - CODECLIMATE_REPO_TOKEN=5306e7c3069bd3fef06f717d679f41e969e13bb05efef5bbe1fd781043b0c117
 rvm:
   - 2.2.3
-  - 2.3.0
+  - 2.3.1
 script: "gem install bundler rake --no-ri --no-rdoc; rake"
 notifications:
   email:
     recipients:
       - kigster@gmail.com
-    on_success: never
+    on_success: change
     on_failure: always

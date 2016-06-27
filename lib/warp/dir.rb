@@ -1,13 +1,20 @@
+require_relative 'dir/version'
 module Warp
   PROJECT_LIBS = File.dirname(File.absolute_path(__FILE__))
   PROJECT_HOME = PROJECT_LIBS + '/../..'
 
   module Dir
     # tried in order.
+    INSTALL_TIME = Time.now
     DOTFILES = %w(.bash_profile .bashrc .profile .bash_login).map{|f| "~/#{f}" }
-    DOTFILE_CREATED='.bash_profile'
-    SHELL_WRAPPER = "#{PROJECT_HOME}/bin/warp-dir.bash"
-
+    SHELL_WRAPPER_FILE = "#{PROJECT_HOME}/bin/warp-dir.bash"
+    SHELL_WRAPPER_DEST  = ENV['HOME'] + '/.bash_wd'
+    SHELL_WRAPPER_REGX  = %r[WarpDir \(v(\d+\.\d+\.\d+)]
+    SHELL_WRAPPER_SRCE  = <<-eof
+# WarpDir (v#{Warp::Dir::VERSION}, appended on #{INSTALL_TIME}) BEGIN
+[[ -f ~/.bash_wd ]] && source ~/.bash_wd
+# WarpDir (v#{Warp::Dir::VERSION}, appended on #{INSTALL_TIME}) END
+eof
     class << self
       def require_all_from(folder)
         ::Dir.glob(Warp::PROJECT_LIBS + folder + '/*.rb') { |file| Kernel.require file }

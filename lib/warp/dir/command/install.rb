@@ -1,10 +1,16 @@
-require 'warp/dir/command'
 require 'warp/dir'
+require 'warp/dir/command'
+require 'fileutils'
 class Warp::Dir::Command::Install < Warp::Dir::Command
   description %q(Installs warp-dir shell wrapper in your ~/.bashrc)
   needs_a_point? false
 
   attr_accessor :installed, :existing, :wrapper, :shell_init_files
+
+# SHELL_WRAPPER_FILE
+# SHELL_WRAPPER_DEST
+# SHELL_WRAPPER_REGX
+# SHELL_WRAPPER_SRCE
 
   class << self
     def wrapper_installed?
@@ -15,7 +21,7 @@ class Warp::Dir::Command::Install < Warp::Dir::Command
       path = ::Warp::Dir.absolute(file_path)
       matches = if File.exists?(path)
                   File.open path do |file|
-                    file.find { |line| line =~ /warp-dir/ }
+                    file.find { |line| line =~ ::Warp::Dir::SHELL_WRAPPER_REGX }
                   end
                 end
       matches
@@ -25,7 +31,7 @@ class Warp::Dir::Command::Install < Warp::Dir::Command
   def initialize(*args)
     self.installed        = []
     self.existing         = []
-    self.wrapper          = File.read(::Warp::Dir::SHELL_WRAPPER)
+    self.wrapper          = ::Warp::Dir::SHELL_WRAPPER_SRCE
     self.shell_init_files = ::Warp::Dir::DOTFILES
     super(*args)
   end
@@ -33,9 +39,14 @@ class Warp::Dir::Command::Install < Warp::Dir::Command
   def run(*args)
     self.shell_init_files = config[:dotfile].split(',') if config[:dotfile]
     self.shell_init_files.any? { |dotfile| append_wrapper_to(dotfile) }
+
+    # Overwrites if already there
+    install_bash_wd
+
     local_existing    = self.existing
     local_installed   = self.installed
     local_shell_files = self.shell_init_files
+
     if installed.empty?
       if existing.empty?
         on :error do
@@ -61,14 +72,25 @@ class Warp::Dir::Command::Install < Warp::Dir::Command
 
   private
 
+  def install_bash_wd
+    source = File.read(::Warp::Dir::SHELL_WRAPPER_FILE)
+    source.gsub!(/%WARP-DIR%/, "WarpDir (v#{::Warp::Dir::VERSION})")
+    File.open(::Warp::Dir::SHELL_WRAPPER_DEST, 'w') do |file|
+      file.puts source
+    end
+  end
+
   def append_wrapper_to(shell_init_file)
     file          = ::Warp::Dir.absolute(shell_init_file)
     pre_installed = self.class.already_installed?(file)
     self.existing << file if pre_installed
     if File.exists?(file)
       if !pre_installed || config[:force]
-        File.open(file, 'a') do |f|
-          f.write(wrapper)
+        source = File.read(file)
+        source.gsub!(/# WarpDir.*BEGIN\n.*\n# WarpDir.*END/, '')
+        File.open(file, 'w') do |f|
+          f.write source
+          f.write wrapper
         end
         self.installed << shell_init_file
       end

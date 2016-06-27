@@ -4,6 +4,8 @@ require_relative 'base'
 module Warp
   module Dir
     module Serializer
+      # Serializer only assumes that Points can serialize themselves
+      # or deserialize themselves to/from a one-line text format.
       class Dotfile < Base
 
         def warprc_file_path
@@ -19,11 +21,8 @@ module Warp
             f.each_line do |line|
               line = line.chomp
               next if line.blank?
-              name, path = line.split(/:/)
-              if name.nil? || path.nil?
-                raise Warp::Dir::Errors::StoreFormatError.new("File may be corrupt - #{config.warprc}:#{line}", line)
-              end
-              store.add point_name: name, point_path: path
+              line.gsub!(/["']/,'') # remove any quotes that may have been inserted
+              store.add(point: Warp::Dir::Point.deserialize(line))
             end
           end
         end
@@ -32,7 +31,7 @@ module Warp
           File.open(warprc_file_path, 'wt') do |file|
             buffer = ''
             store.points.each do |point|
-              buffer << "#{point.name}:#{point.relative_path}\n"
+              buffer << "#{point.serialize}\n"
             end
             file.write(buffer)
           end
@@ -41,5 +40,3 @@ module Warp
     end
   end
 end
-
-
