@@ -2,6 +2,13 @@ require 'forwardable'
 require 'digest'
 module Warp
   module Dir
+    # This class encapsulates the tuple: name + path.
+    # It provides convenience accessors to retrieve absolute or
+    # realtive path of a point, optionally via a set of predefined
+    # filters.
+    #
+    # In addition, this class is responsible for serializing and
+    # deserializing itself properly.
     class Point
 
       # This method creates/defines methods used to
@@ -20,17 +27,20 @@ module Warp
       def self.deserialize(line)
         name, path = line.split(/:/)
         if name.nil? || path.nil?
-          raise Warp::Dir::Errors::StoreFormatError.new("File may be corrupt - #{config.warprc}:#{line}", line)
+          raise Warp::Dir::Errors::StoreFormatError.new(
+            'warprc file may be corrupt, offending line is: ' +
+              line, line)
         end
         self.new(name, path)
       end
 
-      filtered_paths    absolute_path: %i(quote_spaces),
-                                 path: %i(quote_spaces),
-                        relative_path: %i(make_relative quote_spaces)
+      filtered_paths absolute_path: %i(quote_spaces),
+                     path:          %i(quote_spaces),
+                     relative_path: %i(make_relative quote_spaces)
 
-      #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-
+      #
+      # Instance Methods
+      #
       attr_accessor :full_path, :name
 
       def initialize(name, full_path)
@@ -39,6 +49,7 @@ module Warp
         @full_path = Warp::Dir.absolute full_path
         @name      = name.to_sym
       end
+
       def inspect
         sprintf("(#{object_id})[name: '%s', path: '%s']", name, relative_path)
       end

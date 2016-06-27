@@ -1,3 +1,4 @@
+.idea/
 *.gem
 *.rbc
 .bundle
@@ -17,5 +18,3 @@ test/version_tmp
 tmp
 vendor/
 **/.DS_Store
-
-.idea
