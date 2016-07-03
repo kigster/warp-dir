@@ -1,6 +1,9 @@
 # Warp Directory
 
+[![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/warp-dir?type=total)](https://rubygems.org/gems/ven    table)
 [![Gem Version](https://badge.fury.io/rb/warp-dir.svg)](https://badge.fury.io/rb/warp-dir)
+<br />
+
 [![Build Status](https://travis-ci.org/kigster/warp-dir.svg?branch=master)](https://travis-ci.org/kigster/warp-dir)
 [![Code Climate](https://codeclimate.com/github/kigster/warp-dir/badges/gpa.svg)](https://codeclimate.com/github/kigster/warp-dir)
 [![Test Coverage](https://codeclimate.com/github/kigster/warp-dir/badges/coverage.svg)](https://codeclimate.com/github/kigster/warp-dir/coverage)
