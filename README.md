@@ -30,6 +30,32 @@ The main difference is that `wd` is able to add/remove/list folder "shortcuts", 
 
 This of this as a folder-navigation super-charge tool that you'd use on a most frequently-used set of folders. This becomes __really useful__ if you are often finding youself going into a small number of deeply nested folders with a long path prefix. 
 
+## Installation
+
+Three steps:
+
+ 1. This `wd` requires version 2+ of ruby interpreter. Check your default ruby with `ruby --version`. You should see something like "ruby 2.3.0p0....". If you see version 1.9 or earlier, upgrade your ruby with `brew update; brew install ruby`.
+ 2. Install warp-dir gem:
+```bash
+~ ❯ gem install warp-dir --no-ri --no-rdoc
+```
+ 3. The last step is to install the `wd` BASH function and auto-completion:
+```bash
+~ ❯ warp-dir install --dotfile ~/.bash_profile
+```
+
+This last step appends the required shell function to the shell initialization file specified with the `--dotfile` flag. If you are unsure what that means, please run the command above as is.
+
+And step 3 you will need to restart your shell, so reopen your Terminal or [iTerm2](https://www.iterm2.com/) (please use iTerm over Terminal — it's soooo much better!), and then type:
+
+```bash
+~ ❯ wd help
+```
+
+If the above command returns a properly formatted help like the image below, your setup
+is now complete!
+
+
 ## Usage
 
 __NOTE:__ in the below examples, the characters `~ ❯ ` denote the current shell prompt, showing the current folder you are in. The command to type is on the right hand side of the "❯".
@@ -117,31 +143,6 @@ These features will be added shortly:
  * for now `wd clean` is not supported
  * for now history is not supported
  * for now '-' is not supported
-
-## Installation
-
-Three steps:
-
- 1. This `wd` requires version 2+ of ruby interpreter. Check your default ruby with `ruby --version`. You should see something like "ruby 2.3.0p0....". If you see version 1.9 or earlier, upgrade your ruby with `brew update; brew install ruby`.
- 2. Install warp-dir gem:
-```bash
-~ ❯ gem install warp-dir --no-ri --no-rdoc
-```
- 3. The last step is to install the `wd` BASH function and auto-completion:
-```bash
-~ ❯ warp-dir install --dotfile ~/.bash_profile
-```
-
-This last step appends the required shell function to the shell initialization file specified with the `--dotfile` flag. If you are unsure what that means, please run the command above as is.
-
-And step 3 you will need to restart your shell, so reopen your Terminal or [iTerm2](https://www.iterm2.com/) (please use iTerm over Terminal — it's soooo much better!), and then type:
-
-```bash
-~ ❯ wd help
-```
-
-If the above command returns a properly formatted help like the image below, your setup
-is now complete!
 
 ## Future Development
 
