@@ -43,7 +43,7 @@ Three steps:
 $ gem install warp-dir --no-ri --no-rdoc
 ```
 
- - [ ] The last step is to install the `wd` BASH function and auto-completion. This step appends the required shell function to your shell initialization file, that is specified with the `--dotfile` flag. 
+ - The last step is to install the `wd` BASH function and auto-completion. This step appends the required shell function to your shell initialization file, that is specified with the `--dotfile` flag. 
 
 ```bash
 $ warp-dir install --dotfile ~/.bash_profile
@@ -57,7 +57,7 @@ $ wd help
 
 If the above command returns a properly formatted help that looks like the image below, your setup is now complete!
 
-![Image](doc/wd-help.png)
+![Image](doc/wd-help.png?refresh=1)
 
 
 ## Usage
