@@ -34,12 +34,15 @@ This of this as a folder-navigation super-charge tool that you'd use on a most f
 
 Three steps:
 
- 1. This `wd` requires version 2+ of ruby interpreter. Check your default ruby with `ruby --version`. You should see something like "ruby 2.3.0p0....". If you see version 1.9 or earlier, upgrade your ruby with `brew update; brew install ruby`.
- 2. Install warp-dir gem:
+ - [ ] This `wd` requires version 2+ of ruby interpreter. Check your default ruby with `ruby --version`. You should see something like "ruby 2.3.0p0....". If you see version 1.9 or earlier, upgrade your ruby with `brew update; brew install ruby`.
+ - [ ] Install warp-dir gem:
+
 ```bash
 ~ ❯ gem install warp-dir --no-ri --no-rdoc
 ```
- 3. The last step is to install the `wd` BASH function and auto-completion:
+
+ - [ ] The last step is to install the `wd` BASH function and auto-completion:
+
 ```bash
 ~ ❯ warp-dir install --dotfile ~/.bash_profile
 ```
