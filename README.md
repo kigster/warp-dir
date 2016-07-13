@@ -34,29 +34,30 @@ This of this as a folder-navigation super-charge tool that you'd use on a most f
 
 Three steps:
 
- - [ ] This `wd` requires version 2+ of ruby interpreter. Check your default ruby with `ruby --version`. You should see something like "ruby 2.3.0p0....". If you see version 1.9 or earlier, upgrade your ruby with `brew update; brew install ruby`.
- - [ ] Install warp-dir gem:
+ - `wd` requires a Ruby interpreter version 2.2 higher. 
+   - Please Check your default ruby with `ruby --version`. You should see something like "ruby 2.3.0p0....". 
+   - If you see version 1.9 or earlier, please upgrade your ruby using the package manager native to your OS.   
+ - Install `warp-dir` ruby gem (note: you may need to prefix the command with `sudo` if you are installing into the "system" ruby namespace).
 
 ```bash
-~ ❯ gem install warp-dir --no-ri --no-rdoc
+$ gem install warp-dir --no-ri --no-rdoc
 ```
 
- - [ ] The last step is to install the `wd` BASH function and auto-completion:
+ - [ ] The last step is to install the `wd` BASH function and auto-completion. This step appends the required shell function to your shell initialization file, that is specified with the `--dotfile` flag. 
 
 ```bash
-~ ❯ warp-dir install --dotfile ~/.bash_profile
+$ warp-dir install --dotfile ~/.bash_profile
 ```
 
-This last step appends the required shell function to the shell initialization file specified with the `--dotfile` flag. If you are unsure what that means, please run the command above as is.
-
-And step 3 you will need to restart your shell, so reopen your Terminal or [iTerm2](https://www.iterm2.com/) (please use iTerm over Terminal — it's soooo much better!), and then type:
+After the last step you __need to restart your session__, so – if you are on Mac OS X, – please reopen your Terminal or better yet – [iTerm2](https://www.iterm2.com/), and then type:
 
 ```bash
-~ ❯ wd help
+$ wd help
 ```
 
-If the above command returns a properly formatted help like the image below, your setup
-is now complete!
+If the above command returns a properly formatted help that looks like the image below, your setup is now complete!
+
+![Image](doc/wd-help.png)
 
 
 ## Usage
@@ -118,9 +119,6 @@ See? I think we thought of everything :)
 
 Happy warping!
 
-### Detailed Usage
-
-![Image](doc/wd-help.png)
 
 ## `wd` Concept 
 
