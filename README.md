@@ -1,6 +1,6 @@
 # Warp Directory
 
-[![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/warp-dir?type=total)](https://rubygems.org/gems/ven    table)
+[![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/warp-dir?type=total)](https://rubygems.org/gems/warp-dir)
 [![Gem Version](https://badge.fury.io/rb/warp-dir.svg)](https://badge.fury.io/rb/warp-dir)
 <br />
 

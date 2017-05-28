@@ -4,7 +4,7 @@ env:
 rvm:
   - 2.2.3
   - 2.3.1
-script: "gem install bundler rake --no-ri --no-rdoc; rake"
+script: "gem install bundler rake --no-ri --no-rdoc; rake && codeclimate-test-reporter"
 notifications:
   email:
     recipients:

@@ -1,8 +1,6 @@
-begin
-  require 'codeclimate-test-reporter'
-  CodeClimate::TestReporter.start
-rescue LoadError
-end
+require 'simplecov'
+SimpleCov.start
+
 require 'warp/dir'
 require 'rspec/core'
 require 'rspec/its'
