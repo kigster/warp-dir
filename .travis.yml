@@ -10,6 +10,7 @@ before_install:
 after_success:
   - codeclimate-test-reporter
 script: rake
+cache: bundler
 notifications:
   email:
     recipients:
