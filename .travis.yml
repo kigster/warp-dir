@@ -1,19 +1,21 @@
 language: ruby
-env:
-  - CODECLIMATE_REPO_TOKEN=5306e7c3069bd3fef06f717d679f41e969e13bb05efef5bbe1fd781043b0c117
 rvm:
-  - 2.2.7
-  - 2.3.4
-  - 2.4.1
+- 2.2.7
+- 2.3.4
+- 2.4.1
 before_install:
-  - gem install bundler --no-ri --no-rdoc
+- gem install bundler --no-ri --no-rdoc
 after_success:
-  - codeclimate-test-reporter
+- codeclimate-test-reporter
 script: rake
 cache: bundler
 notifications:
   email:
     recipients:
-      - kigster@gmail.com
+    - kigster@gmail.com
     on_success: change
     on_failure: always
+addons:
+  code_climate:
+    repo_token:
+      secure: wNEKCPWPHHLuA3O70A7rChnLzNb5hXsJ5wjfvCJK36Y/bU7iJLQds54Pt5ZB3hgo8f0nXP6tTGeoy7D5GhESwcyOFB0shOuliJ7ym0oxH9twixez7G/B8B+AJzfLcrhAN350dsSZ81mD8n62F4+u3NCZnmAYNIlj8XR4dF8GOXtUsTyowQiPUkJ7bA4Jk4mukBwIkDTRDp5Mev9nbN7NFpoK+BlHuKElHFZxjVUYK84JQ6TNwcp80YC6my8RtRnS+P4gZJYb0aMSPWayLsTFjgV/VHgZeQn3HzAL4+UIvQ6G8/lVJCQCaH1KJSkQBnH5nZVT/oNXit3Kj9OluXh3PhJRPNhxB7q2p0HGsR20/h+eqZpjUw6hdzBXzqCCLQJUFCo4upvCKSAcggygtGiOL7rIO0vB99JRkGjGRl98SPJ5S8/cnEi3JsIrd5wqS8mVn1uGJE8XkjAUs1nw5yNx0sqSa2z7wQoPVH5j8bWBOAcJANNQyUhbhQO1d1hc7IBLKFgC8w+DNknpl0UsrGhseCPoluuvvpH5em5Xfx5HDqXGUcs1tmuoW6t8FvlEnJlkR8QNJh8eQepjgub0OCax1FwFVR/98w1VKY7lMpFFHwUszJoP3Z1eM/h+ftv0Eu4Zlb+pcOHTSdxCVNYzN9Aw+IUb81cI5RpZCUoQYlfOf1g=
