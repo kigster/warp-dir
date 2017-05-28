@@ -2,16 +2,13 @@
 
 [![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/warp-dir?type=total)](https://rubygems.org/gems/warp-dir)
 [![Gem Version](https://badge.fury.io/rb/warp-dir.svg)](https://badge.fury.io/rb/warp-dir)
-<br />
-
 [![Build Status](https://travis-ci.org/kigster/warp-dir.svg?branch=master)](https://travis-ci.org/kigster/warp-dir)
 [![Code Climate](https://codeclimate.com/github/kigster/warp-dir/badges/gpa.svg)](https://codeclimate.com/github/kigster/warp-dir)
 [![Test Coverage](https://codeclimate.com/github/kigster/warp-dir/badges/coverage.svg)](https://codeclimate.com/github/kigster/warp-dir/coverage)
-[![Issue Count](https://codeclimate.com/github/kigster/warp-dir/badges/issue_count.svg)](https://codeclimate.com/github/kigster/warp-dir)
 
-<hr/>
+--
+
 [![Gitter](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)](https://gitter.im/kigster/warp-dir)
-<hr/>
 
 This is a ruby implementation of the tool `wd` (warp directory),
 [originally written as a `ZSH` module](https://github.com/mfaerevaag/wd)
