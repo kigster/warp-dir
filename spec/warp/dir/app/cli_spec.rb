@@ -152,7 +152,7 @@ RSpec.describe Warp::Dir::App::CLI do
           expect(warp_args).to output(/has been removed/)
         end
         it 'should change warp point count ' do
-          expect(store.size).to eq(2)
+          expect(store.size).to eq(3)
           expect {
             expect(warp_args).to validate { |cli|
               expect(cli.config.point).to eql(point.name)
@@ -160,7 +160,7 @@ RSpec.describe Warp::Dir::App::CLI do
             }
             store.restore!
           }.to change(store, :size).by(-1)
-          expect(store.size).to eq(1)
+          expect(store.size).to eq(2)
         end
       end
 

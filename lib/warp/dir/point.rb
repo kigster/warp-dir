@@ -50,6 +50,14 @@ module Warp
         @name      = name.to_sym
       end
 
+      def exist?
+        ::Dir.exist?(full_path)
+      end
+
+      def missing?
+        !exist?
+      end
+
       def inspect
         sprintf("(#{object_id})[name: '%s', path: '%s']", name, relative_path)
       end
@@ -66,13 +74,16 @@ module Warp
         name <=> other.name
       end
 
-      def eql?(another)
+      def ==(another)
         return false unless another.is_a?(Warp::Dir::Point)
         %i(name full_path).each do |attribute|
           return false unless send(attribute) == another.send(attribute)
         end
         true
       end
+
+      alias_method :eql?, :==
+
 
       def serialize
         "#{name}:#{full_path}"

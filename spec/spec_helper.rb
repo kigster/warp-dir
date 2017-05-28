@@ -5,7 +5,7 @@ rescue LoadError
 end
 require 'warp/dir'
 require 'rspec/core'
-
+require 'rspec/its'
 
 module Warp
   module Dir
@@ -66,6 +66,11 @@ RSpec.shared_context :fixture_file do
     File.new(config_path)
   }
   let(:config) { Warp::Dir::Config.new(warprc: file.path) }
+end
+
+RSpec.shared_context :fixture_store do
+  include_context :fixture_file
+  let(:store) { Warp::Dir::Store.new(config) }
 end
 
 RSpec.shared_context :initialized_store do

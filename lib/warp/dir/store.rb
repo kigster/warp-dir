@@ -68,6 +68,13 @@ module Warp
         result
       end
 
+      def clean!
+        points_collection.select(&:missing?).tap do |p|
+          points_collection.reject!(&:missing?)
+          save!
+        end
+      end
+
       def save!
         serializer.persist!
       end

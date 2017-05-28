@@ -28,6 +28,30 @@ RSpec.describe Warp::Dir::Store do
     end
   end
 
+  describe 'reading from fixture file' do
+    include_context :fixture_store
+
+    subject(:store_with_invalid_paths) { store }
+
+    its(:size) { should eq 3 }
+    its(:points) { should include(Warp::Dir::Point.new('bad', '/does-not/exist'))}
+
+    context '#clean!' do
+      subject(:points) { store_with_invalid_paths.points_collection.to_a }
+      it('should contain one bad point') {
+        expect(points.select(&:exist?).size).to eq(2)
+        expect(points.select(&:missing?).size).to eq(1)
+      }
+      it 'should be able to automatically clean up bad folder' do
+        store_with_invalid_paths.clean!
+        expect(points.select(&:exist?).size).to eq(2)
+        expect(points.select(&:missing?).size).to eq(0)
+        expect(points.size).to eq(2)
+      end
+    end
+
+  end
+
   describe 'when warprc file already exists' do
     include_context :fake_serializer
     include_context :initialized_store

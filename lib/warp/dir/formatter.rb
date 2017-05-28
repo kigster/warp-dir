@@ -23,7 +23,7 @@ module Warp
         print ? STDERR.printf(out) : out
       end
 
-      def format_point(point, *args)
+      def self.format_point(point, *args)
         PointFormatter.new(point).format(*args)
       end
 
@@ -34,8 +34,6 @@ module Warp
       def happy(message: nil)
         STDOUT.printf(message.blue.bold)
       end
-
-      private
 
       class PointFormatter
         attr_accessor :point
@@ -55,18 +53,18 @@ module Warp
       end
 
       class StoreFormatter
-        attr_accessor :store
+        attr_accessor :points
 
-        def initialize(store)
-          @store = store
+        def initialize(store_or_points)
+          self.points = store_or_points.is_a?(::Array) ? store_or_points : store_or_points.points
         end
 
         # find the widest warp point name, and indent them all based on that.
         # make it easy to extend to other types, and allow the caller to
         # sort by one of the fields.
         def format(type = DEFAULT_FORMAT, sort_field = :name)
-          longest_key_length = store.points.map(&:name).map(&:length).sort.last
-          Warp::Dir.sort_by(store.points, sort_field).map do |point|
+          longest_key_length = points.map(&:name).map(&:length).sort.last
+          Warp::Dir.sort_by(points, sort_field).map do |point|
             PointFormatter.new(point).format(type, longest_key_length)
           end.join("\n")
         end
