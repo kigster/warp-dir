@@ -193,7 +193,7 @@ RSpec.describe Warp::Dir::App::CLI do
                 expect(response.type).to eql(Warp::Dir::App::Response::INFO), response.message
                 store.restore!
                 updated_point = store[wp_name]
-                expect(updated_point.relative_path).to eql(Warp::Dir::pwd)
+                expect(::File.expand_path(updated_point.relative_path)).to eql(`pwd -P`.chomp)
               }.to_not change(store, :size)
 
             end
