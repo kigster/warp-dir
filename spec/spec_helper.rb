@@ -1,5 +1,7 @@
-require 'simplecov'
-SimpleCov.start
+if RUBY_VERSION.to_f > 2.3
+  require 'simplecov'
+  SimpleCov.start
+end
 
 require 'warp/dir'
 require 'rspec/core'

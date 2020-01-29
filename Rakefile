@@ -1,7 +1,6 @@
-task :reinstall do
+task :reinstall => [ :'development:cleanup' ] do
   [ %q(chmod -R o+r .),
     %q(rm -f *.gem),
-    %q(rm -rf build),
     %q(gem uninstall -quiet -a --executables warp-dir 2> /dev/null; true),
     %q(gem build warp-dir.gemspec)
   ].each do |command|
@@ -12,9 +11,9 @@ task :reinstall do
     export gem_file=$(ls -1 *.gem | tail -1)
     export gem_name=${gem_file//.gem/}
     if [ "$(which ruby)" == "/usr/bin/ruby" ]; then
-      gem install $gem_file -n /usr/local/bin --no-ri --no-rdoc
+      gem install $gem_file -n /usr/local/bin
     else
-      gem install $gem_file --no-ri --no-rdoc
+      gem install $gem_file
     fi
   EOF
 end
@@ -26,14 +25,12 @@ namespace :development do
   desc 'Setup temporary Gemfile and install all dependencies.'
   task :setup do
     sh %q{
-      echo "source 'https://rubygems.org'; gemspec" > Gemfile
-      [[ -n $(which bundle) ]] || gem install bundler --no-ri --no-rdoc --quiet
-      bundle install --quiet
+      bundle install
     }.gsub(%r{^\s+}m, '')
   end
 
   task :cleanup do
-    sh %q{ rm -f Gemfile }
+    sh %q{ rm -f build }
   end
 
   namespace :bundler do

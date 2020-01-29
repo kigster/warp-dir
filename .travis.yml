@@ -2,21 +2,24 @@ language: ruby
 env:
   - CODECLIMATE_REPO_TOKEN=5306e7c3069bd3fef06f717d679f41e969e13bb05efef5bbe1fd781043b0c117
 rvm:
-- 2.2.7
-- 2.3.4
-- 2.4.1
+ - 2.3.8
+ - 2.4.9
+ - 2.5.7
+ - 2.6.5
+ - 2.7.0
 before_install:
-- gem install bundler --no-ri --no-rdoc
-after_success:
-- codeclimate-test-reporter
-script: rake
+- gem update --system
+- gem install bundler
+- bundle install --jobs 10 --redownload
+before_script:
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- ./cc-test-reporter before-build
+script:
+  - USER=travis bundle exec rspec --format documentation
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 cache: bundler
-notifications:
-  email:
-    recipients:
-    - kigster@gmail.com
-    on_success: change
-    on_failure: always
 addons:
   code_climate:
     repo_token:
