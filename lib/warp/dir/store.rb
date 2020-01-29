@@ -80,8 +80,8 @@ module Warp
       end
 
       # a version of add that save right after.
-      def insert(*args)
-        add(*args)
+      def insert(**opts)
+        add(**opts)
         save!
       end
 
