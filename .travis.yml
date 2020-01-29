@@ -19,5 +19,5 @@ script:
   - USER=travis bundle exec rspec --format documentation
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-  - if [[ "$TRAVIS_TEST_RESULT" == 0 && "$(ruby --version)" =~ '2.7' ]]; then ./cc-test-reporter upload-coverage; fi 
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 && "$(ruby --version)" =~ '2.7' ]]; then ./cc-test-reporter format-coverage -t simplecov coverage/.resultset.json; ./cc-test-reporter upload-coverage; fi 
 cache: bundler

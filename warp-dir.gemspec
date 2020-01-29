@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
   s.add_dependency('slop', '~> 4.2')
 
   s.add_development_dependency 'bundler'
-  s.add_development_dependency 'codeclimate-test-reporter'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3.6'
   s.add_development_dependency 'rspec-its'
