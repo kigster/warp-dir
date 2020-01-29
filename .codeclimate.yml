@@ -1,22 +1,42 @@
 ---
-engines:
-  duplication:
-    enabled: true
+version: "2"
+checks:
+  argument-count:
     config:
-      languages:
-      - ruby
-  fixme:
-    enabled: true
+      threshold: 5
+  complex-logic:
+    config:
+      threshold: 4
+  file-lines:
+    config:
+      threshold: 250
+  method-complexity:
+    config:
+      threshold: 5
+  method-count:
+    config:
+      threshold: 20
+  method-lines:
+    config:
+      threshold: 25
+  nested-control-flow:
+    config:
+      threshold: 4
+  return-statements:
+    config:
+      threshold: 4
+  similar-code:
+    config:
+      threshold: 5 
+  identical-code:
+    config:
+      threshold: 5
+plugins:
   rubocop:
     enabled: true
-ratings:
-  paths:
-  - "**.inc"
-  - "**.js"
-  - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
 exclude_paths:
-- spec/
+- "spec/"
+- "config/"
+- "pkg/"
+- "bin/"
+- "vendor/"

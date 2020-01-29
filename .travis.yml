@@ -10,7 +10,7 @@ rvm:
 before_install:
   - gem update --system
   - gem install bundler
-  - bundle install --jobs 10 --redownload --deployment --path=${BUNDLE_PATH:-vendor/bundle}
+  - bundle install --jobs 10 --redownload --path=${BUNDLE_PATH:-vendor/bundle}
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
@@ -19,5 +19,5 @@ script:
   - USER=travis bundle exec rspec --format documentation
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-  - if [[ "$TRAVIS_TEST_RESULT" == 0 && "$(ruby --version)" =~ '2.7' ]]; then ./cc-test-reporter upload-coverage; fi  # Upload coverage/codeclimate.json
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 && "$(ruby --version)" =~ '2.7' ]]; then ./cc-test-reporter upload-coverage; fi 
 cache: bundler
