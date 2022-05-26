@@ -19,6 +19,8 @@ image:https://img.shields.io/gitter/room/gitterHQ/gitter.svg[Gitter,link=https:/
 
 image::https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkigster%2Fwarp-dir.svg?type=large[FOSSA Status,link=https://app.fossa.com/projects/git%2Bgithub.com%2Fkigster%2Fwarp-dir?ref=badge_large]
 
+TIP: You can read this README in a nicely formatted xref:README.pdf[PDF Document].
+
 This is a ruby implementation of the tool `wd` (warp directory), https://github.com/mfaerevaag/wd[originally written as a `ZSH` module] by https://github.com/mfaerevaag[Markus Færevaag].
 
 I personally went back to `bash` after trying out `ZSH`, but it was the `wd` plugin that I really missed.
@@ -58,9 +60,6 @@ Shell support is installed in the following files:
 $ source ~/.bash_profile
 # Now we can use 'wd' shortcut
 $ wd --help
-
-# And, it supports command completion in BASH!
-$ wd
 ----
 
 After the last step you *need to restart your session*, so -- if you are on Mac OS X, -- please reopen your Terminal or better yet -- https://www.iterm2.com/[iTerm2], and then type:
@@ -118,13 +117,23 @@ drwxrwx---  21 kig  staff   714 Apr 28 11:40 ../
 drwxrwx---   3 kig  staff   102 Dec 24 03:14 ack/
 ----
 
-==== Command Completion
+==== Command Completion in BASH
 
 If you installed `wd` properly, it should register it's own command completion for BASH and be ready for your tabs :)
 
-Note that you can use `wd` to change directory by giving an absolute or relative directory name, just like `cd` (so not just using warp-points), so when you type `wd [TAB]` you will see all saved warp points as well as the local directories you can `cd` into.
+Note that you can use `wd` to change directory by giving an absolute or relative directory name, just like `cd` (so not just using warp-points), so when you type `wd <TAB><TAB>` you should see the list of _all saved warp points as well as all of the local sub-directories relative to where you are at_.
 
-That's basically it!
+[source,bash]
+----
+# And, it supports command completion in BASH!
+$ wd<TAB><TAB>
+# should print the list of registered warp points, and commands.
+
+$ wd install --dotfile /Users/kig/.bash<TAB><TAB>
+/Users/kig/.bash_login    /Users/kig/.bash_profile  /Users/kig/.bashrc
+----
+
+Command completion is activated by loading the `~/.bash_wd` file that's installed with `warp-dir install` command.
 
 ==== Config File (aka. Warp Points Database)
 
