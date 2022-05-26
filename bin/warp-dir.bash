@@ -46,7 +46,7 @@ function _wd::info() {
 
 function _wd::exec() {
   export WARP_DIR_SHELL=yes
-  export RUBYOPT="-W0"
+  export RUBYOPT=W0
   if type rbenv | grep -q function; then
     rbenv exec warp-dir "$@" 2>&1
   else
@@ -69,6 +69,31 @@ function _wd::not-found() {
   "
 }
 
+function _wd::gem-install() {
+  local temp code
+  temp="$(mktemp)"
+
+  _wd::info "Ruby $(ruby --version) does not have warp-dir gem. Installing the missing gem..."
+  gem install -N --quiet --force --no-wrapper warp-dir >/dev/null 2>"${temp}"
+  code=$?
+
+  hash -r 2>/dev/null
+
+  if [[ ${code} -eq 0 ]]; then
+    _wd::info "Installation was successful, warp-dir executable is now at:"
+    _wd::info "\e[1;32m$(which warp-dir)"
+    _wd::init
+  else
+    _wd::err "Install failed, exit code=${code}\n"
+#    [[ -s "${temp}" ]] && {
+#      printf "\e[1;31m"
+#      cat "${temp}"
+#      printf "\e[0;0m"
+#    }
+  fi
+
+}
+
 function wd() {
   if [[ "$1" == "--comp-debug" ]]; then
     _wd::debug
@@ -77,28 +102,10 @@ function wd() {
 
   _wd::init
 
-  local temp code
-  temp="$(mktemp)"
-
   command -v warp-dir >/dev/null || {
     hash -r 2>/dev/null
     if [[ -z $(which warp-dir) ]]; then
-      _wd::info "Can't find warp-dir executable, installing the missing gem..."
-      gem install -N --quiet --force --no-wrapper warp-dir >/dev/null 2>"${temp}"
-      code=$?
-      hash -r 2>/dev/null
-      if [[ ${code} -eq 0 ]]; then
-        _wd::info "Installation was successful, warp-dir executable is now at:"
-        _wd::info "\e[1;32m$(which warp-dir)"
-        _wd::init
-      else
-        _wd::err "Install failed, exit code=${code}\n"
-        [[ -s "${temp}" ]] && {
-          printf "\e[1;31m"
-          cat "${temp}"
-          printf "\e[0;0m"
-        }
-      fi
+      _wd::gem-install
     fi
   }
 
@@ -112,10 +119,14 @@ function wd() {
   local output
   set +e
   output="$(_wd::exec "$@")"
+  ((DEBUG)) && printf "%s" "${output}"
   local code=$?
 
   if [[ $code -eq 127 ]]; then
-    [[ -n $(command -v rbenv) ]] && rbenv rehash >/dev/null 2>&1
+    [[ -n $(command -v rbenv) ]] && {
+      _wd::gem-install
+      rbenv rehash >/dev/null 2>&1
+    }
     output="$(_wd::exec "$@")"
     code=$?
     if [[ $code -eq 127 ]]; then
@@ -125,7 +136,11 @@ function wd() {
     fi
   fi
 
-  eval "${output}"
+  if [[ "${output}" =~ (cd |printf ) ]]; then
+    eval "${output}"
+  else
+    printf "%s\n" "${output}"
+  fi
   export IFS="${previous_ifs}"
 }
 

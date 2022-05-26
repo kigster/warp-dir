@@ -103,8 +103,8 @@ module Warp
           opts.string  '-s', '--dotfile', '<dotfile>      – shell init file to append the wd wrapper, eg. ~/.bashrc'
           opts.string  '-c', '--config',  "<config>       – location of the configuration file (default: #{Warp::Dir.default_config})", default: Warp::Dir.default_config
           opts.on      '-V', '--version', '               – print the version' do
-            puts "Version #{Warp::Dir::VERSION}"
-            exit
+            $stdout.puts "Version #{Warp::Dir::VERSION}"
+            exec('/bin/echo -n')
           end
 
           Slop::Parser.new(opts).parse(arguments)

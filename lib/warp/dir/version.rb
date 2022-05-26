@@ -32,10 +32,12 @@ module Warp
   $ wd add <name>   #{'# add current directory as a warp point, call it <name>'.bold.black}
   $ wd<TAB>         #{'# to see the command completion in action'.bold.black}
     EOF
-    @install_notice += <<~EOF
+    @install_notice += <<~EOF.green
 
-      Please submit issues and pull requests to:
-      https://github.com/kigster/warp-dir
+      Please submit issues and pull requests on Github:
+
+       • https://github.com/kigster/warp-dir
+       • via email to Konstantin Gredeskoul, @kigster on GMail, @kig on Twitter.
 
       Thank you!
     EOF

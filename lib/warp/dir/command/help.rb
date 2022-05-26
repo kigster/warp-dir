@@ -4,7 +4,6 @@ class Warp::Dir::Command::Help < Warp::Dir::Command
   description 'Show this extremely unhelpful text'
   aliases :wtf
 
-
   def run(opts, flags = [])
     commander = ::Warp::Dir.commander
     cmd = self

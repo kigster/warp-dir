@@ -8,7 +8,7 @@ module Warp
         # Use Case                       exit code       stream
         #----------------------------------------------------------------
         # Information / Help / List              0       STDOUT
-        # Error occured                          1       STDERR
+        # Error occurred                         1       STDERR
         # Execute Shell Command                  2       STDOUT
 
         class Type < Struct.new(:exit_code, :stream)
@@ -35,7 +35,7 @@ module Warp
         SHELL.instance_eval do
           def print(msg)
             under_shell = ::Warp::Dir.eval_context?
-            if under_shell then
+            if under_shell
               stream.printf("#{msg};")
             else
               stream.printf(
