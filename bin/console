@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
+# vim: ft=ruby
 
-require "colored"
-require "warp/dir"
+require 'colored2'
+require 'warp/dir'
 
 # (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
+# require 'pry'
 # Pry.start
 
-require "irb"
+require 'irb'
 IRB.start

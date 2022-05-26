@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# vim: ft=ruby
 
 lib_path = File.dirname(__FILE__) + '/../lib'
 if File.exist?(lib_path)
@@ -8,5 +9,6 @@ end
 require 'warp/dir'
 require 'warp/dir/app/cli'
 
-response = Warp::Dir::App::CLI.new(ARGV.dup).run
-response.print.exit! if response
+Warp::Dir::App::CLI.new(ARGV.dup).run.tap do |response|
+  response.print.exit! if response
+end
