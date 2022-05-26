@@ -104,7 +104,7 @@ module Warp
           opts.string  '-c', '--config',  "<config>       – location of the configuration file (default: #{Warp::Dir.default_config})", default: Warp::Dir.default_config
           opts.on      '-V', '--version', '               – print the version' do
             $stdout.puts "Version #{Warp::Dir::VERSION}"
-            exec('/bin/echo -n')
+            exit 0
           end
 
           Slop::Parser.new(opts).parse(arguments)

@@ -12,6 +12,7 @@
 
 image:https://github.com/kigster/warp-dir/actions/workflows/ruby.yml/badge.svg[Specs,link=https://github.com/kigster/warp-dir/actions/workflows/ruby.yml]
 image:https://github.com/kigster/warp-dir/actions/workflows/rubocop.yml/badge.svg[Rubocop,link=https://github.com/kigster/warp-dir/actions/workflows/rubocop.yml]
+image:https://github.com/kigster/warp-dir/actions/workflows/shellcheck.yml/badge.svg[ShellCheck,link=https://github.com/kigster/warp-dir/actions/workflows/shellcheck.yml]
 
 image:https://ruby-gem-downloads-badge.herokuapp.com/warp-dir?type=total[Downloads,link=https://rubygems.org/gems/warp-dir]
 image:https://badge.fury.io/rb/warp-dir.svg[Gem Version,link=https://badge.fury.io/rb/warp-dir]

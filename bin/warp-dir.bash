@@ -7,26 +7,32 @@
 #
 # https://github.com/kigster/warp-dir
 #
-# shellcheck disable=SC2207,SC2206
+# shellcheck disable=SC2207,SC2206,SC2059
 
 declare -a wd_commands
 declare -a wd_short_flags
 declare -a wd_long_flags
 declare -a wd_default_dotfiles
 
+declare wd_temp
+
 export wd_commands=(add ls remove warp install help list)
 export wd_default_dotfiles=(~/.bash_profile ~/.bashrc ~/.bash_login ~/.profile ~/.zshrc)
 
 function _wd::init() {
+  # shellcheck disable=SC2155
+  export wd_temp="$(mktemp)"
+  rm -f "${wd_temp}" && touch "${wd_temp}"
+
   [[ ${#wd_long_flags[@]} -gt 0 ]] && return
   command -v warp-dir >/dev/null && {
-    export wd_long_flags=($(wd --help | awk 'BEGIN{FS="--"}{print "--" $2}' | sed -E '/^--$/d' | grep -E -v ']|help' | grep -E -- "${cur}" | awk '{if ($1 != "") { printf "%s\n", $1} } '))
-    export wd_short_flags=($(wd --help | grep -E -- '-[a-z], --' | cut -d '-' -f 2 | tr -d ',' | sed 's/^/-/g'))
+    export wd_long_flags=($(warp-dir --help | awk 'BEGIN{FS="--"}{print "--" $2}' | sed -E '/^--$/d' | grep -E -v ']|help' | grep -E -- "${cur}" | awk '{if ($1 != "") { printf "%s\n", $1} } '))
+    export wd_short_flags=($(warp-dir --help | grep -E -- '-[a-z], --' | cut -d '-' -f 2 | tr -d ',' | sed 's/^/-/g'))
   }
 }
 
 function _wd::debug() {
-  printf "%-20s: %s\n" "long flags" "$(echo "${wd_long_flags[*]}" | tr '\n' ' ')"
+  printf "%-20s: %s\n" "long0 flags" "$(echo "${wd_long_flags[*]}" | tr '\n' ' ')"
   printf "%-20s: %s\n" "short flags" "$(echo "${wd_short_flags[*]}" | tr '\n' ' ')"
   printf "%-20s: %s\n" "commands" "$(echo "${wd_commands[*]}" | tr '\n' ' ')"
   printf "%-20s: %s\n" "points" "$(_wd::current-points | tr '\n' ' ')"
@@ -37,20 +43,20 @@ function _wd::current-points() {
 }
 
 function _wd::err() {
-  printf "\n\e[7;31m ERROR ❯❯  \e[0;31m %s\e[0;0m\n" "$*" >&2
+  printf "\n\e[7;31m ERROR ❯❯  \e[0;31m $*\e[0;0m\n" >&2
 }
 
 function _wd::info() {
-  printf "\n\e[7;34m INFO  ❯❯  \e[0;35m %s\e[0;0m\n" "$*" >&2
+  printf "\n\e[7;34m INFO  ❯❯  \e[0;35m $*\e[0;0m\n" >&2
 }
 
 function _wd::exec() {
   export WARP_DIR_SHELL=yes
   export RUBYOPT=W0
   if type rbenv | grep -q function; then
-    rbenv exec warp-dir "$@" 2>&1
+    rbenv exec warp-dir "$@" 2>/dev/null
   else
-    warp-dir "$@"
+    warp-dir "$@" 2>/dev/null
   fi
 }
 
@@ -70,11 +76,10 @@ function _wd::not-found() {
 }
 
 function _wd::gem-install() {
-  local temp code
-  temp="$(mktemp)"
+  local code
 
   _wd::info "Ruby $(ruby --version) does not have warp-dir gem. Installing the missing gem..."
-  gem install -N --quiet --force --no-wrapper warp-dir >/dev/null 2>"${temp}"
+  gem install -N --quiet --force --no-wrapper warp-dir >"${wd_temp}" 2>&1
   code=$?
 
   hash -r 2>/dev/null
@@ -85,11 +90,12 @@ function _wd::gem-install() {
     _wd::init
   else
     _wd::err "Install failed, exit code=${code}\n"
-#    [[ -s "${temp}" ]] && {
-#      printf "\e[1;31m"
-#      cat "${temp}"
-#      printf "\e[0;0m"
-#    }
+    [[ -s "${wd_temp}" ]] && {
+      printf "\e[1;31m"
+      cat "${wd_temp}"
+      printf "\e[0;0m"
+    }
+    return 1
   fi
 
 }
@@ -105,7 +111,7 @@ function wd() {
   command -v warp-dir >/dev/null || {
     hash -r 2>/dev/null
     if [[ -z $(which warp-dir) ]]; then
-      _wd::gem-install
+      _wd::gem-install || return 1
     fi
   }
 
@@ -119,12 +125,15 @@ function wd() {
   local output
   set +e
   output="$(_wd::exec "$@")"
-  ((DEBUG)) && printf "%s" "${output}"
   local code=$?
+  ((DEBUG)) && printf "DEBUG OUTPUT: [%s]" "${output}"
 
   if [[ $code -eq 127 ]]; then
     [[ -n $(command -v rbenv) ]] && {
-      _wd::gem-install
+      _wd::gem-install || {
+        export IFS="${previous_ifs}"
+        return 1
+      }
       rbenv rehash >/dev/null 2>&1
     }
     output="$(_wd::exec "$@")"
@@ -138,10 +147,13 @@ function wd() {
 
   if [[ "${output}" =~ (cd |printf ) ]]; then
     eval "${output}"
+    code=$?
   else
     printf "%s\n" "${output}"
+    code=0
   fi
   export IFS="${previous_ifs}"
+  return "${code}"
 }
 
 # @description Command Completion
