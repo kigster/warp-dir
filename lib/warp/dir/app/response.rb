@@ -8,7 +8,7 @@ module Warp
         # Use Case                       exit code       stream
         #----------------------------------------------------------------
         # Information / Help / List              0       STDOUT
-        # Error occured                          1       STDERR
+        # Error occurred                         1       STDERR
         # Execute Shell Command                  2       STDOUT
 
         class Type < Struct.new(:exit_code, :stream)
@@ -24,24 +24,22 @@ module Warp
           end
 
           def to_s
-            "code:#{exit_code}, stream:#{stream == STDOUT ? "STDOUT" : "STDERR"}"
+            "code:#{exit_code}, stream:#{stream == $stdout ? "STDOUT" : "STDERR"}"
           end
         end
 
-        INFO  = Type.new(0, STDOUT)
-        ERROR = Type.new(1, STDERR)
-        SHELL = Type.new(2, STDOUT)
+        INFO  = Type.new(0, $stdout)
+        ERROR = Type.new(1, $stderr)
+        SHELL = Type.new(2, $stdout)
 
         SHELL.instance_eval do
           def print(msg)
             under_shell = ::Warp::Dir.eval_context?
-            if under_shell then
+            if under_shell
               stream.printf("#{msg};")
             else
               stream.printf(
-                'WARNING: '.red +
-                "This functionality is only available within shell eval{} context:\n\n\t#{msg.yellow.bold}\n\n" +
-                "Please install shell wrapper 'wd' via the 'install' command.\n")
+                "#{'WARNING: '.red}This functionality is only available within shell eval{} context:\n\n\t#{msg.yellow.bold}\n\nPlease install shell wrapper 'wd' via the 'install' command.\n")
             end
           end
 
@@ -89,7 +87,7 @@ module Warp
             @messages << message
             self
           else
-            @messages.join('')
+            @messages.join
           end
         end
 

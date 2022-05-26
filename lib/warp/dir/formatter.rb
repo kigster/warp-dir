@@ -20,7 +20,7 @@ module Warp
         out << "#{message} ".red if !exception && message
         out << "#{exception.message}:\n#{message}".red if message && exception
         out << "\n"
-        print ? STDERR.printf(out) : out
+        print ? $stderr.printf(out) : out
       end
 
       def self.format_point(point, *args)
@@ -32,7 +32,7 @@ module Warp
       end
 
       def happy(message: nil)
-        STDOUT.printf(message.blue.bold)
+        $stdout.printf(message.blue.bold)
       end
 
       class PointFormatter

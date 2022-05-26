@@ -19,12 +19,11 @@ class Warp::Dir::Command::Install < Warp::Dir::Command
 
     def already_installed?(file_path)
       path = ::Warp::Dir.absolute(file_path)
-      matches = if File.exist?(path)
-                  File.open path do |file|
-                    file.find { |line| line =~ ::Warp::Dir::SHELL_WRAPPER_REGX }
-                  end
-                end
-      matches
+      if File.exist?(path)
+        File.open path do |file|
+          file.find { |line| line =~ ::Warp::Dir::SHELL_WRAPPER_REGX }
+        end
+      end
     end
   end
 
@@ -84,16 +83,14 @@ class Warp::Dir::Command::Install < Warp::Dir::Command
     file          = ::Warp::Dir.absolute(shell_init_file)
     pre_installed = self.class.already_installed?(file)
     self.existing << file if pre_installed
-    if File.exist?(file)
-      if !pre_installed || config[:force]
-        source = File.read(file)
-        source.gsub!(/# WarpDir.*BEGIN\n.*\n# WarpDir.*END/, '')
-        File.open(file, 'w') do |f|
-          f.write source
-          f.write wrapper
-        end
-        self.installed << shell_init_file
+    if File.exist?(file) && (!pre_installed || config[:force])
+      source = File.read(file)
+      source.gsub!(/# WarpDir.*BEGIN\n.*\n# WarpDir.*END/, '')
+      File.open(file, 'w') do |f|
+        f.write source
+        f.write wrapper
       end
+      self.installed << shell_init_file
     end
   end
 

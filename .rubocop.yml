@@ -1,8 +1,9 @@
 inherit_from:
+  - .relaxed-rubocop-2.5.yml
   - .rubocop_todo.yml
-  - .relaxed-rubocop-2.4.yml
 
 AllCops:
+  NewCops: enable
   TargetRubyVersion: 2.7
   UseCache: true
   DefaultFormatter: progress
@@ -36,3 +37,6 @@ Style/Dir:
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented_relative_to_receiver
+    
+Metrics/BlockLength:
+  Enabled: false

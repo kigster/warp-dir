@@ -4,10 +4,10 @@ require 'warp/dir/formatter'
 RSpec.describe Warp::Dir::Formatter do
   include_context :initialized_store
 
-  let(:path_absolute) { ENV['HOME'] + '/workspace' }
+  let(:path_absolute) { "#{::Dir.home}/workspace" }
   let(:path_relative) { '~/workspace' }
-  let(:p1) { Warp::Dir::Point.new('p', ENV['HOME'] + '/workspace') }
-  let(:p2) { Warp::Dir::Point.new('n', ENV['HOME'] + '/workspace/new-project') }
+  let(:p1) { Warp::Dir::Point.new('p', "#{::Dir.home}/workspace") }
+  let(:p2) { Warp::Dir::Point.new('n', "#{::Dir.home}/workspace/new-project") }
 
   describe 'with empty store' do
     before do

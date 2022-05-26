@@ -5,13 +5,13 @@ RSpec.describe Warp::Dir::Point do
   include_context :fake_serializer
   include_context :initialized_store
 
-  let(:path_absolute) { ENV['HOME'] + '/workspace' }
+  let(:path_absolute) { "#{::Dir.home}/workspace" }
   let(:path_relative) { '~/workspace' }
-  let(:p1) { Warp::Dir::Point.new('p', ENV['HOME'] + '/workspace') }
-  let(:p2) { Warp::Dir::Point.new('n', ENV['HOME'] + '/workspace/new-project') }
+  let(:p1) { Warp::Dir::Point.new('p', "#{::Dir.home}/workspace") }
+  let(:p2) { Warp::Dir::Point.new('n', "#{::Dir.home}/workspace/new-project") }
 
   describe 'with two distinct but identical objects' do
-    let(:p2) { Warp::Dir::Point.new('p', ENV['HOME'] + '/workspace') }
+    let(:p2) { Warp::Dir::Point.new('p', "#{::Dir.home}/workspace") }
     it 'correctly defines #eql?' do
       expect(p1).to eql(p2)
     end
@@ -36,7 +36,7 @@ RSpec.describe Warp::Dir::Point do
   describe '#filtered_paths' do
     describe 'automatically creates accessors to full_path based on filters' do
       let(:rel_path) { '~/workspace' }
-      let(:abs_path) { ENV['HOME'] + '/workspace' }
+      let(:abs_path) { "#{::Dir.home}/workspace" }
       let(:p) { Warp::Dir::Point.new('boo', rel_path ) }
 
       it 'should properly define absolute_path accessor' do
@@ -52,10 +52,10 @@ RSpec.describe Warp::Dir::Point do
 
     describe 'when point warps to a folder with a space in the name' do
       let(:long_path) { '/Documents/My Long Ass Name With Space' }
-      let(:pl) { Warp::Dir::Point.new('boo', ENV['HOME'] + long_path) }
+      let(:pl) { Warp::Dir::Point.new('boo', ::Dir.home + long_path) }
       context 'should return quoted result when called' do
         it '#absolute_path' do
-          expect(pl.absolute_path).to eql(%Q("#{ENV['HOME']}#{long_path}"))
+          expect(pl.absolute_path).to eql(%Q("#{::Dir.home}#{long_path}"))
         end
         it '#relative_path' do
           expect(pl.relative_path).to eql(%Q("~#{long_path}"))

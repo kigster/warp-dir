@@ -6,6 +6,7 @@ module Warp
 
       class StoreFormatError < Warp::Dir::Errors::Runtime
         attr_reader :line
+
         def initialize(msg, line)
           @line = line
           super msg
@@ -21,6 +22,7 @@ module Warp
       # it's own concrete message
       class InstanceError < Warp::Dir::Errors::Runtime
         attr_accessor :instance
+
         def initialize(message = nil)
           super message ? message : "#{self.class.name}->[#{instance}]"
         end
@@ -49,6 +51,7 @@ module Warp
           super color_error('Point ', point.to_s, ' was not found.')
         end
       end
+
       class PointAlreadyExists < ::Warp::Dir::Errors::InstanceError
         def initialize(point)
           self.instance = point

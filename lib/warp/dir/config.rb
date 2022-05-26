@@ -5,7 +5,7 @@ module Warp
     class Config
 
       DEFAULTS = {
-        warprc: ENV['HOME'] + '/.warprc',
+        warprc: "#{::Dir.home}/.warprc",
         shell: false,
         force: false,
         debug: false,

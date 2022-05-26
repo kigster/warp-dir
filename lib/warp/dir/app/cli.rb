@@ -54,8 +54,8 @@ module Warp
           response
         rescue Exception => e
           if config.debug
-            STDERR.puts(e.inspect)
-            STDERR.puts(e.backtrace.join("\n"))
+            $stderr.puts(e.inspect)
+            $stderr.puts(e.backtrace.join("\n"))
           end
           on :error do
             message e.message.red
@@ -101,10 +101,10 @@ module Warp
           opts.bool    '-q', '--quiet',   '               – suppress output (quiet mode)'
           opts.bool    '-d', '--debug',   '               – show stacktrace if errors are detected'
           opts.string  '-s', '--dotfile', '<dotfile>      – shell init file to append the wd wrapper, eg. ~/.bashrc'
-          opts.string  '-c', '--config',  '<config>       – location of the configuration file (default: ' + Warp::Dir.default_config + ')', default: Warp::Dir.default_config
+          opts.string  '-c', '--config',  "<config>       – location of the configuration file (default: #{Warp::Dir.default_config})", default: Warp::Dir.default_config
           opts.on      '-V', '--version', '               – print the version' do
-            puts 'Version ' + Warp::Dir::VERSION
-            exit
+            $stdout.puts "Version #{Warp::Dir::VERSION}"
+            exit 0
           end
 
           Slop::Parser.new(opts).parse(arguments)

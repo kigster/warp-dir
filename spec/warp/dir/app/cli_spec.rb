@@ -1,10 +1,4 @@
 require 'spec_helper'
-require 'support/cli_expectations'
-require 'warp/dir'
-require 'warp/dir/config'
-require 'warp/dir/app/cli'
-require 'pp'
-require 'fileutils'
 
 RSpec.describe Warp::Dir::App::CLI do
   include_context :fixture_file
@@ -22,7 +16,7 @@ RSpec.describe Warp::Dir::App::CLI do
     describe 'with suffix flags' do
       subject { cli.send(:extract_suffix_flags, argv) }
       describe 'and with at leats two arguments' do
-        let(:argv) { 'command argument --flag1 --flag2 -- --suffix1 --suffix2 suffix-argument'.split(' ')}
+        let(:argv) { 'command argument --flag1 --flag2 -- --suffix1 --suffix2 suffix-argument'.split}
         it 'extracts them well' do
           should eql(%w(--suffix1 --suffix2 suffix-argument))
         end
@@ -89,7 +83,7 @@ RSpec.describe Warp::Dir::App::CLI do
       context 'and --debug is given' do
         it 'should print backtrace' do
           expect(argv.join(' ')).to eql('boo dkk --debug --config /tmp/warprc')
-          expect(STDERR).to receive(:puts).twice
+          expect($stderr).to receive(:puts).twice
           expect(argv).to validate(false) { |cli|
             expect(cli.config.debug).to be_truthy
           }

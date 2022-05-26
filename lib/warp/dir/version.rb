@@ -3,7 +3,7 @@
 require_relative '../../colored'
 module Warp
   module Dir
-    VERSION = '1.6.2'
+    VERSION = '1.7.0'
 
     @install_notice = <<~EOF
 
@@ -16,7 +16,7 @@ module Warp
 
     EOF
     @install_notice += <<-EOF.bold.green
-  $ warp-dir install --dotfile ~/.bash_profile
+   warp-dir install --dotfile ~/.bash_profile
 
     EOF
     @install_notice += <<~EOF
@@ -28,13 +28,16 @@ module Warp
     EOF
     @install_notice += <<-EOF.bold.blue
   $ wd help
-  $ wd <directory>  # change directory – works just like "cd"
-  $ wd add <name>   # add current directory as a warp point, call it <name>
+  $ wd <directory>  #{'# change directory – works just like "cd"'.bold.black}
+  $ wd add <name>   #{'# add current directory as a warp point, call it <name>'.bold.black}
+  $ wd<TAB>         #{'# to see the command completion in action'.bold.black}
     EOF
-    @install_notice += <<~EOF
+    @install_notice += <<~EOF.green
 
-      Please submit issues and pull requests to:
-      https://github.com/kigster/warp-dir
+      Please submit issues and pull requests on Github:
+
+       • https://github.com/kigster/warp-dir
+       • via email to Konstantin Gredeskoul, @kigster on GMail, @kig on Twitter.
 
       Thank you!
     EOF
