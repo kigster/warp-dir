@@ -72,7 +72,7 @@ $ wd help
 
 If the above command returns a properly formatted help that looks like the image below, your setup is now complete!
 
-image:https://raw.githubusercontent.com/kigster/warp-dir/master/doc/wd-help.png[Image]
+image:https://raw.githubusercontent.com/kigster/warp-dir/master/docs/wd-help.png[Image]
 
 == Usage
 
