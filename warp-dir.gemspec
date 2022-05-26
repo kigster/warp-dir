@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary       = %q{Warp-Dir (aka 'wd') replaces 'cd' and lets you instantly move between saved "warp points" and regular folders.}
   s.description   = "Warp-Dir is compatible (and inspired by) the popular 'wd' tool available as a ZSH module. This one is written in ruby and so it should work in any shell. Credits for the original zsh-only tool go to (https://github.com/mfaerevaag/wd)."
   s.homepage      = 'https://github.com/kigster/warp-dir'
-  s.files         = `git ls-files`.split($\).reject{ |f| f.match(%r{^(docs|spec|README\.pdf)/*}) }
+  s.files         = `git ls-files`.split($\).reject{ |f| f.match(%r{^((docs|spec)/.*|README.pdf)$}) }
 
   s.executables << 'warp-dir'
   s.bindir = 'exe'
