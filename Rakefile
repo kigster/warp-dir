@@ -1,68 +1,29 @@
-task :reinstall => [ :'development:cleanup' ] do
-  [ %q(chmod -R o+r .),
-    %q(rm -f *.gem),
-    %q(gem uninstall -quiet -a --executables warp-dir 2> /dev/null; true),
-    %q(gem build warp-dir.gemspec)
-  ].each do |command|
-    sh command
-  end
+# frozen_string_literal: true
 
-  sh <<-EOF.gsub(%r{^\s+}m, '')
-    export gem_file=$(ls -1 *.gem | tail -1)
-    export gem_name=${gem_file//.gem/}
-    if [ "$(which ruby)" == "/usr/bin/ruby" ]; then
-      gem install $gem_file -n /usr/local/bin
-    else
-      gem install $gem_file
-    fi
-  EOF
+require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
+
+require 'yard'
+
+def shell(*args)
+  puts "running: #{args.join(' ')}"
+  system(args.join(' '))
 end
 
-namespace :development do
-  desc 'Setup temporary Gemfile, install all dependencies, and remove Gemfile'
-  task :install => [:setup, :cleanup]
-
-  desc 'Setup temporary Gemfile and install all dependencies.'
-  task :setup do
-    sh %q{
-      bundle install
-    }.gsub(%r{^\s+}m, '')
-  end
-
-  task :cleanup do
-    sh %q{ rm -f build }
-  end
-
-  namespace :bundler do
-    task :load do
-      require 'bundler'
-      require 'bundler/gem_tasks'
-    end
-    desc "Invoke Bundler's 'release' task to push the gem to RubyGems.org"
-    task :release => [ :setup, :load ] do
-      Rake::Task['release'].invoke
-      Rake::Task['development:cleanup'].invoke
-    end
-
-    desc 'Package and install the gem locally'
-    task :install => [ :setup, :load ] do
-      Rake::Task['install:local'].invoke
-      Rake::Task['development:cleanup'].invoke
-    end
-  end
+task :permissions do
+  shell('rm -rf pkg/')
+  shell("chmod -v o+r,g+r * */* */*/* */*/*/* */*/*/*/* */*/*/*/*/*")
+  shell("find . -type d -exec chmod o+x,g+x {} \\;")
 end
 
-require 'rake/clean'
-CLEAN.include %w(pkg coverage *.gem)
+task build: :permissions
 
-begin
-  require 'rspec/core/rake_task'
-  RSpec::Core::RakeTask.new(:spec)
-rescue LoadError
+YARD::Rake::YardocTask.new(:doc) do |t|
+  t.files = %w(lib/**/*.rb exe/* - README.md LICENSE)
+  t.options.unshift('--title', '"warp-dir", or "wd" (which stands for warp directory) is a Ruby implementation of the ZSH module by the same name, which is compatible with this gem. The `wd` command lets you "bookmark" and then "jump" to custom directories in BASH, without using cd. Why? Because cd seems inefficient when the folder is frequently visited or has a long path.')
+  t.after = -> { exec('open doc/index.html') } if RUBY_PLATFORM =~ /darwin/
 end
 
-task :spec => [ 'development:setup' ] do
-  Rake::Task['development:cleanup'].invoke
-end
+RSpec::Core::RakeTask.new(:spec)
 
-task :default => [:spec]
+task default: :spec

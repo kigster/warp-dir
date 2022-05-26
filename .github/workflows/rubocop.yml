@@ -1,4 +1,4 @@
-name: Ruby
+name: Rubocop
 
 on:
   push:
@@ -24,4 +24,4 @@ jobs:
       - name: Install dependencies
         run: bundle install -j 8
       - name: Run Rubocop
-        run: bundle exec rspec --format documentation
+        run: bundle exec rubocop

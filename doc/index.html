@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.24
+    &mdash; &quot;SimpleFeed — Fast and Scalable &quot;write-time&quot; Simple Feed for Social Networks, with a Redis-based default backend implementation.&quot;
   
 </title>
 
@@ -57,178 +57,348 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'>
-<h1 id="warp_directory">Warp Directory</h1>
-
-<p><a href="https://rubygems.org/gems/warp-dir"><img src="http://ruby-gem-downloads-badge.herokuapp.com/warp-dir?type=total" alt="Downloads" /></a> <a href="https://badge.fury.io/rb/warp-dir"><img src="https://badge.fury.io/rb/warp-dir.svg" alt="Gem Version" /></a> <a href="https://travis-ci.org/kigster/warp-dir"><img src="https://travis-ci.org/kigster/warp-dir.svg?branch=master" alt="Build Status" /></a> <a href="https://codeclimate.com/github/kigster/warp-dir"><img src="https://codeclimate.com/github/kigster/warp-dir/badges/gpa.svg" alt="Code Climate" /></a> <a href="https://codeclimate.com/github/kigster/warp-dir/coverage"><img src="https://codeclimate.com/github/kigster/warp-dir/badges/coverage.svg" alt="Test Coverage" /></a></p>
-<hr />
-<p><a href="https://gitter.im/kigster/warp-dir"><img src="https://img.shields.io/gitter/room/gitterHQ/gitter.svg" alt="Gitter" /></a></p>
-
-<p>This is a ruby implementation of the tool <code>wd</code> (warp directory), <a href="https://github.com/mfaerevaag/wd">originally written as a <code>ZSH</code> module</a> by <a href="https://github.com/mfaerevaag">Markus Færevaag</a>.</p>
-
-<p>I personaly went back to <code>bash</code> after trying out <code>ZSH</code>, but it was the <code>wd</code> plugin that I really missed.</p>
-
-<p>While Markus kindly offered a ruby version in a <a href="https://github.com/mfaerevaag/wd/tree/ruby">separate branch of this module</a>, it wasn’t quite as extensible as I wanted to (or well tested), so it ended up being an inspiration for this gem.</p>
-
-<h2 id="warp_this">Warp This</h2>
-
-<p>WarpDir is a UNIX command line tool that works somewhat similar to the standard built-in command <code>cd</code> — “change directory”.</p>
-
-<p>The main difference is that <code>wd</code> is able to add/remove/list folder “shortcuts”, and allows you to jump to these shortcuts from anywhere on the filesystem.</p>
-
-<p>This of this as a folder-navigation super-charge tool that you’d use on a most frequently-used set of folders. This becomes <strong>really useful</strong> if you are often finding youself going into a small number of deeply nested folders with a long path prefix.</p>
-
-<h2 id="installation">Installation</h2>
-
-<p>Three steps:</p>
-
-<ul>
-<li><code>wd</code> requires a Ruby interpreter version 2.2 higher.
-<ul>
-<li>Please Check your default ruby with <code>ruby --version</code>. You should see something like “ruby 2.3.0p0….”.</li>
-
-<li>If you see version 1.9 or earlier, please upgrade your ruby using the package manager native to your OS.</li>
+      <div id="content"><div id='filecontents'><div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_warp_this">1. Warp This</a></li>
+<li><a href="#_installation">2. Installation</a></li>
+<li><a href="#_usage">3. Usage</a>
+<ul class="sectlevel2">
+<li><a href="#_command_completion">3.1. Command Completion</a></li>
+<li><a href="#_config_file_aka_warp_points_database">3.2. Config File (aka. Warp Points Database)</a></li>
 </ul>
 </li>
-
-<li>Install <code>warp-dir</code> ruby gem (note: you may need to prefix the command with <code>sudo</code> if you are installing into the “system” ruby namespace).</li>
+<li><a href="#_wd_concept">4. <code>wd</code> Concept</a>
+<ul class="sectlevel2">
+<li><a href="#_notable_differences_with_original_wd">4.1. Notable Differences with original <code>wd</code></a></li>
 </ul>
-
-<p>“sh $ gem install warp-dir –no-ri –no-rdoc</p>
-
-<p>“</p>
-
+</li>
+<li><a href="#_future_development">5. Future Development</a></li>
+<li><a href="#_development">6. Development</a></li>
+<li><a href="#_adding_new_commands">7. Adding New Commands</a></li>
+<li><a href="#_contributing">8. Contributing</a></li>
+<li><a href="#_author">9. Author</a></li>
+<li><a href="#_license">10. License</a></li>
+</ul>
+</div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><a class="image" href="https://rubygems.org/gems/warp-dir"><img src="http://ruby-gem-downloads-badge.herokuapp.com/warp-dir?type=total" alt="Downloads"></a></span>
+<span class="image"><a class="image" href="https://badge.fury.io/rb/warp-dir"><img src="https://badge.fury.io/rb/warp-dir.svg" alt="Gem Version"></a></span>
+<span class="image"><a class="image" href="https://travis-ci.org/kigster/warp-dir"><img src="https://travis-ci.org/kigster/warp-dir.svg?branch=master" alt="Build Status"></a></span>
+<span class="image"><a class="image" href="https://codeclimate.com/github/kigster/warp-dir"><img src="https://codeclimate.com/github/kigster/warp-dir/badges/gpa.svg" alt="Code Climate"></a></span>
+<span class="image"><a class="image" href="https://codeclimate.com/github/kigster/warp-dir/coverage"><img src="https://codeclimate.com/github/kigster/warp-dir/badges/coverage.svg" alt="Test Coverage"></a></span>
+<span class="image"><a class="image" href="https://gitter.im/kigster/warp-dir"><img src="https://img.shields.io/gitter/room/gitterHQ/gitter.svg" alt="Gitter"></a></span></p>
+</div>
+<div class="paragraph">
+<p>This is a ruby implementation of the tool <code>wd</code> (warp directory), <a href="https://github.com/mfaerevaag/wd">originally written as a <code>ZSH</code> module</a> by <a href="https://github.com/mfaerevaag">Markus Færevaag</a>.</p>
+</div>
+<div class="paragraph">
+<p>I personaly went back to <code>bash</code> after trying out <code>ZSH</code>, but it was the <code>wd</code> plugin that I really missed.</p>
+</div>
+<div class="paragraph">
+<p>While Markus kindly offered a ruby version in a <a href="https://github.com/mfaerevaag/wd/tree/ruby">separate branch of this module</a>,
+it wasn&#8217;t quite as extensible as I wanted to (or well tested), so it ended up being an inspiration for this gem.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_warp_this">1. Warp This</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>WarpDir is a UNIX command line tool that works somewhat similar to the standard built-in command <code>cd</code>&#8201;&#8212;&#8201;"change directory".</p>
+</div>
+<div class="paragraph">
+<p>The main difference is that <code>wd</code> is able to add/remove/list folder "shortcuts", and allows you to jump to these shortcuts from anywhere on the filesystem.</p>
+</div>
+<div class="paragraph">
+<p>This of this as a folder-navigation super-charge tool that you&#8217;d use on a most frequently-used set of folders. This becomes <strong>really useful</strong> if you are often finding youself going into a small number of deeply nested folders with a long path prefix.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation">2. Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Three steps:</p>
+</div>
+<div class="ulist">
 <ul>
-<li>The last step is to install the <code>wd</code> BASH function and auto-completion. This step appends the required shell function to your shell initialization file, that is specified with the <code>--dotfile</code> flag.</li>
+<li>
+<p><code>wd</code> requires a Ruby interpreter version 2.2 higher.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Please Check your default ruby with <code>ruby --version</code>. You should see something like "ruby 2.3.0p0&#8230;&#8203;.".</p>
+</li>
+<li>
+<p>If you see version 1.9 or earlier, please upgrade your ruby using the package manager native to your OS.</p>
+</li>
 </ul>
+</div>
+</li>
+<li>
+<p>Install <code>warp-dir</code> ruby gem (note: you may need to prefix the command with <code>sudo</code> if you are installing into the "system" ruby namespace).</p>
+<div class="listingblock">
+<div class="content">
+<pre class="code bash"><code class="bash">$ gem install warp-dir</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The last step is to install the <code>wd</code> BASH function and auto-completion. This step appends the required shell function to your shell initialization file, that is specified with the <code>--dotfile</code> flag.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="code bash"><code class="bash">$ warp-dir install --dotfile ~/.bash_profile
+Shell support is installed in the following files:
+/Users/kig/.bash_profile
+$ source ~/.bash_profile
+# Now we can use &#39;wd&#39; shortcut
+$ wd --help
 
-<p>“sh $ warp-dir install –dotfile ~/.bash_profile</p>
-
-<p>“</p>
-
-<p>After the last step you <strong>need to restart your session</strong>, so – if you are on Mac OS X, – please reopen your Terminal or better yet – <a href="https://www.iterm2.com/">iTerm2</a>, and then type:</p>
-
-<p>“sh $ wd help</p>
-
-<p>“</p>
-
+# And, it supports command completion in BASH!
+$ wd</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>After the last step you <strong>need to restart your session</strong>, so&#8201;&#8212;&#8201;if you are on Mac OS X,&#8201;&#8212;&#8201;please reopen your Terminal or better yet&#8201;&#8212;&#8201;<a href="https://www.iterm2.com/">iTerm2</a>, and then type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="code bash"><code class="bash">$ wd help</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>If the above command returns a properly formatted help that looks like the image below, your setup is now complete!</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="https://raw.githubusercontent.com/kigster/warp-dir/master/doc/wd-help.png" alt="Image"></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage">3. Usage</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+in the below examples, the characters `~ ❯ ` denote the current shell prompt, showing the current folder you are in. The command to type is on the right hand side of the "❯".
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s first bookmark a long directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="code bash"><code class="bash">~ ❯ cd ~/workspace/arduino/robots/command-bridge/src
+~/workspace/arduino/robots/command-bridge/src ❯ wd add cbsrc
+Warp point saved!
 
-<p><img src="doc/wd-help.png?refresh=1" alt="Image" /></p>
+~/workspace/arduino/robots/command-bridge/src ❯ cd ~/workspace/c++/foo/src
+~/workspace/c++/foo/src ❯ wd add foosrc
+Warp point saved!
 
-<h2 id="usage">Usage</h2>
-
-<p><strong>NOTE:</strong> in the below examples, the characters <code>~ ❯ </code> denote the current shell prompt, showing the current folder you are in. The command to type is on the right hand side of the “❯”.</p>
-
-<p>Let’s first bookmark a long directory:</p>
-
-<p>“sh ~ ❯ cd ~/workspace/arduino/robots/command-bridge/src ~/workspace/arduino/robots/command-bridge/src ❯ wd add cbsrc Warp point saved!</p>
-
-<p>~/workspace/arduino/robots/command-bridge/src ❯ cd ~/workspace/c++/foo/src ~/workspace/c++/foo/src ❯ wd add foosrc Warp point saved!</p>
-
-<p>~/workspace/c++/foo/src ❯ cd /usr/local/Cellar /usr/local/Cellar ❯ wd add brew Warp point saved!</p>
-
-<p>“</p>
-
+~/workspace/c++/foo/src ❯ cd /usr/local/Cellar
+/usr/local/Cellar ❯ wd add brew
+Warp point saved!</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Now we can list/inspect current set of warp points:</p>
-
-<p>“sh /usr/local/Cellar ❯ wd l cbsrc -&gt; ~/workspace/arduino/robots/command-bridge/src foosrc -&gt; ~/workspace/c++/foo/src brew -&gt; /usr/local/Cellar</p>
-
-<p>“</p>
-
-<p>Now we can jump around these warp points, as well as run ‘ls’ inside (even passing arbitrary arguments to the <code>ls</code> itself):</p>
-
-<p>“sh /usr/local/Cellar ❯ wd cbsrc ~/workspace/arduino/robots/command-bridge/src ❯ wd foosrc ~/workspace/c++/foo/src ❯ 1 wd ls brew – -alF | head -4 # run ls -alF inside /usr/local/Cellar total 0 drwxrwx— 73 kig staff 2482 May 7 15:29 ./ drwxrwx— 21 kig staff 714 Apr 28 11:40 ../ drwxrwx— 3 kig staff 102 Dec 24 03:14 ack/</p>
-
-<p>“</p>
-
-<h3 id="command_completion">Command Completion</h3>
-
-<p>If you installed <code>wd</code> properly, it should register it’s own command completion for BASH and be ready for your tabs :)</p>
-
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="code bash"><code class="bash">/usr/local/Cellar ❯ wd l
+   cbsrc -&gt; ~/workspace/arduino/robots/command-bridge/src
+  foosrc -&gt; ~/workspace/c++/foo/src
+    brew -&gt; /usr/local/Cellar</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can jump around these warp points, as well as run 'ls' inside (even passing arbitrary arguments to the <code>ls</code> itself):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="code bash"><code class="bash">/usr/local/Cellar ❯ wd cbsrc
+~/workspace/arduino/robots/command-bridge/src ❯ wd foosrc
+~/workspace/c++/foo/src ❯  1 wd ls brew -- -alF | head -4        # run ls -alF inside /usr/local/Cellar
+total 0
+drwxrwx---  73 kig  staff  2482 May  7 15:29 ./
+drwxrwx---  21 kig  staff   714 Apr 28 11:40 ../
+drwxrwx---   3 kig  staff   102 Dec 24 03:14 ack/</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_command_completion">3.1. Command Completion</h3>
+<div class="paragraph">
+<p>If you installed <code>wd</code> properly, it should register it&#8217;s own command completion for BASH and be ready for your tabs :)</p>
+</div>
+<div class="paragraph">
 <p>Note that you can use <code>wd</code> to change directory by giving an absolute or relative directory name, just like <code>cd</code> (so not just using warp-points), so when you type <code>wd [TAB]</code> you will see all saved warp points as well as the local directories you can <code>cd</code> into.</p>
-
-<p>That’s basically it!</p>
-
-<h3 id="config_file_aka_warp_points_database">Config File (aka. Warp Points Database)</h3>
-
-<p>All of the mappings are stored in the <code>~/.warprc</code> file, where the warp point name is followed by a colon, and the path it maps to. So it’s trivial to do a global search/replace on that file in your favorite editor, if, for example, a commond top level folder had changed.</p>
-
+</div>
+<div class="paragraph">
+<p>That&#8217;s basically it!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_config_file_aka_warp_points_database">3.2. Config File (aka. Warp Points Database)</h3>
+<div class="paragraph">
+<p>All of the mappings are stored in the <code>~/.warprc</code> file, where the warp point name is followed by a colon, and the path it maps to. So it&#8217;s trivial to do a global search/replace on that file in your favorite editor, if, for example, a commond top level folder had changed.</p>
+</div>
+<div class="paragraph">
 <p>The format of the file was left identical to that of the <code>ZSH</code> version of <code>wd</code> so that one could switch back and force between the two versions of <code>wd</code> and still be able to use their collection of warp points.</p>
-
+</div>
+<div class="paragraph">
 <p>See? I think we thought of everything :)</p>
-
+</div>
+<div class="paragraph">
 <p>Happy warping!</p>
-
-<h2 id="_concept"><code>wd</code> Concept</h2>
-
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_wd_concept">4. <code>wd</code> Concept</h2>
+<div class="sectionbody">
+<div class="paragraph">
 <p>The overall concept comes from the realization that when we work on the command line, we often do things that <code>wd</code> tool provides straight out of the box, such as:</p>
-
+</div>
+<div class="ulist">
 <ul>
-<li>we often have to deal with a limited number of folders at any given time</li>
-
-<li>on occastion have to jump between these folders (which we call <strong>warp points</strong>), which may require mult-level <code>cd</code> command, for example: <code>cd ~/workspace/foo/src/include/; ....; cd ~/Documents/Microsoft\ Word/; ...</code></li>
-
-<li>seems like it should be easy to add, remove and list warp points</li>
-
-<li>everything should require typing few characters as possible :)</li>
-
-<li>it would be great to have full BASH completion support</li>
+<li>
+<p>we often have to deal with a limited number of folders at any given time</p>
+</li>
+<li>
+<p>on occastion have to jump between these folders (which we call <strong>warp points</strong>), which may require mult-level <code>cd</code> command, for example: <code>cd ~/workspace/foo/src/include/; ....; cd ~/Documents/Microsoft\ Word/; ...</code></p>
+</li>
+<li>
+<p>seems like it should be easy to add, remove and list warp points</p>
+</li>
+<li>
+<p>everything should require typing few characters as possible :)</p>
+</li>
+<li>
+<p>it would be great to have full BASH completion support</p>
+</li>
 </ul>
-
+</div>
+<div class="paragraph">
 <p>Some future extensions could be based on some additional realizations:</p>
-
+</div>
+<div class="ulist">
 <ul>
-<li>perhaps you might want to inspect a bookmarked folder without leaving your current place.</li>
-
-<li>maybe by inspecting we mean — running a <code>find</code>, or <code>ls</code> or any other command for that matter</li>
+<li>
+<p>perhaps you might want to inspect a bookmarked folder without leaving your current place.</p>
+</li>
+<li>
+<p>maybe by inspecting we mean&#8201;&#8212;&#8201;running a <code>find</code>, or <code>ls</code> or any other command for that matter</p>
+</li>
 </ul>
-
-<h3 id="notable_differences_with_original_">Notable Differences with original <code>wd</code></h3>
-
+</div>
+<div class="sect2">
+<h3 id="_notable_differences_with_original_wd">4.1. Notable Differences with original <code>wd</code></h3>
+<div class="ulist">
 <ul>
-<li>instead of <code>wd add!</code> use <code>wd add -f &lt;point&gt;</code> (or –force)</li>
+<li>
+<p>instead of <code>wd add!</code> use <code>wd add -f &lt;point&gt;</code> (or --force)</p>
+</li>
 </ul>
-
+</div>
+<div class="paragraph">
 <p>These features will be added shortly:</p>
-
+</div>
+<div class="ulist">
 <ul>
-<li>for now <code>wd clean</code> is not supported</li>
-
-<li>for now history is not supported</li>
-
-<li>for now ‘-’ is not supported</li>
+<li>
+<p>for now <code>wd clean</code> is not supported</p>
+</li>
+<li>
+<p>for now history is not supported</p>
+</li>
+<li>
+<p>for now '-' is not supported</p>
+</li>
 </ul>
-
-<h2 id="future_development">Future Development</h2>
-
-<p>I have so many cool ideas about where this can go, that I created a <a href="ROADMAP.md">dedicated page</a> for the discussion of future features. Please head over there if you’ld like to participate.</p>
-
-<h2 id="development">Development</h2>
-
-<p>After checking out the repo, run <code>bin/setup</code> to install dependencies. You can also run <code>bin/console</code> for an interactive prompt that will allow you to experiment.</p>
-
-<p>To install this gem onto your local machine, run <code>bundle exec rake install</code>. To release a new version, update the version number in <code>version.rb</code>, and then run <code>bundle exec rake release</code>, which will create a git tag for the version, push git commits and tags, and push the <code>.gem</code> file to <a href="https://rubygems.org">rubygems.org</a>.</p>
-
-<h2 id="adding_new_commands">Adding New Commands</h2>
-
-<p>Just follow the patter in the <code>lib/warp/dir/commands/</code> folder, copy and modify one of the existing commands. Command class name is used as an actual command.</p>
-
-<h2 id="contributing">Contributing</h2>
-
-<p>Bug reports and pull requests are welcome on GitHub at https://github.com/kigster/warp-dir.</p>
-
-<h2 id="author">Author</h2>
-<p>&copy; 2016 Konstantin Gredeskoul, all rights reserved.</p>
-<h2 id="license">License</h2>
-
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_future_development">5. Future Development</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I have so many cool ideas about where this can go, that I created a
+<a href="ROADMAP.html">dedicated page</a> for the discussion of future features.  Please head over
+there if you&#8217;ld like to participate.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_development">6. Development</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fork the repo to your github username, and create a feature branch.</p>
+</div>
+<div class="paragraph">
+<p>Run <code>bin/setup</code> to install dependencies.  You can also run <code>bin/console</code> for an interactive prompt that will
+allow you to experiment.</p>
+</div>
+<div class="paragraph">
+<p>To install this gem onto your local machine, run <code>bundle install</code>.</p>
+</div>
+<div class="paragraph">
+<p>To submit your change, create a new pull request, and ensure to provide tests for any new code.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_adding_new_commands">7. Adding New Commands</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Just follow the patter in the <code>lib/warp/dir/commands/</code> folder, copy and modify
+one of the existing commands.  Command class name is used as an actual command.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_contributing">8. Contributing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Bug reports and pull requests are welcome on GitHub at <a href="https://github.com/kigster/warp-dir" class="bare">https://github.com/kigster/warp-dir</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_author">9. Author</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>&copy; 2016-2020 Konstantin Gredeskoul, All rights reserved.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_license">10. License</h2>
+<div class="sectionbody">
+<div class="paragraph">
 <p>This project is distributed under the <a href="https://raw.githubusercontent.com/kigster/warp-dir/master/LICENSE">MIT License</a>.</p>
-</div></div>
+</div>
+</div>
+</div></div></div>
 
       <div id="footer">
-  Generated on Tue Jan 28 16:12:25 2020 by
+  Generated on Wed May 25 20:33:40 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.24 (ruby-2.7.0).
+  0.9.27 (ruby-3.1.2).
 </div>
 
     </div>

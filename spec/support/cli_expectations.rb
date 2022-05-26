@@ -1,34 +1,34 @@
 require 'rspec/expectations'
 require 'warp/dir/app/cli'
-require 'rspec/expectations'
 
 module Warp
   module Dir
     module CLIHelper
 
       def run_command!(arguments)
-        argv = arguments.is_a?(Array) ? arguments : arguments.split(' ')
+        argv = arguments.is_a?(Array) ? arguments : arguments.split
         cli  = Warp::Dir::App::CLI.new(argv)
         cli.run
       end
 
       def validate!(arguments, yield_before_validation: false)
-        argv = arguments.is_a?(Array) ? arguments : arguments.split(' ')
+        argv = arguments.is_a?(Array) ? arguments : arguments.split
         cli  = Warp::Dir::App::CLI.new(argv)
-        if yield_before_validation
-          yield(cli) if block_given?
+        if yield_before_validation && block_given?
+          yield(cli)
         end
         cli.validate
-        unless yield_before_validation
-          yield(cli) if block_given?
+        if !yield_before_validation && block_given?
+          yield(cli)
         end
         cli.run
       end
 
       def output_matches(output, expected)
-        if expected.is_a?(Regexp)
+        case expected
+        when Regexp
           expected.match(output)
-        elsif expected.is_a?(String)
+        when String
           output.include?(expected)
         else
           nil
@@ -77,8 +77,8 @@ RSpec::Matchers.define :validate do |expected|
           expected.call(cli)
         end
       rescue Exception => e
-        STDERR.puts(e.inspect)
-        STDERR.puts(e.backtrace.join("\n"))
+        $stderr.puts(e.inspect)
+        $stderr.puts(e.backtrace.join("\n"))
         raise
       end
     else
@@ -103,16 +103,3 @@ RSpec::Matchers.define :exit_with do |expected|
     response.code != expected
   end
 end
-
-# RSpec::Matchers.define :eval_to_true_after_validate do |expected|
-#   match do |actual|
-#     expected_type = expected.is_a?(Symbol) ?
-#       Warp::Dir::App::Response::RETURN_TYPE[expected_type] :
-#       expected
-#     response = run_and_yield(expected)
-#     response.type == expected_type
-#   end
-#   failure_message_for_should_not do |actual|
-#     "expected #{expected} to produce return type #{}"
-#   end
-# end

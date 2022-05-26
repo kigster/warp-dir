@@ -6,7 +6,7 @@
 <title>
   Module: Warp::Dir
   
-    &mdash; Documentation by YARD 0.9.24
+    &mdash; &quot;SimpleFeed — Fast and Scalable &quot;write-time&quot; Simple Feed for Social Networks, with a Redis-based default backend implementation.&quot;
   
 </title>
 
@@ -135,7 +135,7 @@
         <dt id="SHELL_WRAPPER_DEST-constant" class="">SHELL_WRAPPER_DEST =
           
         </dt>
-        <dd><pre class="code"><span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>HOME</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/.bash_wd</span><span class='tstring_end'>&#39;</span></span></pre></dd>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='op'>::</span><span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_home'>home</span><span class='embexpr_end'>}</span><span class='tstring_content'>/.bash_wd</span><span class='tstring_end'>&quot;</span></span></pre></dd>
       
         <dt id="SHELL_WRAPPER_REGX-constant" class="">SHELL_WRAPPER_REGX =
           
@@ -154,7 +154,7 @@
         <dt id="VERSION-constant" class="">VERSION =
           
         </dt>
-        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>1.6.2</span><span class='tstring_end'>&#39;</span></span></pre></dd>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>1.7.0</span><span class='tstring_end'>&#39;</span></span></pre></dd>
       
         <dt id="INSTALL_NOTICE-constant" class="">INSTALL_NOTICE =
           
@@ -413,7 +413,7 @@
       <pre class="code"><span class="info file"># File 'lib/warp/dir.rb', line 35</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_absolute'>absolute</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_path'>path</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>HOME</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_path'>path</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='op'>::</span><span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_home'>home</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -585,7 +585,7 @@
       <pre class="code"><span class="info file"># File 'lib/warp/dir.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pwd'>pwd</span>
-  <span class='backtick'>%x(</span><span class='tstring_content'>pwd</span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_chomp'>chomp</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>HOME</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~</span><span class='tstring_end'>&#39;</span></span>
+  <span class='backtick'>%x(</span><span class='tstring_content'>pwd</span><span class='tstring_end'>)</span></span><span class='period'>.</span><span class='id identifier rubyid_chomp'>chomp</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span> <span class='op'>::</span><span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_home'>home</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~</span><span class='tstring_end'>&#39;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -615,7 +615,7 @@
       <pre class="code"><span class="info file"># File 'lib/warp/dir.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_relative'>relative</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_path'>path</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>HOME</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_path'>path</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span> <span class='op'>::</span><span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_home'>home</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~</span><span class='tstring_end'>&#39;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -645,7 +645,7 @@
       <pre class="code"><span class="info file"># File 'lib/warp/dir.rb', line 19</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_require_all_from'>require_all_from</span><span class='lparen'>(</span><span class='id identifier rubyid_folder'>folder</span><span class='rparen'>)</span>
-  <span class='op'>::</span><span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_glob'>glob</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Warp.html" title="Warp (module)">Warp</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Warp.html#PROJECT_LIBS-constant" title="Warp::PROJECT_LIBS (constant)">PROJECT_LIBS</a></span></span> <span class='op'>+</span> <span class='id identifier rubyid_folder'>folder</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/*.rb</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_file'>file</span><span class='op'>|</span> <span class='const'>Kernel</span><span class='period'>.</span><span class='id identifier rubyid_require'>require</span> <span class='id identifier rubyid_file'>file</span> <span class='rbrace'>}</span>
+  <span class='op'>::</span><span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_glob'>glob</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="../Warp.html" title="Warp (module)">Warp</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Warp.html#PROJECT_LIBS-constant" title="Warp::PROJECT_LIBS (constant)">PROJECT_LIBS</a></span></span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_folder'>folder</span><span class='embexpr_end'>}</span><span class='tstring_content'>/*.rb</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_file'>file</span><span class='op'>|</span> <span class='const'>Kernel</span><span class='period'>.</span><span class='id identifier rubyid_require'>require</span> <span class='id identifier rubyid_file'>file</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -687,9 +687,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 28 16:12:25 2020 by
+  Generated on Wed May 25 20:33:40 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.24 (ruby-2.7.0).
+  0.9.27 (ruby-3.1.2).
 </div>
 
     </div>

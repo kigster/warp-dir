@@ -28,8 +28,7 @@ module Warp
         name, path = line.split(/:/)
         if name.nil? || path.nil?
           raise Warp::Dir::Errors::StoreFormatError.new(
-            'warprc file may be corrupt, offending line is: ' +
-              line, line)
+            "warprc file may be corrupt, offending line is: #{line}", line)
         end
         self.new(name, path)
       end

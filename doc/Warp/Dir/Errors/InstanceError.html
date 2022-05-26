@@ -6,7 +6,7 @@
 <title>
   Exception: Warp::Dir::Errors::InstanceError
   
-    &mdash; Documentation by YARD 0.9.24
+    &mdash; &quot;SimpleFeed — Fast and Scalable &quot;write-time&quot; Simple Feed for Social Networks, with a Redis-based default backend implementation.&quot;
   
 </title>
 
@@ -106,7 +106,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>This is a generic Exception that wraps an object passed to the initializer and assumed to be the reason for the failure. Message is optional, but each concrete exception should provide it&#39;s own concrete message</p>
+<p>This is a generic Exception that wraps an object passed to the initializer and assumed to be the reason for the failure. Message is optional, but each concrete exception should provide it’s own concrete message</p>
 
 
   </div>
@@ -274,12 +274,12 @@
       <pre class="lines">
 
 
-24
-25
-26</pre>
+26
+27
+28</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/errors.rb', line 24</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/errors.rb', line 26</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>super</span> <span class='id identifier rubyid_message'>message</span> <span class='op'>?</span> <span class='id identifier rubyid_message'>message</span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>-&gt;[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_instance'>instance</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span>
@@ -322,12 +322,12 @@
       <pre class="lines">
 
 
-23
 24
-25</pre>
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/errors.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/errors.rb', line 24</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_instance'>instance</span>
   <span class='ivar'>@instance</span>
@@ -359,14 +359,14 @@
       <pre class="lines">
 
 
-32
-33
 34
 35
-36</pre>
+36
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/errors.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/errors.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_color_error'>color_error</span> <span class='id identifier rubyid_instance_type'>instance_type</span><span class='comma'>,</span> <span class='id identifier rubyid_instance'>instance</span><span class='comma'>,</span> <span class='id identifier rubyid_result'>result</span>
   <span class='id identifier rubyid_instance_type'>instance_type</span><span class='period'>.</span><span class='id identifier rubyid_red'>red</span><span class='period'>.</span><span class='id identifier rubyid_bold'>bold</span> <span class='op'>+</span>
@@ -393,12 +393,12 @@
       <pre class="lines">
 
 
-28
-29
-30</pre>
+30
+31
+32</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/errors.rb', line 28</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/errors.rb', line 30</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
   <span class='kw'>super</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r{</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='regexp_end'>}</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -413,9 +413,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 28 16:12:25 2020 by
+  Generated on Wed May 25 20:33:40 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.24 (ruby-2.7.0).
+  0.9.27 (ruby-3.1.2).
 </div>
 
     </div>

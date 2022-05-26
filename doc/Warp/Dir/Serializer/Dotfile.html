@@ -6,7 +6,7 @@
 <title>
   Class: Warp::Dir::Serializer::Dotfile
   
-    &mdash; Documentation by YARD 0.9.24
+    &mdash; &quot;SimpleFeed — Fast and Scalable &quot;write-time&quot; Simple Feed for Social Networks, with a Redis-based default backend implementation.&quot;
   
 </title>
 
@@ -301,7 +301,7 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_restore!'>restore!</span>
   <span class='kw'>unless</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_warprc_file_path'>warprc_file_path</span><span class='rparen'>)</span>
-    <span class='const'>STDERR</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No warprc file found in the path </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_warprc_file_path'>warprc_file_path</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No warprc file found in the path </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_warprc_file_path'>warprc_file_path</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span>
     <span class='kw'>return</span>
   <span class='kw'>end</span>
   <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_warprc_file_path'>warprc_file_path</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>r</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
@@ -353,9 +353,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 28 16:12:26 2020 by
+  Generated on Wed May 25 20:33:40 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.24 (ruby-2.7.0).
+  0.9.27 (ruby-3.1.2).
 </div>
 
     </div>

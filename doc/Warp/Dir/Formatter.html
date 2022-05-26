@@ -6,7 +6,7 @@
 <title>
   Class: Warp::Dir::Formatter
   
-    &mdash; Documentation by YARD 0.9.24
+    &mdash; &quot;SimpleFeed — Fast and Scalable &quot;write-time&quot; Simple Feed for Social Networks, with a Redis-based default backend implementation.&quot;
   
 </title>
 
@@ -488,7 +488,7 @@
       <pre class="code"><span class="info file"># File 'lib/warp/dir/formatter.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_happy'>happy</span><span class='lparen'>(</span><span class='label'>message:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='const'>STDOUT</span><span class='period'>.</span><span class='id identifier rubyid_printf'>printf</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_blue'>blue</span><span class='period'>.</span><span class='id identifier rubyid_bold'>bold</span><span class='rparen'>)</span>
+  <span class='gvar'>$stdout</span><span class='period'>.</span><span class='id identifier rubyid_printf'>printf</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_blue'>blue</span><span class='period'>.</span><span class='id identifier rubyid_bold'>bold</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -528,7 +528,7 @@
   <span class='id identifier rubyid_out'>out</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_red'>red</span> <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_exception'>exception</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_message'>message</span>
   <span class='id identifier rubyid_out'>out</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_exception'>exception</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_content'>:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_red'>red</span> <span class='kw'>if</span> <span class='id identifier rubyid_message'>message</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_exception'>exception</span>
   <span class='id identifier rubyid_out'>out</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_print'>print</span> <span class='op'>?</span> <span class='const'>STDERR</span><span class='period'>.</span><span class='id identifier rubyid_printf'>printf</span><span class='lparen'>(</span><span class='id identifier rubyid_out'>out</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id identifier rubyid_out'>out</span>
+  <span class='id identifier rubyid_print'>print</span> <span class='op'>?</span> <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_printf'>printf</span><span class='lparen'>(</span><span class='id identifier rubyid_out'>out</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id identifier rubyid_out'>out</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -540,9 +540,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 28 16:12:25 2020 by
+  Generated on Wed May 25 20:33:40 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.24 (ruby-2.7.0).
+  0.9.27 (ruby-3.1.2).
 </div>
 
     </div>

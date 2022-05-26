@@ -6,7 +6,7 @@
 <title>
   Class: Warp::Dir::App::CLI
   
-    &mdash; Documentation by YARD 0.9.24
+    &mdash; &quot;SimpleFeed — Fast and Scalable &quot;write-time&quot; Simple Feed for Social Networks, with a Redis-based default backend implementation.&quot;
   
 </title>
 
@@ -794,8 +794,8 @@
   <span class='id identifier rubyid_response'>response</span>
 <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span>
-    <span class='const'>STDERR</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rparen'>)</span>
-    <span class='const'>STDERR</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rparen'>)</span>
+    <span class='gvar'>$stderr</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_on'>on</span> <span class='symbol'>:error</span> <span class='kw'>do</span>
     <span class='id identifier rubyid_message'>message</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_red'>red</span>
@@ -896,11 +896,11 @@
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_validated'>validated</span> <span class='op'>=</span> <span class='kw'>false</span>
   <span class='id identifier rubyid_no_arguments'>no_arguments</span>   <span class='op'>=</span> <span class='id identifier rubyid_argv'>argv</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
   <span class='id identifier rubyid_commands'>commands</span>       <span class='op'>=</span> <span class='id identifier rubyid_shift_non_flag_commands'>shift_non_flag_commands</span>
-  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_opts'>opts</span>      <span class='op'>=</span> <span class='id identifier rubyid_parse_with_slop'>parse_with_slop</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_argv'>argv</span><span class='rparen'>)</span>  <span class='comment'># merge first few non-flag args which we filtered into `commands` hash
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_opts'>opts</span>      <span class='op'>=</span> <span class='id identifier rubyid_parse_with_slop'>parse_with_slop</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_argv'>argv</span><span class='rparen'>)</span>
+  <span class='comment'># merge first few non-flag args which we filtered into `commands` hash
 </span>  <span class='comment'># merge onto the hash resulting from options
 </span>  <span class='comment'># and pass on to override the default config opts for the final config.
-</span>
-  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_configure'>configure</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_to_hash'>to_hash</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_commands'>commands</span><span class='rparen'>)</span><span class='rparen'>)</span>
+</span>  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_configure'>configure</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_to_hash'>to_hash</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_commands'>commands</span><span class='rparen'>)</span><span class='rparen'>)</span>
 
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_store'>store</span>     <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Warp.html" title="Warp (module)">Warp</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Dir.html" title="Warp::Dir (module)">Dir</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Store.html" title="Warp::Dir::Store (class)">Store</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Store.html#initialize-instance_method" title="Warp::Dir::Store#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="../../../Warp.html" title="Warp (module)">Warp</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Dir.html" title="Warp::Dir (module)">Dir</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Serializer.html" title="Warp::Dir::Serializer (module)">Serializer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Serializer/Dotfile.html" title="Warp::Dir::Serializer::Dotfile (class)">Dotfile</a></span></span><span class='rparen'>)</span>
 
@@ -927,9 +927,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 28 16:12:25 2020 by
+  Generated on Wed May 25 20:33:40 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.24 (ruby-2.7.0).
+  0.9.27 (ruby-3.1.2).
 </div>
 
     </div>

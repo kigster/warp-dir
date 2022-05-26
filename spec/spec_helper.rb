@@ -7,6 +7,12 @@ require 'warp/dir'
 require 'rspec/core'
 require 'rspec/its'
 
+require 'support/cli_expectations'
+require 'warp/dir/config'
+require 'warp/dir/app/cli'
+require 'pp'
+require 'fileutils'
+
 module Warp
   module Dir
     module App
@@ -42,7 +48,7 @@ RSpec.shared_context :fake_serializer do
   let(:file) { @file ||= ::Tempfile.new('warp-dir') }
   let(:config) { Warp::Dir::Config.new(warprc: file.path) }
   let(:serializer) {
-    @initialized_store ||= FakeSerializer ||= Class.new(Warp::Dir::Serializer::Base) do
+    @initialized_store ||= FakeSerializer = Class.new(Warp::Dir::Serializer::Base) do
       def persist!;
       end
 
@@ -75,7 +81,7 @@ end
 
 RSpec.shared_context :initialized_store do
   let(:store) { Warp::Dir::Store.new(config) }
-  let(:wp_path) { ENV['HOME'] + '/workspace/tinker-mania' }
+  let(:wp_path) { "#{::Dir.home}/workspace/tinker-mania" }
   let(:wp_name) { 'harro' }
   let(:point) { Warp::Dir::Point.new(wp_name, wp_path) }
 end

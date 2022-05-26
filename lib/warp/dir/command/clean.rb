@@ -10,7 +10,7 @@ class Warp::Dir::Command::Clean < Warp::Dir::Command
     s = self.store
     if removed.empty?
       on :success do
-        message 'All entries are valid in your file ' + s.config.warprc.blue + ' are ' + 'valid.'.green
+        message "All entries are valid in your file #{s.config.warprc.blue} are #{'valid.'.green}"
       end
     else
       on :success do

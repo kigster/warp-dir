@@ -58,10 +58,10 @@ RSpec.describe Warp::Dir::Store do
 
     context 'when store responds to common methods on collections' do
       let(:point_name) { 'moo' }
-      let(:point_path) { ENV['HOME'] + '/tmp/12398485' }
+      let(:point_path) { "#{::Dir.home}/tmp/12398485" }
       let(:store) { Warp::Dir::Store.new(config) }
-      let(:p1) { Warp::Dir::Point.new('p', ENV['HOME'] + '/workspace') }
-      let(:p2) { Warp::Dir::Point.new('n', ENV['HOME'] + '/workspace/new-project') }
+      let(:p1) { Warp::Dir::Point.new('p', "#{::Dir.home}/workspace") }
+      let(:p2) { Warp::Dir::Point.new('n', "#{::Dir.home}/workspace/new-project") }
 
       it 'should be able to have an empty store' do
         expect(store.points).to be_empty
@@ -81,7 +81,7 @@ RSpec.describe Warp::Dir::Store do
 
     context 'when the data store is empty' do
       let(:point_name) { 'moo' }
-      let(:point_path) { ENV['HOME'] + '/tmp/12398485' }
+      let(:point_path) { "#{::Dir.home}/tmp/12398485" }
       let(:store) { Warp::Dir::Store.new(config) }
 
       it 'should be able to initialize the Store' do
@@ -109,7 +109,7 @@ RSpec.describe Warp::Dir::Store do
         # double adding the same point is ok
         expect { store.add(point_name: point_name, point_path: point_path) }.to_not raise_error
         # adding another point pointing to the same name is not OK
-        expect { store.add(point_name: point_name, point_path: point_path + '98984') }.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
+        expect { store.add(point_name: point_name, point_path: "#{point_path}98984") }.to raise_error(Warp::Dir::Errors::PointAlreadyExists)
       end
 
       it 'should be able to add multiple points to the Store' do

@@ -4,7 +4,7 @@ RSpec.describe Warp::Dir::Config do
   let(:c1) { Warp::Dir::Config.new(blah: 'blah blah') }
 
   it 'should have a default folder' do
-    expect(c1.warprc).to eql(ENV['HOME'] + '/.warprc')
+    expect(c1.warprc).to eql("#{::Dir.home}/.warprc")
   end
 
   it 'should automatically create accessors' do

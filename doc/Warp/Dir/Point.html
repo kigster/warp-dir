@@ -6,7 +6,7 @@
 <title>
   Class: Warp::Dir::Point
   
-    &mdash; Documentation by YARD 0.9.24
+    &mdash; &quot;SimpleFeed — Fast and Scalable &quot;write-time&quot; Simple Feed for Social Networks, with a Redis-based default backend implementation.&quot;
   
 </title>
 
@@ -477,15 +477,15 @@
       <pre class="lines">
 
 
+45
 46
 47
 48
 49
-50
-51</pre>
+50</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 46</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_full_path'>full_path</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:name is required</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -531,12 +531,12 @@
       <pre class="lines">
 
 
+43
 44
-45
-46</pre>
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 44</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_full_path'>full_path</span>
   <span class='ivar'>@full_path</span>
@@ -574,12 +574,12 @@
       <pre class="lines">
 
 
+43
 44
-45
-46</pre>
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 44</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
   <span class='ivar'>@name</span>
@@ -618,8 +618,7 @@
 31
 32
 33
-34
-35</pre>
+34</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 27</span>
@@ -628,8 +627,7 @@
   <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='id identifier rubyid_line'>line</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>:</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='id identifier rubyid_path'>path</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../../Warp.html" title="Warp (module)">Warp</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Dir.html" title="Warp::Dir (module)">Dir</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Errors.html" title="Warp::Dir::Errors (module)">Errors</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Errors/StoreFormatError.html" title="Warp::Dir::Errors::StoreFormatError (class)">StoreFormatError</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Errors/StoreFormatError.html#initialize-instance_method" title="Warp::Dir::Errors::StoreFormatError#initialize (method)">new</a></span></span><span class='lparen'>(</span>
-      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>warprc file may be corrupt, offending line is: </span><span class='tstring_end'>&#39;</span></span> <span class='op'>+</span>
-        <span class='id identifier rubyid_line'>line</span><span class='comma'>,</span> <span class='id identifier rubyid_line'>line</span><span class='rparen'>)</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>warprc file may be corrupt, offending line is: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_line'>line</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_line'>line</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -712,12 +710,12 @@
       <pre class="lines">
 
 
+72
 73
-74
-75</pre>
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 73</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='op'>&lt;=&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_name'>name</span> <span class='op'>&lt;=&gt;</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
@@ -746,16 +744,16 @@
       <pre class="lines">
 
 
+76
 77
 78
 79
 80
 81
-82
-83</pre>
+82</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 77</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 76</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_another'>another</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_another'>another</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../../Warp.html" title="Warp (module)">Warp</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Dir.html" title="Warp::Dir (module)">Dir</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="Warp::Dir::Point (class)">Point</a></span></span><span class='rparen'>)</span>
@@ -806,12 +804,12 @@
       <pre class="lines">
 
 
+52
 53
-54
-55</pre>
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exist?'>exist?</span>
   <span class='op'>::</span><span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_full_path'>full_path</span><span class='rparen'>)</span>
@@ -836,12 +834,12 @@
       <pre class="lines">
 
 
+68
 69
-70
-71</pre>
+70</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 69</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash'>hash</span>
   <span class='const'>Digest</span><span class='op'>::</span><span class='const'>SHA1</span><span class='period'>.</span><span class='id identifier rubyid_base64digest'>base64digest</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_full_path'>full_path</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span>
@@ -866,12 +864,12 @@
       <pre class="lines">
 
 
+60
 61
-62
-63</pre>
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 61</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='id identifier rubyid_sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object_id'>object_id</span><span class='embexpr_end'>}</span><span class='tstring_content'>)[name: &#39;%s&#39;, path: &#39;%s&#39;]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_relative_path'>relative_path</span><span class='rparen'>)</span>
@@ -918,12 +916,12 @@
       <pre class="lines">
 
 
+56
 57
-58
-59</pre>
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_missing?'>missing?</span>
   <span class='op'>!</span><span class='id identifier rubyid_exist?'>exist?</span>
@@ -948,12 +946,12 @@
       <pre class="lines">
 
 
+87
 88
-89
-90</pre>
+89</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 88</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 87</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_serialize'>serialize</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_full_path'>full_path</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
@@ -978,12 +976,12 @@
       <pre class="lines">
 
 
+64
 65
-66
-67</pre>
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 65</span>
+      <pre class="code"><span class="info file"># File 'lib/warp/dir/point.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span><span class='lparen'>(</span><span class='id identifier rubyid_width'>width</span> <span class='op'>=</span> <span class='int'>0</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_width'>width</span><span class='embexpr_end'>}</span><span class='tstring_content'>s  -&gt;  %s</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_relative_path'>relative_path</span><span class='rparen'>)</span>
@@ -998,9 +996,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 28 16:12:25 2020 by
+  Generated on Wed May 25 20:33:40 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.24 (ruby-2.7.0).
+  0.9.27 (ruby-3.1.2).
 </div>
 
     </div>

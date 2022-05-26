@@ -8,7 +8,7 @@ RSpec.describe Warp::Dir::Command::Add do
   let(:command_class) { Warp::Dir::Command::Add }
   let(:commander) { Warp::Dir::Commander.instance }
 
-  let(:wp_path) { ENV['HOME'] + '/workspace/tinker-mania' }
+  let(:wp_path) { "#{::Dir.home}/workspace/tinker-mania" }
   let(:wp_name) { 'harro' }
   let(:point) { Warp::Dir::Point.new(wp_name, wp_path) }
 

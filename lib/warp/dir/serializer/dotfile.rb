@@ -14,7 +14,7 @@ module Warp
 
         def restore!
           unless File.exist?(warprc_file_path)
-            STDERR.puts "No warprc file found in the path #{warprc_file_path}" if config.debug
+            $stderr.puts "No warprc file found in the path #{warprc_file_path}" if config.debug
             return
           end
           File.open(warprc_file_path, 'r') do |f|

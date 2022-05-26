@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # vim: ft=ruby
 
-lib_path = File.dirname(__FILE__) + '/../lib'
+lib_path = "#{File.dirname(__FILE__)}/../lib"
 if File.exist?(lib_path)
   $LOAD_PATH << lib_path
 end

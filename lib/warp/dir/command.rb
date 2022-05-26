@@ -19,7 +19,7 @@ module Warp
                   self.command_name.to_s.yellow,
                   (self.send(:needs_a_point?) ? '<point>'.cyan : ' '.cyan),
                   self.send(:description).blue.bold,
-                  (self.respond_to?(:aliases) && !aliases.empty? ? ", aka: " + aliases.join(', ').blue + '' : '')
+                  (self.respond_to?(:aliases) && !aliases.empty? ? ", aka: #{aliases.join(', ').blue}" : '')
           )
         end
 
@@ -79,7 +79,7 @@ module Warp
 
         if store.config.debug
           require 'pp'
-          STDERR.printf 'Initialized Command: '.yellow.bold
+          $stderr.printf 'Initialized Command: '.yellow.bold
           pp self
         end
       end

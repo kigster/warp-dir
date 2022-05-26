@@ -1,5 +1,5 @@
 # Relaxed.Ruby.Style
-## Version 2.4
+## Version 2.5
 
 Style/Alias:
   Enabled: false
@@ -105,9 +105,6 @@ Layout/SpaceInsideParens:
   Enabled: false
   StyleGuide: https://relaxed.ruby.style/#layoutspaceinsideparens
 
-Layout/LineLength:
-  Enabled: false
-
 Style/SpecialGlobalVars:
   Enabled: false
   StyleGuide: https://relaxed.ruby.style/#stylespecialglobalvars
@@ -148,27 +145,9 @@ Lint/AssignmentInCondition:
   Enabled: false
   StyleGuide: https://relaxed.ruby.style/#lintassignmentincondition
 
-Metrics/AbcSize:
+Layout/LineLength:
   Enabled: false
 
-Metrics/BlockNesting:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/ParameterLists:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
+Metrics:
   Enabled: false
 
